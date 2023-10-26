@@ -6,3 +6,7 @@ The reason that this project only supports modern hotkey files is due to the fac
 ## Credits
 This project uses code from the site [Hotkey Editor for AoE II](
 https://aokhotkeys.appspot.com/), using its [associated repository](https://github.com/crimsoncantab/aok-hotkeys).  The main pieces I've used are the code to parse the hotkey files, the file associating the hotkeys with the in-game strings, and the file that associates the input keycodes with the keycodes used in the hotkey files.
+
+Invaluble Resources:
+* https://gist.github.com/KSneijders/8be5b386100548cc4a24da5ff2c6b520
+* https://gist.github.com/KSneijders/9231eeec1a66b314c3402729f0c455fa
