@@ -4,7 +4,9 @@ import './App.css';
 import Upload from './Upload.js'
 
 function App() {
-  <Upload />
+    return (
+        <Upload />
+    )
 }
 
 export default App;
