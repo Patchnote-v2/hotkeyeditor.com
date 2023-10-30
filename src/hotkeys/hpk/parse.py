@@ -54,7 +54,7 @@ class HkParser(object):
         # .hkp has a 3 constant menus that initialize the array in self._result['menus']
         # before the n-number of menus are processed, meaning that when a .hki file is
         # processed the array has to be initialized intentionally
-        if self._file_type == "HKP":
+        if self._file_type == FileType.HKP:
             self._parse_base_menus()
         else:
             self._result['menus'] = []
