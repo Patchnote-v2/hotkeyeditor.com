@@ -2,3 +2,7 @@
 **/__pycache__/
 **/node_modules/
 db.sqlite3
+src/Base.hkp
+src/Base_2.hkp
+src/Dev.hkp
+src/output.txt
