@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from .izip import compress, decompress
 from .parse import HkParser, HkUnparser, FileType
 from .strings import hk_groups, hk_mapping
@@ -18,24 +20,6 @@ hk_versions = [
 ]
 
 
-def copy_dict(d, *keys):
-    return {key: d[key] for key in keys}
-
-
-class HotkeyAssign:
-    def __init__(self, hkfile):
-        self.version = hkfile.version
-        self.hotkeys = {k: copy_dict(v, 'code', 'ctrl', 'alt', 'shift') for (k, v) in hkfile}
-        self.update()
-
-    def get_hotkeys(self, version_hotkeys):
-        return {k: v for (k, v) in self.hotkeys.items() if k in version_hotkeys}
-
-    def update(self):
-        self.hotkeys.update(
-            {k: {'code': 0, 'ctrl': False, 'alt': False, 'shift': False} for k in hk_desc if k not in self.hotkeys})  # noqa
-
-
 class HotkeyFile:
     # these are derived from the numerical ids/text ids in the game configs
     _hk_names = {k: v[0] for k, v in hk_mapping.items()}
@@ -49,36 +33,67 @@ class HotkeyFile:
     _hk_desc = {k: v[1] for k, v in hk_mapping.items()}
     _hk_groups = hk_groups
 
-    def __init__(self, hki, validate=True, file_name: str = "Base.hkp", file_type: FileType = FileType.HKI):
+    def __init__(self,
+                 hki,
+                 validate=True,
+                 file_name: str = "Base.hkp",
+                 file_type: FileType = FileType.HKI):
         self._file_name = file_name
         self._file_type = file_type
 
         hk_bytes = decompress(hki)
         parser = HkParser(file_type)
-        hk_dict = parser.parse_to_dict(hk_bytes)
+        data = parser.parse_to_dict(hk_bytes)
 
-        # raw file data
-        self.hk_dict = hk_dict
+        self._num_menus = len(data['menus'])
+        self.deserialize_file(data)
 
         # Header, used to determine version
-        self._header = hk_dict['header']
+        self._header = data['header']
 
         # File size, used to determine version
-        self._file_size = hk_dict['size']
+        self._file_size = data['size']
         self.version = self._find_version(self._file_size, self._header)
         # Raw menu data
-        self.data = hk_dict['menus']
+        # self.data = hk_dict['menus']
 
         # hk_map = raw menu data; no menu
-        self.hk_map, self.orphan_ids, self.ids_in_file_type = self._build_id_map(self.data)
+        self.hk_map, self.orphan_ids = self._build_id_map(self.data)
 
         if validate:
             parser.validate_size()
             self.validate()
 
-    # def test(self):
-    #     for key, value in self.hk_map.items():
-    #         print(f"'{self._hk_desc[self._hk_ids[key]]}'")
+    def deserialize_file(self, data):
+        # Perhaps need to add a file_type??
+        Hotkey = namedtuple('Hotkey', 'string_text keycode ctrl alt shift menu_id')
+
+        self.data = {}
+        index = 0
+        for menu in data['menus']:
+            for key in menu:
+                if key['id'] <= 0:
+                    continue
+                self.data[key['id']] = Hotkey(hk_mapping[key['id']],
+                                              key['code'],
+                                              key['ctrl'],
+                                              key['alt'],
+                                              key['shift'],
+                                              index,)
+            index = index + 1
+
+    def serialize_to_file(self):
+        # Serializes the data from Hotfile.data to just include the data that the
+        # hotkey file has
+        output = [[] for _ in range(self._num_menus)]
+        print(self.data)
+        for id, hotkey in self.data.items():
+            output[hotkey.menu_id].append({"code": hotkey.keycode,
+                                           "id": id,
+                                           "ctrl": hotkey.ctrl,
+                                           "alt": hotkey.alt,
+                                           "shift": hotkey.shift})
+        return output
 
     def get_file_size(self) -> int:
         return int(self._file_size)
@@ -94,16 +109,13 @@ class HotkeyFile:
     @ classmethod
     def _build_id_map(cls, menus):
         hk_map = {}
-        ids_in_file_type = []
-        for menu in menus:
-            for hotkey in menu:
-                id = hotkey['id']
-                if id >= 0:
-                    while id in hk_map:
-                        id += 0x1000000
-                    hk_map[id] = hotkey
-                    ids_in_file_type.append([id])
-        return hk_map, set(hk_map.keys()) - cls._valid_ids, ids_in_file_type
+        for id, hotkey in menus.items():
+            hk_map[id] = hotkey
+            # if id >= 0:
+            # while id in hk_map:
+            # id += 0x1000000
+            # hk_map[id] = hotkey
+        return hk_map, set(hk_map.keys()) - cls._valid_ids
 
     @ staticmethod
     def _find_version(file_size, header):
@@ -125,30 +137,9 @@ class HotkeyFile:
                 yield k, self[k]
 
     # def deserialize(self, json: str):
-
     def serialize(self):
         unparser = HkUnparser(self._file_type)
-        hk_dict = dict(size=self._file_size, header=self._header, menus=self.data)
+        hk_dict = dict(size=self._file_size, header=self._header,
+                       menus=self.serialize_to_file())
         raw = unparser.unparse_to_bytes(hk_dict)
         return compress(raw)
-
-    def print_with_strings(self):
-        for each in self.__iter__():
-            print(hk_desc[each[0]])
-
-
-def _print_in_hk_file_order(hotkey_file):
-    groups = {name for menu in hk_groups for name in menu[1]}
-    for i, menu in enumerate(hotkey_file.data):
-        print(i)
-        for hotkey in menu:
-            if hotkey['id'] in _hk_ids:
-                name = _hk_ids[hotkey['id']]
-                if name not in groups:
-                    print(repr(_hk_ids[hotkey['id']]) + ',')
-
-
-# def _convert_to_single_map():
-#     for k in sys.stdin:
-#         k = k.strip()
-#         print('{} : (0x{:x}, {}),'.format(repr(k), _hk_names[k], repr(hk_desc[k])))
