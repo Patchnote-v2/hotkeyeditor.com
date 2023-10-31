@@ -86,7 +86,6 @@ class HotkeyFile:
         # Serializes the data from Hotfile.data to just include the data that the
         # hotkey file has
         output = [[] for _ in range(self._num_menus)]
-        print(self.data)
         for id, hotkey in self.data.items():
             output[hotkey.menu_id].append({"code": hotkey.keycode,
                                            "id": id,
@@ -125,16 +124,15 @@ class HotkeyFile:
                 version = k
         return version
 
-    def __getitem__(self, key):
-        return self.hk_map[self._hk_names[key]]
+    def __iter__(self):
+        for k, v in self.data.items():
+            yield k, v
 
     def __contains__(self, key):
-        return key in self._hk_names and self._hk_names[key] in self.hk_map
+        return key in self.data
 
-    def __iter__(self):
-        for k in self._hk_names:
-            if k in self:
-                yield k, self[k]
+    def __getitem__(self, key):
+        return self.data[key]
 
     # def deserialize(self, json: str):
     def serialize(self):
