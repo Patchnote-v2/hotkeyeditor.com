@@ -71,8 +71,8 @@ class HkParser(object):
 
 
 class HkUnparser(object):
-
-    def __init__(self):
+    def __init__(self, file_type: FileType = FileType.HKI) -> None:
+        self._file_type = file_type
         self._reset()
 
     def _reset(self, hk_dict=None):
@@ -87,6 +87,12 @@ class HkUnparser(object):
 
     def _unparse_header(self, header):
         self._pack(header, struct_format=HEADER_FORMAT)
+
+    def _unparse_base_menus(self, hk_dict):
+        for each in range(3):
+            menu = hk_dict['menus'].pop(0)
+            self._unparse_menu(menu)
+        return hk_dict
 
     def _unparse_menus(self, menus):
         self._pack(len(menus))
@@ -104,5 +110,9 @@ class HkUnparser(object):
     def unparse_to_bytes(self, hk_dict):
         self._reset(hk_dict)
         self._unparse_header(hk_dict['header'])
+
+        if self._file_type == FileType.HKP:
+            hk_dict = self._unparse_base_menus(hk_dict)
+
         self._unparse_menus(hk_dict['menus'])
         return self._result
