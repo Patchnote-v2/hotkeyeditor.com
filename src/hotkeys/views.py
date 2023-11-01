@@ -5,25 +5,15 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 
+from .utils import serialize_all_files
+
 from .hpk.new_hotkey_file import HotkeyFile
 from .hpk.parse import FileType
-
-
-def serialize_all_files(files: dict) -> dict:
-    data = {}
-    for key, value in files.items():
-        data['key'] = {}
-
-        for each in value:
-            pass
-            # print(type(each))
-    return data
 
 
 @method_decorator(csrf_exempt, name="dispatch")
 class UploadHKPView(View):
     def post(self, request):
-        from random import shuffle
         # Check for valid Content-Type header, otherwise return given JSON response
 
         # response_data = json.dumps(response_data, cls=serializers.json.DjangoJSONEncoder)
@@ -38,7 +28,9 @@ class UploadHKPView(View):
             else:
                 files['profile'] = HotkeyFile(each.read(), False, each.name, FileType.HKI)
 
-        files['base'].serialize_to_file()
+        # files['base'].serialize_to_file()
+
+        serialize_all_files(files)
 
         # print(files['base'].data)
         # shuffle(files['base'].data)
