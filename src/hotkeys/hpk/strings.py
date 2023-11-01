@@ -954,17 +954,24 @@ hk_mapping = {
     0x1004ad1: 'Toggle Idle Pointers (2)',
 
     # update 83607
-    # Base.hpk
+    # Base.hkp
     0x4ad2: 'Dromon',
     0x4b11: 'More Items',  # As best I can tell it was added this update
 
     # update 93001
-    # Base.hpk
+    # Base.hkp
     0x4ad3: 'Select all Mills',
     0x4ad4: 'Select all Mining Camps',
     0x4ad5: 'Select all Lumber Camps',
-    # <profile>.hpk
-    0x4b27: 'Unselect'
+    # <profile>.hkp
+    0x4b27: 'Unselect',
+
+    # update 95810
+    # Base.hkp
+    0x4AD7: 'Select all Mule Carts',
+    0x4B9A: 'Go to Mule Cart',
+    0x4AD6: 'Mule Cart',
+    0x4D1F: 'Fortified Church: Go Back to Work'
 }
 
 # hk_groups = {
@@ -1688,7 +1695,8 @@ hk_groups = {
         19024,
         16796240,
         19135,
-        19136
+        19136,
+        19354
     ],
     "Select Commands": [
         19003,
@@ -1728,7 +1736,8 @@ hk_groups = {
         16790,
         16787,
         16786,
-        16784
+        16784,
+        19159,
     ],
     "All Units": [
         19000,
@@ -1832,7 +1841,8 @@ hk_groups = {
         19333,
         19334,
         19335,
-        19336
+        19336,
+        19158,
     ],
     "Dock": [
         19045,
@@ -1969,7 +1979,8 @@ hk_groups = {
         19116,
         19117,
         19118,
-        19119
+        19119,
+        19743
     ],
     "Market": [
         19286,
