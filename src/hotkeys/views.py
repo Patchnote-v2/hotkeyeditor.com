@@ -1,5 +1,3 @@
-from collections import namedtuple
-
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -9,6 +7,7 @@ from .utils import serialize_all_files
 
 from .hpk.new_hotkey_file import HotkeyFile
 from .hpk.parse import FileType
+from .hpk.strings import hk_groups
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -61,6 +60,8 @@ class UploadHKPView(View):
         return JsonResponse(data={"test": True}, status=200)
 
     def get(self, response):
+        # todo: find a way to automate getting the highest version number
+        # otherwise it has to be updated manually
         base_path = f"hotkeys/static/hotkeys/defaults/95810/Base.hkp"
         dev_path = f"hotkeys/static/hotkeys/defaults/95810/Dev.hkp"
 
@@ -71,4 +72,6 @@ class UploadHKPView(View):
         with open(dev_path, "rb") as file:
             files["profile"] = HotkeyFile(file.read(), False, "Dev.hkp", FileType.HKI)
 
-        return JsonResponse(data=serialize_all_files(files), status=200)
+        return JsonResponse(data={"hotkeys": serialize_all_files(files),
+                                  "groups": hk_groups},
+                            status=200)
