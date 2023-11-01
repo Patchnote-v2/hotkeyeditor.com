@@ -3,6 +3,8 @@ import axios from "axios";
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
+    const [changed, setChanged] = useState({});
+    
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
         event.preventDefault();
@@ -17,7 +19,17 @@ const Upload = () => {
         }).then((response) => {console.log(response.data);})
           .catch((error) => {console.log(error);});
     }
-      
+    
+    const _getDefaultFiles = (event) => {
+        event.preventDefault();
+        
+        axios({
+            method: 'get',
+            url: '/upload/',
+        }).then((response) => {console.log(response.data);})
+          .catch((error) => {console.log(error);});
+    }
+
     return (
         <>
         <form method="POST" onSubmit={_handleSubmit}>
@@ -26,9 +38,12 @@ const Upload = () => {
                 type="file"
                 name="files"
                 multiple
-                // onChange={(e) => InsertFiles(e)}
             />
-            <button type="submit">Upload All files</button>
+            <button type="submit">Upload Files</button>
+        </form>
+        <form method="POST" onSubmit={_getDefaultFiles}>
+            <label htmlFor="loadDefaults">Load Defaults</label>
+            <button type="submit">Load Defaults</button>
         </form>
         </>
     );
