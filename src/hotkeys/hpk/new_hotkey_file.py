@@ -66,9 +66,6 @@ class HotkeyFile:
 
     # todo: make this fail is there's missing strings in hk_mapping
     def deserialize_file(self, data):
-        # Perhaps need to add a file_type??
-        Hotkey = namedtuple('Hotkey', 'string_text keycode ctrl alt shift menu_id')
-
         self.data = {}
         index = 0
         for menu in data['menus']:
@@ -78,12 +75,12 @@ class HotkeyFile:
                 # It's important that string_text is blank if it fails to find a string match
                 # Looking for blank strings is what is used by the grabstrings command when
                 # looking for missing strings when an update happens.
-                self.data[key['id']] = Hotkey(hk_mapping[key['id']] if key['id'] in hk_mapping else "",
-                                              key['code'],
-                                              key['ctrl'],
-                                              key['alt'],
-                                              key['shift'],
-                                              index,)
+                self.data[key['id']] = {"string_text": hk_mapping[key['id']] if key['id'] in hk_mapping else "",
+                                        "keycode": key['code'],
+                                        "ctrl": key['ctrl'],
+                                        "alt": key['alt'],
+                                        "shift": key['shift'],
+                                        "menu_id": index, }
             index = index + 1
 
     def serialize_to_file(self):
@@ -91,11 +88,11 @@ class HotkeyFile:
         # hotkey file has
         output = [[] for _ in range(self._num_menus)]
         for id, hotkey in self.data.items():
-            output[hotkey.menu_id].append({"code": hotkey.keycode,
-                                           "id": id,
-                                           "ctrl": hotkey.ctrl,
-                                           "alt": hotkey.alt,
-                                           "shift": hotkey.shift})
+            output[hotkey["menu_id"]].append({"code": hotkey["keycode"],
+                                              "id": id,
+                                              "ctrl": hotkey["ctrl"],
+                                              "alt": hotkey["alt"],
+                                              "shift": hotkey["shift"]})
         return output
 
     def get_file_size(self) -> int:

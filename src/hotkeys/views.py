@@ -32,15 +32,6 @@ class UploadHKPView(View):
 
         serialize_all_files(files)
 
-        # print(files['base'].data)
-        # shuffle(files['base'].data)
-        # print(files['base'].data)
-
-        # for menu in files['base'].data:
-        #     for key in menu:
-        #         if key['id'] == 0x4B14:
-        #             key['shift'] = True
-
         # serialize_all_files(files)
         # print(f"{files['base']._file_type.value} -- {files['base'].id_to_file_type}")
         # print(f"{files['profile']._file_type.value} -- {files['profile'].id_to_file_type}")
@@ -68,3 +59,16 @@ class UploadHKPView(View):
         # print(files['base'].get_file_size() + files['profile'].get_file_size())
 
         return JsonResponse(data={"test": True}, status=200)
+
+    def get(self, response):
+        base_path = f"hotkeys/static/hotkeys/defaults/95810/Base.hkp"
+        dev_path = f"hotkeys/static/hotkeys/defaults/95810/Dev.hkp"
+
+        files = {'base': None, 'profile': None}
+        with open(base_path, "rb") as file:
+            files["base"] = HotkeyFile(file.read(), False, "Base.hkp", FileType.HKP)
+
+        with open(dev_path, "rb") as file:
+            files["profile"] = HotkeyFile(file.read(), False, "Dev.hkp", FileType.HKI)
+
+        return JsonResponse(data=serialize_all_files(files), status=200)
