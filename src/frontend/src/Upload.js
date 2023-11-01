@@ -1,5 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
+
+import FullKeyboard from './FullKeyboard.js';
+
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
@@ -45,6 +48,7 @@ const Upload = () => {
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>
         </form>
+        <FullKeyboard />
         </>
     );
 };
