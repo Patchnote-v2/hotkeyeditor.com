@@ -15,10 +15,11 @@ const FullKeyboard = () => {
   
   const [settingKeybind, setSettingKeybind] = useState(false);
 
-  const commonKeyboardOptions = {
+  const enabledKeyboardOptions = {
     onKeyReleased: (key) => onKeyReleased(key),
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
+    disableCaretPositioning: true,
     physicalKeyboardHighlight: true,
     physicalKeyboardHighlightPressUsePointerEvents: true,
     physicalKeyboardHighlightPreventDefault: true,
@@ -27,6 +28,15 @@ const FullKeyboard = () => {
     mergeDisplay: true,
     // debug: true
   };
+  
+  const disabledKeyboardOptions = {
+    ...enabledKeyboardOptions,
+    physicalKeyboardHighlight: false,
+    physicalKeyboardHighlightPreventDefault: false,
+    physicalKeyboardHighlightPressUsePointerEvents: false,
+  }
+  
+  const commonKeyboardOptions = settingKeybind ? enabledKeyboardOptions : disabledKeyboardOptions;
 
   const keyboardOptions = {
     ...commonKeyboardOptions,
