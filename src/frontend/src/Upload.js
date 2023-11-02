@@ -7,6 +7,7 @@ axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
     const [changed, setChanged] = useState({});
+    const [settingKeybind, setSettingKeybind] = useState(false);
     
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
@@ -48,7 +49,7 @@ const Upload = () => {
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>
         </form>
-        <FullKeyboard />
+        <FullKeyboard settingKeybind={settingKeybind}/>
         </>
     );
 };

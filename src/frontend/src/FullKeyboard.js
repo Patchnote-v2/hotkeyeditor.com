@@ -13,7 +13,7 @@ const FullKeyboard = () => {
   const [input, setInput] = useState("");
   const keyboard = useRef();
   
-  const [settingKeybing, setSettingKeybind] = useState(false);
+  const [settingKeybind, setSettingKeybind] = useState(false);
 
   const commonKeyboardOptions = {
     onKeyReleased: (key) => onKeyReleased(key),
