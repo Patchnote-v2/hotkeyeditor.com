@@ -12,13 +12,17 @@ const FullKeyboard = () => {
   const [layoutName, setLayoutName] = useState("");
   const [input, setInput] = useState("");
   const keyboard = useRef();
+  
+  const [settingKeybing, setSettingKeybind] = useState(false);
 
   const commonKeyboardOptions = {
-    onChange: (input) => onChange(input),
-    onKeyPress: (button) => onKeyPress(button),
+    onKeyReleased: (key) => onKeyReleased(key),
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
     physicalKeyboardHighlight: true,
+    physicalKeyboardHighlightPressUsePointerEvents: true,
+    physicalKeyboardHighlightPreventDefault: true,
+    disableCaretPositioning: true,
     syncInstanceInputs: true,
     mergeDisplay: true,
     // debug: true
@@ -94,25 +98,11 @@ const FullKeyboard = () => {
       default: ["{numpadsubtract}", "{numpadadd}", "{numpadenter}"]
     }
   };
-
-  const onChange = (input) => {
-    // setInput(input);
-    // console.log("Input changed", input);
-  }
-
-  const onKeyPress = (button) => {
-    console.log("Button pressed", button);
+  
+  const onKeyReleased = (key) => {
+    console.log(key);
   }
   
-  const onChangeInput = (event) => {
-    let input = event.target.value;
-    setInput(input);
-  }
-  
-  useEffect(() => {
-    keyboard.current.setInput(input);
-  }, [input]);
-
   return (
     <div>
       <div className={"keyboardContainer"}>
