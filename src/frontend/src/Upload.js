@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 
 import FullKeyboard from './FullKeyboard.js';
+import Keybinds from './Keybinds.js';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
     const [changed, setChanged] = useState({});
+    const [data, setData] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
+    
+    const currentHover = useRef();
+    
     
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
@@ -20,7 +25,7 @@ const Upload = () => {
             method: 'post',
             url: '/upload/',
             data: formData,
-        }).then((response) => {console.log(response.data);})
+        }).then((response) => {console.log(response.data);setData(response.data)})
           .catch((error) => {console.log(error);});
     }
     
@@ -30,8 +35,12 @@ const Upload = () => {
         axios({
             method: 'get',
             url: '/upload/',
-        }).then((response) => {console.log(response.data);})
+        }).then((response) => {console.log(response.data);setData(response.data)})
           .catch((error) => {console.log(error);});
+    }
+    
+    const _updateCurrentHover = (event) => {
+        console.log(event);
     }
 
     return (
@@ -50,6 +59,7 @@ const Upload = () => {
             <button type="submit">Load Defaults</button>
         </form>
         <FullKeyboard settingKeybind={settingKeybind}/>
+        <Keybinds data={data} updateCurrentHoverCallback={_updateCurrentHover} />
         </>
     );
 };
