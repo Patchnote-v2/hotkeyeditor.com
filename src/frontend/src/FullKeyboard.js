@@ -3,12 +3,11 @@ import { render } from "react-dom";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import "./index.css";
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 
-const FullKeyboard = () => {
+const FullKeyboard = React.forwardRef(({ props }, keyboard) => {
   const [layoutName, setLayoutName] = useState("");
   const [input, setInput] = useState("");
-  const keyboard = useRef();
   
   const [settingKeybind, setSettingKeybind] = useState(false);
 
@@ -126,6 +125,7 @@ const FullKeyboard = () => {
     <div id="keyboard-wrapper">
       <div className={"keyboardContainer"}>
         <Keyboard
+          ref={keyboard}
           baseClass={"simple-keyboard-main"}
           keyboardRef={r => {keyboard.current = r}}
           layoutName={layoutName}
@@ -156,5 +156,5 @@ const FullKeyboard = () => {
       </div>
     </div>
   );
-}
+})
 export default FullKeyboard;

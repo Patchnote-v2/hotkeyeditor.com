@@ -15,12 +15,16 @@ const Keybinds = (data) => {
                     if (hotkey) {
                         return (
                             <li key={value2}
+                                id={value2}
                                 data-keycode={hotkey.keycode}
                                 data-ctrl={hotkey.ctrl}
                                 data-shift={hotkey.shift}
-                                data-alt={hotkey.alt}>
-                            <span>{hotkey.string_text} -- </span>
-                            <span style={{"backgroundColor": "#DADADA"}}>
+                                data-alt={hotkey.alt}
+                                onMouseOver={data.updateCurrentHoverCallback}
+                                onMouseOut={data.updateCurrentHoverCallback}
+                                className="keycode">
+                            <span className="keycode-text">{hotkey.string_text} -- </span>
+                            <span className="keycode-code">
                                 {hotkey.ctrl ? "Ctrl+" : ""}
                                 {hotkey.shift ? "Shift+" : ""}
                                 {hotkey.alt ? "Alt+" : ""}
@@ -39,8 +43,6 @@ const Keybinds = (data) => {
             // console.log(data.data.hotkeys[data.data.groups[value]]);
         });
     }
-    
-    console.log(keybinds);
     
     return (
         <>

@@ -3,6 +3,7 @@ import axios from "axios";
 
 import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
+import { keyNames } from './keyNames.js';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -11,7 +12,7 @@ const Upload = () => {
     const [data, setData] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
     
-    const currentHover = useRef();
+    const keyboard = useRef(null);
     
     
     const _handleSubmit = (event) => {
@@ -40,7 +41,18 @@ const Upload = () => {
     }
     
     const _updateCurrentHover = (event) => {
-        console.log(event);
+        let dataset = event.target.dataset;
+        let buttons = dataset.ctrl.toLowerCase() === "true" ? "{ctrlleft} {ctrlright} " : "";
+        buttons += dataset.shift.toLowerCase() === "true" ? "{shiftleft} {shiftright} " : "";
+        buttons += dataset.alt.toLowerCase() === "true" ? "{altleft} {altright} " : "";
+        buttons += keyNames[dataset.keycode] ? keyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
+        console.log(buttons);
+        if (event.type === "mouseover") {
+            keyboard.current.addButtonTheme(buttons, "active-key");
+        }
+        else if (event.type === "mouseout") {
+            keyboard.current.removeButtonTheme(buttons, "active-key");
+        }
     }
 
     return (
@@ -58,7 +70,7 @@ const Upload = () => {
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>
         </form>
-        <FullKeyboard settingKeybind={settingKeybind}/>
+        <FullKeyboard ref={keyboard} settingKeybind={settingKeybind} />
         <Keybinds data={data} updateCurrentHoverCallback={_updateCurrentHover} />
         </>
     );

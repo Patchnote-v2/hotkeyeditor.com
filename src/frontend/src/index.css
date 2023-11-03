@@ -22,6 +22,7 @@ input {
 }
 
 #keyboard-wrapper {
+  pointer-events: none;
   position: sticky;
   top: 0px;
 }
@@ -149,4 +150,22 @@ input {
 
 .hg-button.hg-functionBtn.hg-button-space {
   width: 350px;
+}
+
+.hg-theme-default .hg-button.active-key {
+  background-color: red;
+}
+
+.keycode {
+  padding: 3px;
+}
+
+.keycode-text {
+  pointer-events: none;
+}
+
+.keycode-code {
+  background-color: #DADADA;
+  padding: 3px;
+  pointer-events: none;
 }
