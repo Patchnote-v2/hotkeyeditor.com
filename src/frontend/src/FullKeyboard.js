@@ -1,6 +1,3 @@
-
-
-
 import React, { Component } from "react";
 import { render } from "react-dom";
 import Keyboard from "react-simple-keyboard";
@@ -114,7 +111,7 @@ const FullKeyboard = () => {
   }
   
   return (
-    <div>
+    <div id="keyboard-wrapper">
       <div className={"keyboardContainer"}>
         <Keyboard
           baseClass={"simple-keyboard-main"}
