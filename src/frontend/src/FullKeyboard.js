@@ -45,10 +45,10 @@ const FullKeyboard = () => {
       default: [
         "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
         "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
-        "{tab} q w e r t y u i o p [ ] \\",
-        "{capslock} a s d f g h j k l ; ' {enter}",
-        "{shiftleft} z x c v b n m , . / {shiftright}",
-        "{controlleft} {altleft} {metaleft} {space} {metaright} {altright}"
+        "{tab} Q W E R T Y U I O P [ ] \\",
+        "{capslock} A S D F G H J K L ; ' {enter}",
+        "{shiftleft} Z X C V B N M , . / {shiftright}",
+        "{ctrlleft} {metaleft} {altleft} {space} {altright} {metaright} {ctrlright}"
       ]
     },
     display: {
@@ -56,15 +56,27 @@ const FullKeyboard = () => {
       "{tab}": "tab ⇥",
       "{backspace}": "backspace ⌫",
       "{enter}": "enter ↵",
-      "{capslock}": "caps lock ⇪",
+      "{capslock}": "caps ⇪",
       "{shiftleft}": "shift ⇧",
       "{shiftright}": "shift ⇧",
-      "{controlleft}": "ctrl ⌃",
-      "{controlright}": "ctrl ⌃",
+      "{ctrlleft}": "ctrl ⌃",
+      "{ctrlright}": "ctrl ⌃",
       "{altleft}": "alt ⌥",
       "{altright}": "alt ⌥",
-      "{metaleft}": "cmd ⌘",
-      "{metaright}": "cmd ⌘"
+      "{metaleft}": "meta ⌘",
+      "{metaright}": "meta ⌘",
+      "{f1}": "F1",
+      "{f2}": "F2",
+      "{f3}": "F3",
+      "{f4}": "F4",
+      "{f5}": "F5",
+      "{f6}": "F6",
+      "{f7}": "F7",
+      "{f8}": "F8",
+      "{f9}": "F9",
+      "{f10}": "F10",
+      "{f11}": "F11",
+      "{f12}": "F12",
     }
   };
 
