@@ -22,7 +22,6 @@ input {
 }
 
 #keyboard-wrapper {
-  pointer-events: none;
   position: sticky;
   top: 0px;
 }
