@@ -39,8 +39,6 @@ const Keybinds = (data) => {
                 })}
                 </>
             );
-            // console.log(data.data.groups[value]);
-            // console.log(data.data.hotkeys[data.data.groups[value]]);
         });
     }
     

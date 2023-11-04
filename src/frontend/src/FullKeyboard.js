@@ -5,35 +5,25 @@ import "react-simple-keyboard/build/css/index.css";
 import "./index.css";
 import { useEffect, useState, forwardRef } from 'react';
 
-const FullKeyboard = React.forwardRef(({ props }, keyboard) => {
+const FullKeyboard = React.forwardRef((props, keyboard) => {
   const [layoutName, setLayoutName] = useState("");
   const [input, setInput] = useState("");
-  
-  const [settingKeybind, setSettingKeybind] = useState(false);
 
-  const enabledKeyboardOptions = {
-    onKeyReleased: (key) => onKeyReleased(key),
+  const commonKeyboardOptions = {
+    onKeyReleased: (key, event) => onKeyReleased(key, event),
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
     disableCaretPositioning: true,
     physicalKeyboardHighlight: true,
+    physicalKeyboardHighlightPress: true,
     physicalKeyboardHighlightPressUsePointerEvents: true,
     physicalKeyboardHighlightPreventDefault: true,
-    disableCaretPositioning: true,
+    physicalKeyboardHighlightPressUseClick: true,
     syncInstanceInputs: true,
     mergeDisplay: true,
     // debug: true
   };
   
-  const disabledKeyboardOptions = {
-    ...enabledKeyboardOptions,
-    physicalKeyboardHighlight: false,
-    physicalKeyboardHighlightPreventDefault: false,
-    physicalKeyboardHighlightPressUsePointerEvents: false,
-  }
-  
-  const commonKeyboardOptions = settingKeybind ? enabledKeyboardOptions : disabledKeyboardOptions;
-
   const keyboardOptions = {
     ...commonKeyboardOptions,
     /**
@@ -47,7 +37,7 @@ const FullKeyboard = React.forwardRef(({ props }, keyboard) => {
         "{tab} Q W E R T Y U I O P [ ] \\",
         "{capslock} A S D F G H J K L ; ' {enter}",
         "{shiftleft} Z X C V B N M , . / {shiftright}",
-        "{ctrlleft} {metaleft} {altleft} {space} {altright} {metaright} {ctrlright}"
+        "{controlleft} {metaleft} {altleft} {space} {altright} {metaright} {controlright}"
       ]
     },
     display: {
@@ -58,8 +48,8 @@ const FullKeyboard = React.forwardRef(({ props }, keyboard) => {
       "{capslock}": "caps ⇪",
       "{shiftleft}": "shift ⇧",
       "{shiftright}": "shift ⇧",
-      "{ctrlleft}": "ctrl ⌃",
-      "{ctrlright}": "ctrl ⌃",
+      "{controlleft}": "ctrl ⌃",
+      "{controlright}": "ctrl ⌃",
       "{altleft}": "alt ⌥",
       "{altright}": "alt ⌥",
       "{metaleft}": "meta ⌘",
@@ -117,7 +107,8 @@ const FullKeyboard = React.forwardRef(({ props }, keyboard) => {
     }
   };
   
-  const onKeyReleased = (key) => {
+  const onKeyReleased = (key, event) => {
+    console.log(event)
     console.log(key);
   }
   

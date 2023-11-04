@@ -40,7 +40,13 @@ const Upload = () => {
           .catch((error) => {console.log(error);});
     }
     
-    const _updateCurrentHover = (event) => {
+    const _toggleSettingKeybind = () => {
+        keyboard.current.setOptions({
+            physicalKeyboardHighlight: !keyboard.current.options['physicalKeyboardHighlight']
+        });
+    }
+    
+    const updateCurrentHover = (event) => {
         let dataset = event.target.dataset;
         let buttons = dataset.ctrl.toLowerCase() === "true" ? "{ctrlleft} {ctrlright} " : "";
         buttons += dataset.shift.toLowerCase() === "true" ? "{shiftleft} {shiftright} " : "";
@@ -54,6 +60,7 @@ const Upload = () => {
             keyboard.current.removeButtonTheme(buttons, "active-key");
         }
     }
+    
 
     return (
         <>
@@ -66,12 +73,13 @@ const Upload = () => {
             />
             <button type="submit">Upload Files</button>
         </form>
+        <button onClick={_toggleSettingKeybind}>Toggle Setting</button>
         <form method="POST" onSubmit={_getDefaultFiles}>
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>
         </form>
-        <FullKeyboard ref={keyboard} settingKeybind={settingKeybind} />
-        <Keybinds data={data} updateCurrentHoverCallback={_updateCurrentHover} />
+        <FullKeyboard ref={keyboard} />
+        <Keybinds data={data} updateCurrentHoverCallback={updateCurrentHover} />
         </>
     );
 };
