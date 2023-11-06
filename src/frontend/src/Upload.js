@@ -47,7 +47,7 @@ const Upload = () => {
     
     const updateCurrentHover = (event) => {
         let dataset = event.target.dataset;
-        let buttons = dataset.ctrl.toLowerCase() === "true" ? "{ctrlleft} {ctrlright} " : "";
+        let buttons = dataset.ctrl.toLowerCase() === "true" ? "{controlleft} {controlright} " : "";
         buttons += dataset.shift.toLowerCase() === "true" ? "{shiftleft} {shiftright} " : "";
         buttons += dataset.alt.toLowerCase() === "true" ? "{altleft} {altright} " : "";
         buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
