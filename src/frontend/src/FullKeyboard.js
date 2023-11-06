@@ -113,7 +113,8 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
   }
   
   return (
-    <div id="keyboard-wrapper">
+    <div id="keyboard-wrapper"
+         className={props.settingKeybind ? "" : "disableKeyboard"}>
       <div className={"keyboardContainer"}>
         <Keyboard
           ref={keyboard}

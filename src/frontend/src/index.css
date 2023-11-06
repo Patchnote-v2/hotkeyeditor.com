@@ -26,6 +26,10 @@ input {
   top: 0px;
 }
 
+.disableKeyboard {
+  pointer-events: none;
+}
+
 .keyboardContainer {
   display: flex;
   background-color: rgba(0, 0, 0, 0.1);

@@ -43,6 +43,7 @@ const Upload = () => {
         keyboard.current.setOptions({
             physicalKeyboardHighlight: !keyboard.current.options['physicalKeyboardHighlight']
         });
+        setSettingKeybind(!settingKeybind);
     }
     
     const updateCurrentHover = (event) => {
@@ -81,7 +82,7 @@ const Upload = () => {
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>
         </form>
-        <FullKeyboard ref={keyboard} />
+        <FullKeyboard ref={keyboard} settingKeybind={settingKeybind}/>
         <Keybinds data={data} updateCurrentHoverCallback={updateCurrentHover} />
         </>
     );
