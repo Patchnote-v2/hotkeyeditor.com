@@ -3,7 +3,7 @@ import axios from "axios";
 
 import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
-import { keyNames } from './keyNames.js';
+import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -13,7 +13,6 @@ const Upload = () => {
     const [settingKeybind, setSettingKeybind] = useState(false);
     
     const keyboard = useRef(null);
-    
     
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
@@ -51,7 +50,7 @@ const Upload = () => {
         let buttons = dataset.ctrl.toLowerCase() === "true" ? "{ctrlleft} {ctrlright} " : "";
         buttons += dataset.shift.toLowerCase() === "true" ? "{shiftleft} {shiftright} " : "";
         buttons += dataset.alt.toLowerCase() === "true" ? "{altleft} {altright} " : "";
-        buttons += keyNames[dataset.keycode] ? keyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
+        buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
         console.log(buttons);
         if (event.type === "mouseover") {
             keyboard.current.addButtonTheme(buttons, "active-key");
