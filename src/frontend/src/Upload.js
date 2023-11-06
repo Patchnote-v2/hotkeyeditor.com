@@ -53,10 +53,14 @@ const Upload = () => {
         buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
         console.log(buttons);
         if (event.type === "mouseover") {
-            keyboard.current.addButtonTheme(buttons, "active-key");
+            keyboard.current.dispatch((instance) => {
+                instance.addButtonTheme(buttons, "active-key");
+            });
         }
         else if (event.type === "mouseout") {
-            keyboard.current.removeButtonTheme(buttons, "active-key");
+            keyboard.current.dispatch((instance) => {
+                instance.removeButtonTheme(buttons, "active-key");
+            });
         }
     }
     
