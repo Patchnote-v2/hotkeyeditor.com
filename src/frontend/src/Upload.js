@@ -8,9 +8,10 @@ import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
-    const [changed, setChanged] = useState({});
-    const [data, setData] = useState({});
+    const [changed, setChanged] = useState();
+    const [data, setData] = useState();
     const [settingKeybind, setSettingKeybind] = useState(false);
+    const [highlighted, setHighlighted] = useState(null);
     const [buffer, setBuffer] = useState(null);
     
     const keyboard = useRef(null);
@@ -40,6 +41,26 @@ const Upload = () => {
           .catch((error) => {console.log(error);});
     }
     
+    const updateHotkey = (dataset) => {
+        let hotkey = data.hotkeys[dataset.id];
+        hotkey.ctrl = dataset.ctrl === "true" ? true : false;
+        hotkey.shift = dataset.shift === "true" ? true : false;
+        hotkey.alt = dataset.alt === "true" ? true : false;
+        hotkey.keycode = dataset.keycode;
+        
+        let newHotkeys = {...data.hotkeys}
+        newHotkeys[dataset.id] = hotkey
+        setData({groups: data.groups, hotkeys: {...newHotkeys}});
+        
+        
+        let newChanged = {...changed};
+        newChanged[dataset.id] = hotkey;
+        setChanged(newChanged);
+        // setData()
+        
+        // data.hotkeys[dataset.id] = hotkey;
+    }
+    
     /*
         Probably temporary function used for debugging purposes (button that toggles state)
     */
@@ -66,7 +87,7 @@ const Upload = () => {
         
         let dataset = event.target.dataset;
         dataset.id = event.target.id;
-                
+        
         if (!buffer) {
             console.log("Setting buffer");
             _updateSettingKeybind(true);
@@ -75,34 +96,45 @@ const Upload = () => {
         else if (buffer && buffer.keycode == event.target.dataset.keycode) {
             console.log("Clearing buffer");
             _updateSettingKeybind(false);
+            updateHotkey(buffer);
             setBuffer(null);
         }
     }
     
-    const updateBuffer = (update, data) => {
+    const updateBuffer = (dataset) => {
         console.log("updateBuffer");
-        // console.log(event);
+        toggleHighlightedKeys(false, highlighted);
+        toggleHighlightedKeys(true, dataset);
+        
+        setBuffer(dataset);
     }
     
-    /*
-        Used to set the CSS class of the buttons that need to be highlighted.
-        Used to highlight when hovering over a keybind, and when setting a keybind.
-    */
-    const toggleHighlightedKeys = (state, dataset) => {
+    const datasetToKeyString = (dataset) => {
         let buttons = dataset.ctrl.toLowerCase() === "true" ? "{controlleft} {controlright} " : "";
         buttons += dataset.shift.toLowerCase() === "true" ? "{shiftleft} {shiftright} " : "";
         buttons += dataset.alt.toLowerCase() === "true" ? "{altleft} {altright} " : "";
         buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
         console.log(buttons);
-
+        return buttons;
+    }
+    
+    /*
+        Used to set the CSS class of the keys that need to be highlighted.
+        Used to highlight when hovering over a keybind, and when setting a keybind.
+    */
+    const toggleHighlightedKeys = (state, dataset) => {
+        let keys = datasetToKeyString(dataset);
+        console.log(keys);
         if (state) {
+            setHighlighted(JSON.parse(JSON.stringify(dataset)));
             keyboard.current.dispatch((instance) => {
-                instance.addButtonTheme(buttons, "active-key");
+                instance.addButtonTheme(keys, "active-key");
             });
         }
         else {
+            setHighlighted(null);
             keyboard.current.dispatch((instance) => {
-                instance.removeButtonTheme(buttons, "active-key");
+                instance.removeButtonTheme(keys, "active-key");
             });
         }
     }
@@ -122,7 +154,7 @@ const Upload = () => {
         }
     }
     
-
+    
     return (
         <>
         <form method="POST" onSubmit={_handleSubmit}>
@@ -141,7 +173,8 @@ const Upload = () => {
         </form>
         <FullKeyboard ref={keyboard}
                       settingKeybind={settingKeybind}
-                      updateBuffer={updateBuffer} />
+                      updateBuffer={updateBuffer}
+                      buffer={buffer} />
         <Keybinds data={data}
                   buffer={buffer}
                   updateCurrentHoverCallback={updateCurrentHover}
