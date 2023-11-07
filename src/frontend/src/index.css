@@ -34,9 +34,14 @@ input {
   display: flex;
   background-color: rgba(0, 0, 0, 0.1);
   justify-content: center;
-  width: 1024px;
+  width: fit-content;
   margin: 0 auto;
   border-radius: 5px;
+}
+
+
+.simple-keyboard .hg-row {
+  justify-content: center;
 }
 
 .simple-keyboard.hg-theme-default {
@@ -70,9 +75,6 @@ input {
   box-shadow: none;
 }
 
-.simple-keyboard-arrows .hg-row {
-  justify-content: center;
-}
 
 .simple-keyboard-arrows .hg-button {
   width: 50px;
@@ -144,6 +146,45 @@ input {
 
 .simple-keyboard-numpadEnd.simple-keyboard .hg-button.hg-button-enter {
   height: 85px;
+}
+
+.mouse {
+  display: flex;
+  display-items: flex-end;
+}
+
+.mouse .hg-button {
+  text-align: center;
+}
+
+.mouse .simple-keyboard-mouse-extra {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100px;
+}
+
+.simple-keyboard-mouse-extra .hg-button.hg-button-mouseextra1 {
+  height: 85px;
+}
+
+.simple-keyboard-mouse-extra .hg-button.hg-button-mouseextra2 {
+  height: 85px;
+}
+
+
+.mouse .simple-keyboard-mouse-primary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.simple-keyboard-mouse-primary .hg-button.hg-button-wheelup {
+  flex: 0 0 100px;
+}
+
+.simple-keyboard-mouse-primary .hg-button.hg-button-wheeldown {
+  flex: 0 0 100px;
 }
 
 .simple-keyboard.hg-theme-default .hg-button.hg-selectedButton {

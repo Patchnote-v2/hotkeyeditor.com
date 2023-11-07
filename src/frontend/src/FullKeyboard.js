@@ -106,6 +106,31 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
       default: ["{numpadsubtract}", "{numpadadd}", "{numpadenter}"]
     }
   };
+
+  const keyboardMouseExtraOptions = {
+    ...commonKeyboardOptions,
+    layout: {
+      default: ["{mouseextra2}", "{mouseextra1}"]
+    },
+    display: {
+      "{mouseextra2}": "Mouse Extra 2 ↑",
+      "{mouseextra1}": "↓ Mouse Extra 1",
+    }
+  };
+
+  const keyboardMousePrimaryOptions = {
+    ...commonKeyboardOptions,
+    layout: {
+      default: ["{wheelup}", "{mouse1} {mousemiddle} {mouse2}", "{wheeldown}"]
+    },
+    display: {
+      "{mouse1}": "Mouse 1",
+      "{mouse2}": "Mouse 2",
+      "{wheelup}": "Wheel Up",
+      "{mousemiddle}": "Middle",
+      "{wheeldown}": "Wheel Down",
+    }
+  };
   
   const onKeyReleased = (key, event) => {
     console.log(event)
@@ -143,6 +168,16 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
           <Keyboard
             baseClass={"simple-keyboard-numpadEnd"}
             {...keyboardNumPadEndOptions}
+          />
+        </div>
+        <div className="mouse">
+          <Keyboard
+            baseClass={"simple-keyboard-mouse-extra"}
+            {...keyboardMouseExtraOptions}
+          />
+          <Keyboard
+            baseClass={"simple-keyboard-mouse-primary"}
+            {...keyboardMousePrimaryOptions}
           />
         </div>
       </div>

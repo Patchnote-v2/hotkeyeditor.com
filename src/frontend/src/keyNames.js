@@ -360,9 +360,9 @@ export const simpleKeyboardKeyNames = {
     // 253 : 'Pa1', // PA1 key
     // 254 : 'Oem Clear' // Clear key
     //These keys are remapped to AoK codes for various mouse buttons
-    251 : 'Extra Button 2', // AoK uses this for Extra Button 2
-    252 : 'Extra Button 1', // AoK uses this for Extra Button 1
-    253 : 'Middle Button', // AoK uses this for Middle Button
-    254 : 'Wheel Down', // AoK uses this for Wheel Down
-    255 : 'Wheel Up' // AoK uses this for Wheel Up
+    251 : '{mouseextra2}', // AoK uses this for Extra Button 2 (FORWARD)
+    252 : '{mouseextra1}', // AoK uses this for Extra Button 1 (BACKWARD)
+    253 : '{mousemiddle}', // AoK uses this for Middle Button
+    254 : '{wheeldown}', // AoK uses this for Wheel Down
+    255 : '{wheelup}' // AoK uses this for Wheel Up
 }
