@@ -13,6 +13,8 @@ const Keybinds = (data) => {
                     var hotkey = data.data.hotkeys[data.data.groups[value][key2]];
                     // console.log(hotkey);
                     if (hotkey) {
+                        let rowClassNames = "keycode";
+                        rowClassNames += data.buffer && value2 == data.buffer.id ? " active-keybind" : "";
                         return (
                             <li key={value2}
                                 id={value2}
@@ -22,7 +24,8 @@ const Keybinds = (data) => {
                                 data-alt={hotkey.alt}
                                 onMouseOver={data.updateCurrentHoverCallback}
                                 onMouseOut={data.updateCurrentHoverCallback}
-                                className="keycode">
+                                onClick={(event) => data.handleSettingKeybind(event)}
+                                className={rowClassNames}>
                             <span className="keycode-text">{hotkey.string_text} -- </span>
                             <span className="keycode-code">
                                 {hotkey.ctrl ? "Ctrl+" : ""}

@@ -202,6 +202,11 @@ input {
 
 .keycode {
   padding: 3px;
+  pointer-events: auto;
+}
+
+.keycode.active-keybind {
+  background-color: lightcoral;
 }
 
 .keycode-text {
