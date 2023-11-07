@@ -5,6 +5,15 @@ import "react-simple-keyboard/build/css/index.css";
 import "./index.css";
 import { useEffect, useState, forwardRef } from 'react';
 
+const modifiers = {
+  "{shiftleft}": "shift",
+  "{shiftright}": "shift",
+  "{controlleft}": "ctrl",
+  "{controlright}": "ctrl",
+  "{altleft}":  "alt",
+  "{altright}": "alt"
+}
+
 const FullKeyboard = React.forwardRef((props, keyboard) => {
   const [layoutName, setLayoutName] = useState("");
   const [input, setInput] = useState("");
@@ -133,8 +142,18 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
   };
   
   const onKeyReleased = (key, event) => {
+    console.log("onKeyReleased");
     console.log(event)
     console.log(key);
+    
+    // If actively setting keybind
+    if (props.buffer) {
+      // If a modifier was pressed
+      if (Object.keys(modifiers).includes(key)) {
+        props.buffer[modifiers[key]] = !(props.buffer[modifiers[key]] === "true");
+        props.updateBuffer(props.buffer);
+      }
+    }
   }
   
   return (
