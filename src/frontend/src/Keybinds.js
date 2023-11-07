@@ -16,10 +16,6 @@ const Keybinds = (data) => {
                         if (hotkey) {
                             let rowClassNames = "keycode";
                             rowClassNames += data.buffer && value2 == data.buffer.id ? " active-keybind" : "";
-                            if (value2 == 19327) {
-                                console.log("HOTKEYCONTROL");
-                                console.log(hotkey);
-                            }
                             return (
                                 <li key={value2}
                                     id={value2}
