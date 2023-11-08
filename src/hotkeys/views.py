@@ -110,6 +110,8 @@ class GenerateHKPView(View):
 
         response = HttpResponse(files['profile'].serialize(),
                                 content_type="application/octet-stream")
-        response['Content-Disposition'] = 'attachment; filename=%s' % smart_str("Test.hkp")
+        # https://stackoverflow.com/a/37931084/2368714
+        response['Access-Control-Expose-Headers'] = "Content-Disposition"
+        response['Content-Disposition'] = f"attachment; filename={smart_str('Test.hkp')}"
 
         return response
