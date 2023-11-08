@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from hotkeys.views import UploadHKPView
+from hotkeys.views import HKPView, GenerateHKPView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('upload/', UploadHKPView.as_view())
+    path('upload/', HKPView.as_view()),
+    path('generate/', GenerateHKPView.as_view())
 ]

@@ -60,6 +60,17 @@ const Upload = () => {
           .catch((error) => {console.log(error);});
     }
     
+    const uploadChanged = (event) => {
+        event.preventDefault();
+        console.log(changed);
+        axios({
+            method: 'post',
+            url: '/generate/',
+            data: changed,
+        }).then((response) => {console.log(response.data);})
+          .catch((error) => {console.log(error);});
+    }
+    
     const updateHotkey = (dataset) => {
         let hotkey = data.hotkeys[dataset.id];
         hotkey.ctrl = dataset.ctrl;
@@ -180,7 +191,8 @@ const Upload = () => {
             />
             <button type="submit">Upload Files</button>
         </form>
-        <button onClick={_toggleSettingKeybind}>Toggle Setting</button>
+        {/*<button onClick={_toggleSettingKeybind}>Toggle Setting</button>*/}
+        <button onClick={uploadChanged}>Upload Changes</button>
         <form method="POST" onSubmit={_getDefaultFiles}>
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>

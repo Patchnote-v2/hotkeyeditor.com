@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -11,7 +13,7 @@ from .hpk.strings import hk_groups
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class UploadHKPView(View):
+class HKPView(View):
     def post(self, request):
         # Check for valid Content-Type header, otherwise return given JSON response
 
@@ -75,3 +77,11 @@ class UploadHKPView(View):
         return JsonResponse(data={"hotkeys": serialize_all_files(files),
                                   "groups": hk_groups},
                             status=200)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class GenerateHKPView(View):
+    def post(self, request):
+        changed = json.loads(request.body.decode("UTF-8"))
+
+        return JsonResponse(data={"test": True}, status=200)
