@@ -82,6 +82,29 @@ class HKPView(View):
 @method_decorator(csrf_exempt, name="dispatch")
 class GenerateHKPView(View):
     def post(self, request):
+        # todo: figure out best way to determine <profile> naming when downloading
+        # if the user uploaded their own files, figure out a way to save that name
+        # for later; otherwise, if editing from default, probably ad a text box
+        # that lets the user set their own name (with default text value)
         changed = json.loads(request.body.decode("UTF-8"))
+        base_path = f"hotkeys/static/hotkeys/defaults/95810/Base.hkp"
+        dev_path = f"hotkeys/static/hotkeys/defaults/95810/Dev.hkp"
+
+        files = {'base': None, 'profile': None}
+        with open(base_path, "rb") as file:
+            files["base"] = HotkeyFile(file.read(), False, "Base.hkp", FileType.HKP)
+        with open(dev_path, "rb") as file:
+            files["profile"] = HotkeyFile(file.read(), False, "Dev.hkp", FileType.HKI)
+
+        files['base'].update(changed)
+        files['profile'].update(changed)
+
+        with open("Base.hkp", "wb") as file:
+            file.write(files['base'].serialize())
+            file.close()
+
+        with open("Test.hkp", "wb") as file:
+            file.write(files['profile'].serialize())
+            file.close()
 
         return JsonResponse(data={"test": True}, status=200)
