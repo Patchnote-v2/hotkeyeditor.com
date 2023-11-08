@@ -150,7 +150,7 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
     if (props.buffer) {
       // If a modifier was pressed
       if (Object.keys(modifiers).includes(key)) {
-        props.buffer[modifiers[key]] = !(props.buffer[modifiers[key]] === "true");
+        props.buffer[modifiers[key]] = !(props.buffer[modifiers[key]]);
         props.updateBuffer(props.buffer);
       }
     }

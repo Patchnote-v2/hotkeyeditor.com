@@ -7,6 +7,25 @@ import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
+/*
+    Used to construct a consistent dataset from an event.
+    HTMLElement.dataset is a DOMStringMap, meaning that all values are cast into strings.
+    We have to convert these values so that when it's finally sent to the backend
+    types don't need to be cast there.
+    It also allows changes to the data state variable to remain consistent
+    between chaned/unchanged entries.
+*/
+const getDatasetFromEvent = (event) => {
+    let dataset = event.target.dataset;
+    return {
+        ctrl: dataset.ctrl.toLowerCase() === "true" ? true : false,
+        shift: dataset.shift.toLowerCase() === "true" ? true : false,
+        alt: dataset.alt.toLowerCase() === "true" ? true : false,
+        keycode: parseInt(dataset.keycode),
+        id: parseInt(event.target.id)
+    };
+}
+
 const Upload = () => {
     const [changed, setChanged] = useState();
     const [data, setData] = useState();
@@ -43,22 +62,18 @@ const Upload = () => {
     
     const updateHotkey = (dataset) => {
         let hotkey = data.hotkeys[dataset.id];
-        hotkey.ctrl = dataset.ctrl === "true" ? true : false;
-        hotkey.shift = dataset.shift === "true" ? true : false;
-        hotkey.alt = dataset.alt === "true" ? true : false;
+        hotkey.ctrl = dataset.ctrl;
+        hotkey.shift = dataset.shift;
+        hotkey.alt = dataset.alt;
         hotkey.keycode = dataset.keycode;
         
         let newHotkeys = {...data.hotkeys}
         newHotkeys[dataset.id] = hotkey
         setData({groups: data.groups, hotkeys: {...newHotkeys}});
         
-        
         let newChanged = {...changed};
         newChanged[dataset.id] = hotkey;
         setChanged(newChanged);
-        // setData()
-        
-        // data.hotkeys[dataset.id] = hotkey;
     }
     
     /*
@@ -83,17 +98,14 @@ const Upload = () => {
     */
     const handleSettingKeybind = (event) => {
         console.log("beginSettingKeybind");
-        console.log(event);
-        
-        let dataset = event.target.dataset;
-        dataset.id = event.target.id;
+        let dataset = getDatasetFromEvent(event);
         
         if (!buffer) {
             console.log("Setting buffer");
             _updateSettingKeybind(true);
             setBuffer(dataset);
         }
-        else if (buffer && buffer.keycode == event.target.dataset.keycode) {
+        else if (buffer && buffer.keycode === parseInt(event.target.dataset.keycode)) {
             console.log("Clearing buffer");
             _updateSettingKeybind(false);
             updateHotkey(buffer);
@@ -110,9 +122,10 @@ const Upload = () => {
     }
     
     const datasetToKeyString = (dataset) => {
-        let buttons = dataset.ctrl.toLowerCase() === "true" ? "{controlleft} {controlright} " : "";
-        buttons += dataset.shift.toLowerCase() === "true" ? "{shiftleft} {shiftright} " : "";
-        buttons += dataset.alt.toLowerCase() === "true" ? "{altleft} {altright} " : "";
+        console.log("datasetToKeyString");
+        let buttons = dataset.ctrl ? "{controlleft} {controlright} " : "";
+        buttons += dataset.shift ? "{shiftleft} {shiftright} " : "";
+        buttons += dataset.alt ? "{altleft} {altright} " : "";
         buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
         console.log(buttons);
         return buttons;
@@ -123,8 +136,8 @@ const Upload = () => {
         Used to highlight when hovering over a keybind, and when setting a keybind.
     */
     const toggleHighlightedKeys = (state, dataset) => {
+        console.log("toggleHighlightedKeys");
         let keys = datasetToKeyString(dataset);
-        console.log(keys);
         if (state) {
             setHighlighted(JSON.parse(JSON.stringify(dataset)));
             keyboard.current.dispatch((instance) => {
@@ -144,7 +157,8 @@ const Upload = () => {
     */
     const updateCurrentHover = (event) => {
         if (!settingKeybind) {
-            let dataset = event.target.dataset;
+            console.log("updateCurrentHover");
+            let dataset = getDatasetFromEvent(event);
             if (event.type === "mouseover") {
                 toggleHighlightedKeys(true, dataset);
             }
