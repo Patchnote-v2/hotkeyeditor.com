@@ -135,6 +135,9 @@ class HotkeyFile:
     def __getitem__(self, key):
         return self.data[key]
 
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
     # def deserialize(self, json: str):
     def serialize(self):
         unparser = HkUnparser(self._file_type)
