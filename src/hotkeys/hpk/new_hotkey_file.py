@@ -64,6 +64,13 @@ class HotkeyFile:
             parser.validate_size()
             self.validate()
 
+    def update(self, changed):
+        for key, value in changed.items():
+            # Cast to int because JSON keys must be strings
+            key = int(key)
+            if key in self:
+                self[key] = value
+
     # todo: make this fail is there's missing strings in hk_mapping
     def deserialize_file(self, data):
         self.data = {}
