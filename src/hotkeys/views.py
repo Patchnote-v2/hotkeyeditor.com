@@ -1,6 +1,7 @@
 import json
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.utils.encoding import smart_str
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
@@ -107,4 +108,8 @@ class GenerateHKPView(View):
             file.write(files['profile'].serialize())
             file.close()
 
-        return JsonResponse(data={"test": True}, status=200)
+        response = HttpResponse(files['profile'].serialize(),
+                                content_type="application/octet-stream")
+        response['Content-Disposition'] = 'attachment; filename=%s' % smart_str("Test.hkp")
+
+        return response

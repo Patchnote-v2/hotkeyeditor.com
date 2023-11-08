@@ -1,9 +1,13 @@
 import { useState, useRef } from "react";
+
 import axios from "axios";
+
+import fileDownload from 'js-file-download';
 
 import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
 import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
+
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -67,8 +71,9 @@ const Upload = () => {
             method: 'post',
             url: '/generate/',
             data: changed,
-        }).then((response) => {console.log(response.data);})
-          .catch((error) => {console.log(error);});
+            responseType: 'blob',
+        }).then((response) => {fileDownload(response.data, "test.hkp");})
+        .catch((error) => {console.log(error);});
     }
     
     const updateHotkey = (dataset) => {
