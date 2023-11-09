@@ -1,14 +1,19 @@
 import { simpleKeyboardKeyNames } from './keyNames.js';
 
 var Utils = {
-/*
-    Used to construct a consistent dataset from an event.
-    HTMLElement.dataset is a DOMStringMap, meaning that all values are cast into strings.
-    We have to convert these values so that when it's finally sent to the backend
-    types don't need to be cast there.
-    It also allows changes to the data state variable to remain consistent
-    between chaned/unchanged entries.
-*/
+    // https://stackoverflow.com/a/28191966/2368714
+    findKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    },
+    
+    /*
+        Used to construct a consistent dataset from an event.
+        HTMLElement.dataset is a DOMStringMap, meaning that all values are cast into strings.
+        We have to convert these values so that when it's finally sent to the backend
+        types don't need to be cast there.
+        It also allows changes to the data state variable to remain consistent
+        between chaned/unchanged entries.
+    */
     getDatasetFromEvent(event) {
         let dataset = event.target.dataset;
         return {
