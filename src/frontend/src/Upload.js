@@ -11,6 +11,7 @@ import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
+// todo: move to Utils
 /*
     Used to construct a consistent dataset from an event.
     HTMLElement.dataset is a DOMStringMap, meaning that all values are cast into strings.
@@ -60,8 +61,10 @@ const Upload = () => {
         axios({
             method: 'get',
             url: '/upload/',
-        }).then((response) => {console.log(response.data);setData(response.data)})
-          .catch((error) => {console.log(error);});
+        }).then((response) => {
+            console.log(response.data);
+            setData(response.data);
+        }).catch((error) => {console.log(error);});
     }
     
     const uploadChanged = (event) => {
@@ -92,16 +95,6 @@ const Upload = () => {
         setChanged(newChanged);
     }
     
-    /*
-        Probably temporary function used for debugging purposes (button that toggles state)
-    */
-    const _toggleSettingKeybind = () => {
-        keyboard.current.setOptions({
-            physicalKeyboardHighlight: !keyboard.current.options['physicalKeyboardHighlight']
-        });
-        setSettingKeybind(!settingKeybind);
-    }
-    
     const _updateSettingKeybind = (state) => {
         keyboard.current.setOptions({
             physicalKeyboardHighlight: state
@@ -118,25 +111,46 @@ const Upload = () => {
         
         if (!buffer) {
             console.log("Setting buffer");
+            // Actively setting keybind
             _updateSettingKeybind(true);
+            
+            // Update highlights to go from keybind row hover to setting keybind colors
+            updateBufferHighlights(dataset, "keybind-row-setting-button");
+            
             setBuffer(dataset);
         }
         else if (buffer && buffer.keycode === parseInt(event.target.dataset.keycode)) {
             console.log("Clearing buffer");
+            // No longer setting keybind
             _updateSettingKeybind(false);
+            
+            // Add finalized buffer to changed
             updateHotkey(buffer);
+            
+            // Update highlighted keys to finalized buffer
+            updateBufferHighlights(buffer, "keybind-row-hover-button");
+            
             setBuffer(null);
         }
     }
     
     const updateBuffer = (dataset) => {
         console.log("updateBuffer");
-        toggleHighlightedKeys(false, highlighted);
-        toggleHighlightedKeys(true, dataset);
-        
+        updateBufferHighlights(dataset, "keybind-row-setting-button");
         setBuffer(dataset);
     }
     
+    /*
+        Removes -hover or -setting classes on current buttons and sets new ones on dataset
+    */
+    const updateBufferHighlights = (dataset, cssClass) => {
+        // Remove both hover- and setting- classes since we have no way of know
+        // whether or not this is the first time updating the buffer
+        setHighlightedKeys(false, highlighted, "keybind-row-hover-button keybind-row-setting-button");
+        setHighlightedKeys(true, dataset, cssClass);
+    }
+    
+    // todo: move to Utils
     const datasetToKeyString = (dataset) => {
         console.log("datasetToKeyString");
         let buttons = dataset.ctrl ? "{controlleft} {controlright} " : "";
@@ -151,19 +165,21 @@ const Upload = () => {
         Used to set the CSS class of the keys that need to be highlighted.
         Used to highlight when hovering over a keybind, and when setting a keybind.
     */
-    const toggleHighlightedKeys = (state, dataset) => {
-        console.log("toggleHighlightedKeys");
+    const setHighlightedKeys = (state, dataset, cssClasses) => {
+        console.log("setHighlightedKeys");
         let keys = datasetToKeyString(dataset);
         if (state) {
+            // Need to deep-copy with JSON (why didn't Javascript have deep copy years ago?)
+            // Good thing I don't have any complex objects.
             setHighlighted(JSON.parse(JSON.stringify(dataset)));
             keyboard.current.dispatch((instance) => {
-                instance.addButtonTheme(keys, "active-key");
+                instance.addButtonTheme(keys, cssClasses);
             });
         }
         else {
             setHighlighted(null);
             keyboard.current.dispatch((instance) => {
-                instance.removeButtonTheme(keys, "active-key");
+                instance.removeButtonTheme(keys, cssClasses);
             });
         }
     }
@@ -176,10 +192,10 @@ const Upload = () => {
             console.log("updateCurrentHover");
             let dataset = getDatasetFromEvent(event);
             if (event.type === "mouseover") {
-                toggleHighlightedKeys(true, dataset);
+                setHighlightedKeys(true, dataset, "keybind-row-hover-button");
             }
             else if (event.type === "mouseout") {
-                toggleHighlightedKeys(false, dataset);
+                setHighlightedKeys(false, dataset, "keybind-row-hover-button");
             }
         }
     }
@@ -196,7 +212,6 @@ const Upload = () => {
             />
             <button type="submit">Upload Files</button>
         </form>
-        {/*<button onClick={_toggleSettingKeybind}>Toggle Setting</button>*/}
         <button onClick={uploadChanged}>Upload Changes</button>
         <form method="POST" onSubmit={_getDefaultFiles}>
             <label htmlFor="loadDefaults">Load Defaults</label>

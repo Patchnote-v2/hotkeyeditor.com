@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import "./index.css";
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState, forwardRef, useRef } from 'react';
 
 const modifiers = {
   "{shiftleft}": "shift",
@@ -17,8 +17,27 @@ const modifiers = {
 const FullKeyboard = React.forwardRef((props, keyboard) => {
   const [layoutName, setLayoutName] = useState("");
   const [input, setInput] = useState("");
+  const settingKeybindRef = useRef();
+  
+  // I don't understand this.  In the parent, even if I'm updating the state that gets passed
+  // to this component's props in a useEffect in the parent, this component never recieves
+  // the updated prop.  For some reason, using a ref works though?
+  useEffect(() => {
+    settingKeybindRef.current = props.settingKeybind;
+  }, [props]);
 
   const commonKeyboardOptions = {
+    onRender: (keyboard2) => {
+                keyboard2.recurseButtons((button) => {
+                  button.addEventListener('mouseover', (event) => {
+                    button.classList.add(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+                })
+                button.addEventListener('mouseout', (event) => {
+                    button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+                })
+              })
+            },
+    onKeyPress: (key, event) => onKeyPress(key, event),
     onKeyReleased: (key, event) => onKeyReleased(key, event),
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
@@ -141,6 +160,17 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
     }
   };
   
+  const onKeyPress = (key, event) => {
+    console.log("onKeyPress");
+    console.log(event)
+    console.log(key);
+    // if (event.repeat) {
+      // console.log("repeating");
+      // event.preventDefault();
+      // event.stopPropagation();
+    // }
+  }
+
   const onKeyReleased = (key, event) => {
     console.log("onKeyReleased");
     console.log(event)
@@ -158,7 +188,7 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
   
   return (
     <div id="keyboard-wrapper"
-         className={props.settingKeybind ? "" : "disableKeyboard"}>
+         className={props.settingKeybind ? "" : "disable-keyboard"}>
       <div className={"keyboardContainer"}>
         <Keyboard
           ref={keyboard}

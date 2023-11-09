@@ -26,10 +26,6 @@ input {
   top: 0px;
 }
 
-.disableKeyboard {
-  pointer-events: none;
-}
-
 .keyboardContainer {
   display: flex;
   background-color: rgba(0, 0, 0, 0.1);
@@ -196,24 +192,42 @@ input {
   width: 350px;
 }
 
-.hg-theme-default .hg-button.active-key {
-  background-color: red;
+                          /* V "what is being hovered"-"state"-"what it applies to" */
+.hg-theme-default .hg-button.keybind-row-hover-button {
+  background-color: #DA7676;
 }
 
-.keycode {
+.hg-theme-default .hg-button.keybind-row-setting-button {
+  background-color: #DD4343;
+}
+
+.hg-theme-default .hg-button.button-hover-passive-button {
+  cursor: default;
+  background-color: #FEFE00;
+}
+
+.hg-theme-default .hg-button.button-hover-setting-button {
+  background-color: #DA7676;
+}
+
+.hotkey-row {
   padding: 3px;
   pointer-events: auto;
 }
 
-.keycode.active-keybind {
-  background-color: lightcoral;
+.hotkey-row:hover {
+  background-color: #DA7676;
 }
 
-.keycode-text {
+.hotkey-row.keybind-row-setting {
+  background-color: #DD4343;
+}
+
+.hotkey-text {
   pointer-events: none;
 }
 
-.keycode-code {
+.hotkey-code {
   background-color: #DADADA;
   padding: 3px;
   pointer-events: none;
