@@ -210,9 +210,22 @@ input {
   background-color: #DA7676;
 }
 
+#menus {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.menu {
+  border: 1px solid black;
+  flex: 1 0 fit-content;
+  padding: 5px;
+}
+
 .hotkey-row {
   padding: 3px;
   pointer-events: auto;
+  border: 1px solid lightgray;
 }
 
 .hotkey-row:hover {
@@ -221,6 +234,10 @@ input {
 
 .hotkey-row.keybind-row-setting {
   background-color: #DD4343;
+}
+
+.hotkey-row-find {
+  background-color: #FEFE00;
 }
 
 .hotkey-text {

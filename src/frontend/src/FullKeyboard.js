@@ -5,6 +5,9 @@ import "react-simple-keyboard/build/css/index.css";
 import "./index.css";
 import { useEffect, useState, forwardRef, useRef } from 'react';
 
+import { simpleKeyboardKeyNames } from './keyNames.js';
+import Utils from './Utils.js';
+
 const modifiers = {
   "{shiftleft}": "shift",
   "{shiftright}": "shift",
@@ -31,9 +34,17 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
                 keyboard2.recurseButtons((button) => {
                   button.addEventListener('mouseover', (event) => {
                     button.classList.add(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+                    
+                    // Row highlighting based on what's currently being hovered over
+                    let currentButton = event.target.dataset.skbtn;
+                    if (!(Object.keys(modifiers).includes(currentButton))) {
+                      let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
+                      props.findRowsByKeyCode(found);
+                    }
                 })
                 button.addEventListener('mouseout', (event) => {
                     button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+                    props.findRowsByKeyCode(null);
                 })
               })
             },

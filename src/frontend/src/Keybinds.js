@@ -7,15 +7,16 @@ const Keybinds = (data) => {
     
     useEffect(() => {
         if (data.data) {
-            let temp = Object.keys(data.data.groups).map((value, key) => {
+            let mapping = Object.keys(data.data.groups).map((value, key) => {
                 return (
-                    <>
+                    <div class="menu">
                     <h3>{value}</h3>
                     {data.data.groups[value].map((value2, key2) => {
                         var hotkey = data.data.hotkeys[data.data.groups[value][key2]];
                         if (hotkey) {
                             let rowClassNames = "hotkey-row";
                             rowClassNames += data.buffer && value2 == data.buffer.id ? " keybind-row-setting" : "";
+                            rowClassNames += !data.buffer && data.foundRows.includes(value2) ? " hotkey-row-find" : ""
                             return (
                                 <li key={value2}
                                     id={value2}
@@ -41,17 +42,17 @@ const Keybinds = (data) => {
                             return;
                         }
                     })}
-                    </>
+                    </div>
                 );
             })
-            setKeybinds(temp);
+            setKeybinds(mapping);
         }
     }, [data])
     
     return (
-        <>
+        <div id="menus">
         {keybinds ? keybinds : ""}
-        </>
+        </div>
     );
 };
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import axios from "axios";
 
@@ -15,11 +15,20 @@ axios.defaults.baseURL = 'http://localhost:8000';
 const Upload = () => {
     const [changed, setChanged] = useState();
     const [data, setData] = useState();
+    const dataLoadedRef = useRef();
     const [settingKeybind, setSettingKeybind] = useState(false);
     const [highlighted, setHighlighted] = useState(null);
     const [buffer, setBuffer] = useState(null);
+    const [foundRows, setFoundRows] = useState([]);
     
     const keyboard = useRef(null);
+    
+    useEffect(() => {
+        if (data) {
+            // Dear God please someone put me out of my misery
+            dataLoadedRef.current = data;
+        }
+    }, [data]);
     
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
@@ -170,6 +179,15 @@ const Upload = () => {
         }
     }
     
+    const findRowsByKeycode = (keycode) => {
+        if (dataLoadedRef.current) {
+            setFoundRows(keycode ? Object.entries(dataLoadedRef.current.hotkeys)
+                               .filter(([, v]) => v.keycode === parseInt(keycode))
+                               .map(([k]) => parseInt(k))
+                               : []);
+        }
+    }
+    
     
     return (
         <>
@@ -190,11 +208,13 @@ const Upload = () => {
         <FullKeyboard ref={keyboard}
                       settingKeybind={settingKeybind}
                       updateBuffer={updateBuffer}
-                      buffer={buffer} />
+                      buffer={buffer}
+                      findRowsByKeyCode={findRowsByKeycode} />
         <Keybinds data={data}
                   buffer={buffer}
                   updateCurrentHoverCallback={updateCurrentHover}
-                  handleSettingKeybind={handleSettingKeybind} />
+                  handleSettingKeybind={handleSettingKeybind}
+                  foundRows={foundRows} />
         </>
     );
 };
