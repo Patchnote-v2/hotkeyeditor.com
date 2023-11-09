@@ -7,29 +7,10 @@ import fileDownload from 'js-file-download';
 import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
 import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
+import Utils from './Utils.js';
 
 
 axios.defaults.baseURL = 'http://localhost:8000';
-
-// todo: move to Utils
-/*
-    Used to construct a consistent dataset from an event.
-    HTMLElement.dataset is a DOMStringMap, meaning that all values are cast into strings.
-    We have to convert these values so that when it's finally sent to the backend
-    types don't need to be cast there.
-    It also allows changes to the data state variable to remain consistent
-    between chaned/unchanged entries.
-*/
-const getDatasetFromEvent = (event) => {
-    let dataset = event.target.dataset;
-    return {
-        ctrl: dataset.ctrl.toLowerCase() === "true" ? true : false,
-        shift: dataset.shift.toLowerCase() === "true" ? true : false,
-        alt: dataset.alt.toLowerCase() === "true" ? true : false,
-        keycode: parseInt(dataset.keycode),
-        id: parseInt(event.target.id)
-    };
-}
 
 const Upload = () => {
     const [changed, setChanged] = useState();
@@ -107,7 +88,7 @@ const Upload = () => {
     */
     const handleSettingKeybind = (event) => {
         console.log("beginSettingKeybind");
-        let dataset = getDatasetFromEvent(event);
+        let dataset = Utils.getDatasetFromEvent(event);
         
         if (!buffer) {
             console.log("Setting buffer");
@@ -150,24 +131,13 @@ const Upload = () => {
         setHighlightedKeys(true, dataset, cssClass);
     }
     
-    // todo: move to Utils
-    const datasetToKeyString = (dataset) => {
-        console.log("datasetToKeyString");
-        let buttons = dataset.ctrl ? "{controlleft} {controlright} " : "";
-        buttons += dataset.shift ? "{shiftleft} {shiftright} " : "";
-        buttons += dataset.alt ? "{altleft} {altright} " : "";
-        buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
-        console.log(buttons);
-        return buttons;
-    }
-    
     /*
         Used to set the CSS class of the keys that need to be highlighted.
         Used to highlight when hovering over a keybind, and when setting a keybind.
     */
     const setHighlightedKeys = (state, dataset, cssClasses) => {
         console.log("setHighlightedKeys");
-        let keys = datasetToKeyString(dataset);
+        let keys = Utils.datasetToKeyString(dataset);
         if (state) {
             // Need to deep-copy with JSON (why didn't Javascript have deep copy years ago?)
             // Good thing I don't have any complex objects.
@@ -190,7 +160,7 @@ const Upload = () => {
     const updateCurrentHover = (event) => {
         if (!settingKeybind) {
             console.log("updateCurrentHover");
-            let dataset = getDatasetFromEvent(event);
+            let dataset = Utils.getDatasetFromEvent(event);
             if (event.type === "mouseover") {
                 setHighlightedKeys(true, dataset, "keybind-row-hover-button");
             }
