@@ -1,9 +1,7 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import "./index.css";
-import { useEffect, useState, forwardRef, useRef } from 'react';
+import { useEffect, forwardRef, useRef } from 'react';
 
 import { simpleKeyboardKeyNames } from './keyNames.js';
 import Utils from './Utils.js';
@@ -17,9 +15,7 @@ const modifiers = {
   "{altright}": "alt"
 }
 
-const FullKeyboard = React.forwardRef((props, keyboard) => {
-  const [layoutName, setLayoutName] = useState("");
-  const [input, setInput] = useState("");
+const FullKeyboard = forwardRef((props, keyboard) => {
   const settingKeybindRef = useRef();
   
   // I don't understand this.  In the parent, even if I'm updating the state that gets passed
@@ -205,7 +201,6 @@ const FullKeyboard = React.forwardRef((props, keyboard) => {
           ref={keyboard}
           baseClass={"simple-keyboard-main"}
           keyboardRef={r => {keyboard.current = r}}
-          layoutName={layoutName}
           {...keyboardOptions}
         />
 

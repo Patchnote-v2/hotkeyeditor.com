@@ -6,7 +6,6 @@ import fileDownload from 'js-file-download';
 
 import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
-import { keyNames, simpleKeyboardKeyNames } from './keyNames.js';
 import Utils from './Utils.js';
 
 

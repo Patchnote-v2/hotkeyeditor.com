@@ -15,7 +15,7 @@ const Keybinds = (data) => {
                         var hotkey = data.data.hotkeys[data.data.groups[value][key2]];
                         if (hotkey) {
                             let rowClassNames = "hotkey-row";
-                            rowClassNames += data.buffer && value2 == data.buffer.id ? " keybind-row-setting" : "";
+                            rowClassNames += data.buffer && value2 === data.buffer.id ? " keybind-row-setting" : "";
                             rowClassNames += !data.buffer && data.foundRows.includes(value2) ? " hotkey-row-find" : ""
                             return (
                                 <li key={value2}
@@ -39,7 +39,7 @@ const Keybinds = (data) => {
                             );
                         }
                         else {
-                            return;
+                            return (<></>);
                         }
                     })}
                     </div>
