@@ -109,7 +109,7 @@ const Upload = () => {
             
             setBuffer(dataset);
         }
-        else if (buffer && buffer.keycode === dataset.keycode) {
+        else if (buffer && buffer.id === dataset.id) {
             console.log("Clearing buffer");
             // No longer setting keybind
             _updateSettingKeybind(false);
