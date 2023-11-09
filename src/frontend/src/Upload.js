@@ -19,6 +19,7 @@ const Upload = () => {
     const [highlighted, setHighlighted] = useState(null);
     const [buffer, setBuffer] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
+    const [filterRows, setFilterRows] = useState(false);
     
     const keyboard = useRef(null);
     
@@ -108,7 +109,7 @@ const Upload = () => {
             
             setBuffer(dataset);
         }
-        else if (buffer && buffer.keycode === parseInt(event.target.dataset.keycode)) {
+        else if (buffer && buffer.keycode === dataset.keycode) {
             console.log("Clearing buffer");
             // No longer setting keybind
             _updateSettingKeybind(false);
@@ -179,11 +180,12 @@ const Upload = () => {
     }
     
     const findRowsByKeycode = (keycode) => {
-        if (dataLoadedRef.current) {
-            setFoundRows(keycode ? Object.entries(dataLoadedRef.current.hotkeys)
+        if (dataLoadedRef.current && !settingKeybind) {
+            let foundRows = keycode ? Object.entries(dataLoadedRef.current.hotkeys)
                                .filter(([, v]) => v.keycode === parseInt(keycode))
                                .map(([k]) => parseInt(k))
-                               : []);
+                               : []
+            setFoundRows(foundRows);
         }
     }
     
@@ -208,12 +210,15 @@ const Upload = () => {
                       settingKeybind={settingKeybind}
                       updateBuffer={updateBuffer}
                       buffer={buffer}
-                      findRowsByKeyCode={findRowsByKeycode} />
+                      findRowsByKeycode={findRowsByKeycode}
+                      setFilterRows={setFilterRows}
+                      filterRows={filterRows} />
         <Keybinds data={data}
                   buffer={buffer}
                   updateCurrentHoverCallback={updateCurrentHover}
                   handleSettingKeybind={handleSettingKeybind}
-                  foundRows={foundRows} />
+                  foundRows={foundRows}
+                  filterRows={filterRows} />
         </>
     );
 };

@@ -9,11 +9,11 @@ const Keybinds = (data) => {
         if (data.data) {
             let mapping = Object.keys(data.data.groups).map((value, key) => {
                 return (
-                    <div class="menu">
+                    <div className="menu">
                     <h3>{value}</h3>
                     {data.data.groups[value].map((value2, key2) => {
                         var hotkey = data.data.hotkeys[data.data.groups[value][key2]];
-                        if (hotkey) {
+                        if (hotkey && (!data.filterRows || data.foundRows.includes(value2))) {
                             let rowClassNames = "hotkey-row";
                             rowClassNames += data.buffer && value2 === data.buffer.id ? " keybind-row-setting" : "";
                             rowClassNames += !data.buffer && data.foundRows.includes(value2) ? " hotkey-row-find" : ""

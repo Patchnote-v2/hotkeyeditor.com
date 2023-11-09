@@ -17,12 +17,17 @@ const modifiers = {
 
 const FullKeyboard = forwardRef((props, keyboard) => {
   const settingKeybindRef = useRef();
+  const filterRowsRef = useRef();
   
   // I don't understand this.  In the parent, even if I'm updating the state that gets passed
   // to this component's props in a useEffect in the parent, this component never recieves
   // the updated prop.  For some reason, using a ref works though?
   useEffect(() => {
     settingKeybindRef.current = props.settingKeybind;
+  }, [props]);
+  
+  useEffect(() => {
+    filterRowsRef.current = props.filterRows;
   }, [props]);
 
   const commonKeyboardOptions = {
@@ -33,14 +38,19 @@ const FullKeyboard = forwardRef((props, keyboard) => {
                     
                     // Row highlighting based on what's currently being hovered over
                     let currentButton = event.target.dataset.skbtn;
-                    if (!(Object.keys(modifiers).includes(currentButton))) {
-                      let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
-                      props.findRowsByKeyCode(found);
+                    if (!filterRowsRef.current) {
+                      if (!(Object.keys(modifiers).includes(currentButton))) {
+                        let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
+                        props.findRowsByKeycode(found);
+                      }
                     }
                 })
                 button.addEventListener('mouseout', (event) => {
                     button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
-                    props.findRowsByKeyCode(null);
+                    if (!filterRowsRef.current) {
+                      console.log("NULLING");
+                      props.findRowsByKeycode(null);
+                    }
                 })
               })
             },
@@ -190,6 +200,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         props.buffer[modifiers[key]] = !(props.buffer[modifiers[key]]);
         props.updateBuffer(props.buffer);
       }
+    }
+    else if (!props.buffer) {
+      props.setFilterRows(!props.filterRows);
     }
   }
   
