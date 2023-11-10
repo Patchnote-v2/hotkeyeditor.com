@@ -52,7 +52,7 @@ class Command(BaseCommand):
         invalid_strings = {'base': {}, 'profile': {}}
         for key, file in files.items():
             for id, hotkey in file.data.items():
-                if hotkey.string_text == "":
+                if hotkey['string_text'] == "":
                     invalid_strings[key][id] = strings[id]
 
         self.stdout.write(self.style.SUCCESS(invalid_strings))
