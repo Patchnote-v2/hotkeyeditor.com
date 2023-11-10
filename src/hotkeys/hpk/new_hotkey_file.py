@@ -1,3 +1,4 @@
+import uuid
 from collections import namedtuple
 
 from .izip import compress, decompress
@@ -82,12 +83,15 @@ class HotkeyFile:
                 # It's important that string_text is blank if it fails to find a string match
                 # Looking for blank strings is what is used by the grabstrings command when
                 # looking for missing strings when an update happens.
-                self.data[key['id']] = {"string_text": hk_mapping[key['id']] if key['id'] in hk_mapping else "",
-                                        "keycode": key['code'],
-                                        "ctrl": key['ctrl'],
-                                        "alt": key['alt'],
-                                        "shift": key['shift'],
-                                        "menu_id": index, }
+                # Additionally, string_id isn't guaranteed to be unique so use
+                # UUID for unique keys
+                self.data[str(uuid.uuid4())] = {"string_text": hk_mapping[key['id']] if key['id'] in hk_mapping else "",  # noqa
+                                           "string_id": key['id'],
+                                           "keycode": key['code'],
+                                           "ctrl": key['ctrl'],
+                                           "alt": key['alt'],
+                                           "shift": key['shift'],
+                                           "menu_id": index, }
             index = index + 1
 
     def serialize_to_file(self):
@@ -96,7 +100,7 @@ class HotkeyFile:
         output = [[] for _ in range(self._num_menus)]
         for id, hotkey in self.data.items():
             output[hotkey["menu_id"]].append({"code": hotkey["keycode"],
-                                              "id": id,
+                                              "id": hotkey["string_id"],
                                               "ctrl": hotkey["ctrl"],
                                               "alt": hotkey["alt"],
                                               "shift": hotkey["shift"]})

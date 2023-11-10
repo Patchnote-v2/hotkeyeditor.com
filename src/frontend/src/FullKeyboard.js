@@ -40,8 +40,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
                     let currentButton = event.target.dataset.skbtn;
                     if (!filterRowsRef.current) {
                       if (!(Object.keys(modifiers).includes(currentButton))) {
-                        let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
-                        props.findRowsByKeycode(found);
+                        let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton, null);
+                        // parseInt() always only returns the first element in an array
+                        props.findRowsByKeycode(parseInt(found));
                       }
                     }
                 })
@@ -59,7 +60,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
     disableCaretPositioning: true,
-    physicalKeyboardHighlight: true,
+    // physicalKeyboardHighlight: true,
     physicalKeyboardHighlightPress: true,
     physicalKeyboardHighlightPressUsePointerEvents: true,
     physicalKeyboardHighlightPreventDefault: true,

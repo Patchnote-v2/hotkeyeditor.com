@@ -3,7 +3,15 @@ import { simpleKeyboardKeyNames } from './keyNames.js';
 var Utils = {
     // https://stackoverflow.com/a/28191966/2368714
     findKeyByValue(object, value) {
-        return Object.keys(object).find(key => object[key] === value);
+        return Object.keys(object).filter(key => object[key] === value);
+    },
+    
+    findKeyByValueAttribute(object, value, attribute=null) {
+        return Object.keys(object).filter(key => object[key]?.[attribute] === value);
+    },
+    
+    objectFilter(object, func) {
+        return Object.fromEntries(Object.entries(object).filter(func));
     },
     
     /*
@@ -21,7 +29,7 @@ var Utils = {
             shift: dataset.shift.toLowerCase() === "true" ? true : false,
             alt: dataset.alt.toLowerCase() === "true" ? true : false,
             keycode: parseInt(dataset.keycode),
-            id: parseInt(event.target.id)
+            id: event.target.id
         }
     },
 

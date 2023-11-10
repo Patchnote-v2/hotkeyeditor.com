@@ -179,11 +179,15 @@ const Upload = () => {
         }
     }
     
+    /*
+        Given a keycode, returns an array of all UUIDs that have that keycode as their
+        current key
+    */
     const findRowsByKeycode = (keycode) => {
         if (dataLoadedRef.current && !settingKeybind) {
             let foundRows = keycode ? Object.entries(dataLoadedRef.current.hotkeys)
-                               .filter(([, v]) => v.keycode === parseInt(keycode))
-                               .map(([k]) => parseInt(k))
+                               .filter(([k, v]) => dataLoadedRef.current.hotkeys[k].keycode === keycode)
+                               .map(([k]) => k)
                                : []
             setFoundRows(foundRows);
         }
