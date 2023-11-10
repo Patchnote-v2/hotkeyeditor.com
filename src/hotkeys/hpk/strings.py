@@ -462,7 +462,7 @@
 #     'cptship': (0x4126, 'Tec: Shipwright (CP)'),
 #     'cptgcannon': (0x4129, 'Tec: Elite Cannon Galleon (CP)'),
 #     'cpcaravel': (0x4154, 'Caravel (CP)'),
-#     'cpthirisadai': (0x4156, 'Thirisadai (CP)'),
+#     'cpthirisadai': (0x4156, 'Thirisadai (CP
 #     'cpbkrepost': (0x4122, 'Krepost (CP)'),
 #     'cpbdonjon': (0x4146, 'Donjon (CP)'),
 #     'cpcaravanserai': (0x4158, 'Caravanserai (CP)'),
@@ -541,21 +541,21 @@ hk_mapping = {
     0x4b5a: 'Go to Castle',
     0x4b49: 'Go to Dock',
     0x4a50: 'Go to Last Notification',
-    0x1004a50: 'Go to Last Notification (2)',
+    # 0x1004a50: 'Go to Last Notification (2)',
     0x4b5c: 'Go to Lumber Camp',
     0x4a53: 'Go to Market',
     0x4b4c: 'Go to Mill',
     0x4b5b: 'Go to Mining Camp',
     0x4b4a: 'Go to Monastery',
     0x4a7c: 'Go to Next Idle Military Unit',
-    0x1004a7c: 'Go to Next Idle Military Unit (2)',
+    # 0x1004a7c: 'Go to Next Idle Military Unit (2)',
     0x4a4f: 'Go to Next Idle Villager',
-    0x1004a4f: 'Go to Next Idle Villager (2)',
+    # 0x1004a4f: 'Go to Next Idle Villager (2)',
     0x4a51: 'Go to Selected Object',
     0x4b48: 'Go to Siege Workshop',
     0x4b47: 'Go to Stable',
     0x4a52: 'Go to Town Center',
-    0x1004a52: 'Go to Town Center (2)',
+    # 0x1004a52: 'Go to Town Center (2)',
     0x4b4d: 'Go to University',
     0x4b5d: 'Mini-map Combat Mode',
     0x4b5e: 'Mini-map Economic Mode',
@@ -886,23 +886,23 @@ hk_mapping = {
 
     # added later in de
     # this one changed numerical ids
-    0x4aba: 'Elite Kipchak | Tec: Guard Tower, Keep (CP)',
-    0x4abe: 'Flaming Camel | Tec: Murder Holes (CP)',
+    0x4aba: 'Elite Kipchak',
+    0x4abe: 'Flaming Camel',
 
     # update 36906
-    0x4abb: 'Select all Markets | Tec: Heated Shot (CP)',
-    0x4abc: 'Select all Blacksmiths | Tec: Masonry, Architecture (CP)',
-    0x4abd: 'Select all Universities | Tec: Chemistry (CP)',
+    0x4abb: 'Select all Markets',
+    0x4abc: 'Select all Blacksmith',
+    0x4abd: 'Select all Universities',
 
     # update 39284
     0x4b21: 'Drop Relic',
 
     # update 42848
     0x4ac3: 'Select all Trade Carts/Cogs',
-    0x4abf: 'Go to King | Tec: Siege Engineers (CP)',
+    0x4abf: 'Go to King',
 
     # update 44725
-    0x4ac0: 'Go to Donjon | Tec: Treadmill Crane (CP)',
+    0x4ac0: 'Go to Donjon',
     0x4ac1: 'Select all Donjons',
     0x4ac2: 'Donjon',
     0x4ac4: 'Select all Idle Land/Naval Military Units',
@@ -915,21 +915,6 @@ hk_mapping = {
     0x4aad: 'Tec: Block Printing (CP)',
     0x4aae: 'Tec: Faith (CP)',
     0x4aaf: 'Tec: Fervor (CP)',
-    0x4195: 'Select all Archery ranges (CP)',
-    0x4194: 'Select all Barracks (CP)',
-    0x419b: 'Select all Castles (CP)',
-    0x4198: 'Select all Docks (CP)',
-    0x419d: 'Select all Donjons (CP)',
-    0x4191: 'Select all Idle_military (CP)',
-    0x419c: 'Select all Kreposts (CP)',
-    0x4199: 'Select all Markets (CP)',
-    0x419a: 'Select all Monasteries (CP)',
-    0x419e: 'Select all Military_Buildings (CP)',
-    0x4197: 'Select all Siege_workshops (CP)',
-    0x4196: 'Select all Stables (CP)',
-    0x4193: 'Select all Town_centers (CP)',
-    0x4192: 'Select all Trade_carts (CP)',
-    0x4190: 'Select all Idle_villagers (CP)',
     0x14ff: 'Flaming Camel (CP)',
 
     # update 50292
@@ -947,11 +932,11 @@ hk_mapping = {
     0x4acd: 'Tech: Elite Elephant Archer',
     0x4ace: 'Tech: Siege Elephant',
     0x4acf: 'Tech: Elite Shrivamsha Rider',
-    0x4ad0: 'Tech: Elite Battle Elephant | Tech: Advance to next age (inactive) (CP)',  # noqa
+    0x4ad0: 'Tech: Elite Battle Elephant',
 
     # update 81058
     0x4ad1: 'Toggle Idle Pointers',
-    0x1004ad1: 'Toggle Idle Pointers (2)',
+    # 0x1004ad1: 'Toggle Idle Pointers (2)',
 
     # update 83607
     # Base.hkp
@@ -1541,7 +1526,7 @@ hk_groups = {
         19129,
         300409,
         19153,
-        16796369
+        # 16796369 # Toggle Idle Pointers (2)
     ],
     "Game Commands": [
         19235,
@@ -1680,7 +1665,7 @@ hk_groups = {
         19274,
         19277,
         19026,
-        16796242,
+        # 16796242, # TC (2)
         19269,
         19270,
         19271,
@@ -1688,12 +1673,12 @@ hk_groups = {
         19290,
         19330,
         19068,
-        16796284,
+        # 16796284, # Idle Military (2)
         19023,
-        16796239,
+        # 16796239, # Idle Villager (2)
         19025,
         19024,
-        16796240,
+        # 16796240, # Notification (2)
         19135,
         19136,
         19354
@@ -1722,21 +1707,6 @@ hk_groups = {
         19079,
         19140,
         19139,
-        16789,
-        16788,
-        16795,
-        16792,
-        16797,
-        16785,
-        16796,
-        16793,
-        16794,
-        16798,
-        16791,
-        16790,
-        16787,
-        16786,
-        16784,
         19159,
     ],
     "All Units": [
@@ -1804,7 +1774,6 @@ hk_groups = {
         19209,
         19075,
         19148,
-        16728,
         19243
     ],
     "Military Build Menu": [
@@ -1823,11 +1792,9 @@ hk_groups = {
         19332,
         19066,
         19329,
-        16674
     ],
     "Serjeant Build Menu": [
         19138,
-        16710
     ],
     "Fishing Ship Build": [
         19202,
@@ -1854,8 +1821,8 @@ hk_groups = {
         19055,
         19154,
         19053,
-        19320,
-        19072,
+        # 19320, # specific unique warships (longship)
+        # 19072, # specific unique warships (turtleship)
         19341,
         19342,
         19344,
@@ -1864,16 +1831,6 @@ hk_groups = {
         19347,
         19343,
         19457,
-        16662,
-        16664,
-        16666,
-        16669,
-        16672,
-        16676,
-        16678,
-        16681,
-        16724,
-        16726
     ],
     "Barracks": [
         19035,
@@ -1887,13 +1844,6 @@ hk_groups = {
         19454,
         19455,
         19456,
-        16718,
-        16600,
-        16602,
-        16604,
-        16606,
-        16608,
-        16610
     ],
     "Archery Range": [
         19038,
@@ -1910,14 +1860,6 @@ hk_groups = {
         19462,
         19145,
         19149,
-        16716,
-        16720,
-        16612,
-        16614,
-        16616,
-        16618,
-        16620,
-        16622
     ],
     "Stable": [
         19060,
@@ -1932,20 +1874,10 @@ hk_groups = {
         19467,
         19468,
         19469,
-        5800,
         19143,
         19147,
         19151,
         19152,
-        16712,
-        16722,
-        16714,
-        16624,
-        16626,
-        16628,
-        16630,
-        16632,
-        16634
     ],
     "Siege Workshop": [
         19056,
@@ -1958,10 +1890,6 @@ hk_groups = {
         19477,
         19146,
         19150,
-        16640,
-        16683,
-        16636,
-        16638
     ],
     "Monastery": [
         19051,
@@ -1976,10 +1904,6 @@ hk_groups = {
         19485,
         19486,
         19487,
-        19116,
-        19117,
-        19118,
-        19119,
         19743
     ],
     "Market": [
@@ -1993,15 +1917,6 @@ hk_groups = {
         19111,
         19112,
         19113,
-        16655,
-        16657,
-        16659,
-        16696,
-        16698,
-        16700,
-        16702,
-        16704,
-        16706
     ],
     "Castle": [
         19322,
@@ -2016,30 +1931,18 @@ hk_groups = {
         19084,
         19142,
         19086,
-        5375,
-        16642,
-        16644,
-        16646,
-        16648,
-        16650,
-        16652,
-        16685
     ],
     "Mill": [
         19074,
         19337,
         19100,
-        16689
     ],
     "Mining Camp": [
         19338,
         19339,
-        16692,
-        16694
     ],
     "Lumber Camp": [
         19340,
-        16687
     ],
     "Blacksmith": [
         19470,
@@ -2059,7 +1962,6 @@ hk_groups = {
         19495,
         19496,
         19497,
-        19498
     ]
 }
 
