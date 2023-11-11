@@ -211,21 +211,31 @@ input {
 }
 
 #menus {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
+  column-width: 250px;
 }
 
 .menu {
-  border: 1px solid black;
-  flex: 1 0 fit-content;
+  border: 2px solid darkgray;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  break-inside: avoid;
+}
+
+.menu h3 {
+  font-size: 15pt;
+  margin: 0;
   padding: 5px;
+  text-align: center;
+  
 }
 
 .hotkey-row {
+  align-items: center;
+  border-top: 1px solid #AAAAAA;
+  display: flex;
   padding: 3px;
   pointer-events: auto;
-  border: 1px solid lightgray;
+  justify-content: space-between;
 }
 
 .hotkey-row:hover {
@@ -246,6 +256,7 @@ input {
 
 .hotkey-code {
   background-color: #DADADA;
-  padding: 3px;
+  border-radius:3px;
+  padding: 4px;
   pointer-events: none;
 }

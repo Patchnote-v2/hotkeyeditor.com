@@ -54,7 +54,7 @@ const Keybinds = (data) => {
                                 onMouseOut={data.updateCurrentHoverCallback}
                                 onClick={(event) => data.handleSettingKeybind(event)}
                                 className={rowClassNames}>
-                            <span className="hotkey-text">{hotkey.string_text} -- </span>
+                            <span className="hotkey-text">{hotkey.string_text}</span>
                             <span className="hotkey-code">
                                 {hotkey.ctrl ? "Ctrl+" : ""}
                                 {hotkey.shift ? "Shift+" : ""}
@@ -79,8 +79,8 @@ const Keybinds = (data) => {
                     });
                     return (
                         <div className="menu">
-                        <h3>{value}</h3>
-                        {menuRows}
+                            <h3>{value}</h3>
+                            {menuRows}
                         </div>
                     );
                 }
