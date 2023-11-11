@@ -1,6 +1,5 @@
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
-import "./index.css";
 import { useEffect, forwardRef, useRef } from 'react';
 
 import { simpleKeyboardKeyNames } from './keyNames.js';
