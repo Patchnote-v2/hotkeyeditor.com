@@ -10,3 +10,11 @@ https://aokhotkeys.appspot.com/), using its [associated repository](https://gith
 Invaluble Resources:
 * https://gist.github.com/KSneijders/8be5b386100548cc4a24da5ff2c6b520
 * https://gist.github.com/KSneijders/9231eeec1a66b314c3402729f0c455fa
+
+## Features
+ - Editing your hotkeys!
+ - Hover over a key to highlight all keybinds that use it
+ - Select a key to filter to hotkeys that _only_ use that key
+ - WIP: Hover over a group to highlight all keys that group uses
+ - WIP: Select a group to highlight all keys
+ - WIP: Change the grid layout by bulk-changing keybinds (i.e. all hotkeys that use Q can be changed simultaneously)
