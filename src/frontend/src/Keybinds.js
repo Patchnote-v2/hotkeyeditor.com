@@ -59,7 +59,20 @@ const Keybinds = (data) => {
                                 {hotkey.ctrl ? "Ctrl+" : ""}
                                 {hotkey.shift ? "Shift+" : ""}
                                 {hotkey.alt ? "Alt+" : ""}
-                                {keyNames[hotkey.keycode] ? keyNames[hotkey.keycode] : String.fromCharCode(hotkey.keycode).toUpperCase()}
+                                {/*
+                                Following ternary if monstrosity has the following logic:
+                                if (hotkey.keycode) {
+                                    if (keyNames[hotkey.keycode]) {
+                                        String.fromCharCode(hotkey.keycode).toUpperCase()
+                                    }
+                                    else {
+                                      keyNames[hotkey.keycode]  
+                                    }
+                                }
+                                else {
+                                    "null"
+                                }*/}
+                                {hotkey.keycode ? keyNames[hotkey.keycode] ? keyNames[hotkey.keycode] : String.fromCharCode(hotkey.keycode).toUpperCase() : "None"}
                             </span>
                             </li>
                         );
