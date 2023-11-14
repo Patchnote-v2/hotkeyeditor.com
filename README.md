@@ -18,3 +18,4 @@ Invaluble Resources:
  - WIP: Hover over a group to highlight all keys that group uses
  - WIP: Select a group to highlight all keys
  - WIP: Change the grid layout by bulk-changing keybinds (i.e. all hotkeys that use Q can be changed simultaneously)
+ - WIP: Highlight all hotkeys pertaining to a certain building (e.g. Barracks shows unit/technology hotkeys, in addition to go-to, etc)
