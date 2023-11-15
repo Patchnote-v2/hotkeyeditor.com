@@ -9,13 +9,11 @@ const Keybinds = (data) => {
     useEffect(() => {
         if (data.data) {
             let mapping = Object.keys(data.data.groups).map((value, key) => {
-                // Filter all menu rows so we can determine if a menu is empty or not
-                
-                // Using groups, build an array of this menu's hotkeys with UUID keys
+                // Using data.groups, build an array of this menu's hotkeys with UUID keys
                 var menuRows = {}
                 data.data.groups[value].forEach((value) => {
                     let hotkeyIndex = Utils.findKeyByValueAttribute(data.data.hotkeys, value, "string_id");
-                    if (hotkeyIndex.length == 2) {
+                    if (hotkeyIndex.length === 2) {
                     }
                     if (hotkeyIndex.length) {
                         hotkeyIndex.forEach((UUID) => {
@@ -24,6 +22,7 @@ const Keybinds = (data) => {
                     }
                 })
                 
+                // Filter all menu rows so we can determine if a menu is empty or not
                 // Only filter if filtering for insane performance improvements
                 if (data.filterRows) {
                     // I _think_ this way doesn't work if duplicate string_id's are across
@@ -35,8 +34,6 @@ const Keybinds = (data) => {
                 
                 if (menuRows && Object.keys(menuRows).length) {
                     menuRows = Object.keys(menuRows).map((UUID, index) => {
-                        // I don't like this duplicate call
-                        // todo: make it so that menuRows is an array of hotkeys
                         var hotkey = menuRows[UUID];
                         
                         let rowClassNames = "hotkey-row";
