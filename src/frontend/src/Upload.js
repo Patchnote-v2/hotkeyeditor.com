@@ -105,7 +105,9 @@ const Upload = () => {
             _updateSettingKeybind(true);
             
             // Update highlights to go from keybind row hover to setting keybind colors
-            updateBufferHighlights(dataset, "keybind-row-setting-button");
+            setHighlightedKeys({
+                "keybind-row-setting-button": [dataset],
+            });
             
             setBuffer(dataset);
         }
@@ -118,7 +120,9 @@ const Upload = () => {
             updateHotkey(buffer);
             
             // Update highlighted keys to finalized buffer
-            updateBufferHighlights(buffer, "keybind-row-hover-button");
+            setHighlightedKeys({
+                "keybind-row-hover-button": [buffer],
+            });
             
             setBuffer(null);
         }
@@ -126,56 +130,109 @@ const Upload = () => {
     
     const updateBuffer = (dataset) => {
         console.log("updateBuffer");
-        updateBufferHighlights(dataset, "keybind-row-setting-button");
+        setHighlightedKeys({
+            "keybind-row-setting-button": [dataset],
+        });
         setBuffer(dataset);
     }
     
-    /*
-        Removes -hover or -setting classes on current buttons and sets new ones on dataset
-    */
-    const updateBufferHighlights = (dataset, cssClass) => {
-        // Remove both hover- and setting- classes since we have no way of know
-        // whether or not this is the first time updating the buffer
-        setHighlightedKeys(false, highlighted, "keybind-row-hover-button keybind-row-setting-button");
-        setHighlightedKeys(true, dataset, cssClass);
+    const clearHighlightedKeys = (data=null) => {
+        console.log("clearHighlightedKeys");
+        
+        if (data) {
+            let cssClasses = Object.keys(data);
+            if (cssClasses.length) {
+                cssClasses.forEach((test123) => {
+                    let keys = "";
+                    data[test123].forEach((element) => {
+                        keys += Utils.datasetToKeyString(element) + " ";
+                    })
+                    
+                    if (keys.trim() !== "") {
+                        keyboard.current.dispatch((instance) => {
+                            instance.removeButtonTheme(keys, test123);
+                        });
+                    }
+                });
+            }
+        }
+        
+        if (highlighted) {
+            let highlightedCSSClasses = Object.keys(highlighted);
+            if (highlightedCSSClasses.length) {
+                highlightedCSSClasses.forEach((test1) => {
+                    let keys = "";
+                    highlighted[test1].forEach((element) => {
+                        keys += Utils.datasetToKeyString(element) + " ";
+                    })
+                    
+                    if (keys.trim() !== "") {
+                        keyboard.current.dispatch((instance) => {
+                            instance.removeButtonTheme(keys, test1);
+                        });
+                    }
+                });
+            }
+        }
+        setHighlighted(null);
     }
     
     /*
         Used to set the CSS class of the keys that need to be highlighted.
         Used to highlight when hovering over a keybind, and when setting a keybind.
     */
-    const setHighlightedKeys = (state, dataset, cssClasses) => {
+    const setHighlightedKeys = (data) => {
         console.log("setHighlightedKeys");
-        let keys = Utils.datasetToKeyString(dataset);
-        if (state) {
-            // Need to deep-copy with JSON (why didn't Javascript have deep copy years ago?)
-            // Good thing I don't have any complex objects.
-            setHighlighted(JSON.parse(JSON.stringify(dataset)));
-            keyboard.current.dispatch((instance) => {
-                instance.addButtonTheme(keys, cssClasses);
+        clearHighlightedKeys();
+        
+        
+        let cssClasses = Object.keys(data);
+        if (cssClasses.length) {
+            cssClasses.forEach((key) => {
+                let keys = "";
+                data[key].forEach((element) => {
+                    keys += Utils.datasetToKeyString(element) + " ";
+                })
+                
+                if (keys) {
+                    keyboard.current.dispatch((instance) => {
+                        instance.addButtonTheme(keys, key);
+                    });
+                }
             });
         }
-        else {
-            setHighlighted(null);
-            keyboard.current.dispatch((instance) => {
-                instance.removeButtonTheme(keys, cssClasses);
-            });
-        }
+        // Need to deep-copy with JSON (why didn't Javascript have deep copy years ago?)
+        // Good thing I don't have any complex objects.
+        setHighlighted(JSON.parse(JSON.stringify(data)));
     }
     
     /*
         Passed to Keybinds to be used as a callback for updating the keyboard highlighting
     */
     const updateCurrentHover = (event) => {
-        if (!settingKeybind) {
-            console.log("updateCurrentHover");
-            let dataset = Utils.getDatasetFromEvent(event);
-            if (event.type === "mouseover") {
-                setHighlightedKeys(true, dataset, "keybind-row-hover-button");
-            }
-            else if (event.type === "mouseout") {
-                setHighlightedKeys(false, dataset, "keybind-row-hover-button");
-            }
+        console.log("updateCurrentHover");
+        let dataset = Utils.getDatasetFromEvent(event);
+        if (event.type === "mouseover") {
+            console.log("MOUESOVER");
+
+            setHighlightedKeys({
+                "keybind-row-setting-button": [buffer],
+                "keybind-row-hover-button": [dataset],
+            });
+        }
+        else if (event.type === "mouseout") {
+            console.log("MOUESOUT");
+            // We have to explicitly say to remove this key, otherwise
+            // when the mouse moves across multiple elements in the same render
+            // cycle the state isn't accurate to what highlights need to be removed
+            // in clearHighlightedKeys()
+            clearHighlightedKeys({
+                "keybind-row-setting-button": [dataset],
+                "keybind-row-hover-button": [dataset]
+            });
+            setHighlightedKeys({
+                "keybind-row-setting-button": [buffer],
+            });
         }
     }
     
