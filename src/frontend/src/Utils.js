@@ -35,12 +35,14 @@ var Utils = {
 
     datasetToKeyString(dataset) {
         console.log("datasetToKeyString");
-        let buttons = dataset.ctrl ? "{controlleft} {controlright} " : "";
-        buttons += dataset.shift ? "{shiftleft} {shiftright} " : "";
-        buttons += dataset.alt ? "{altleft} {altright} " : "";
-        buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
-        console.log(buttons);
-        return buttons;
+        if (dataset) {
+            let buttons = dataset.ctrl ? "{controlleft} {controlright} " : "";
+            buttons += dataset.shift ? "{shiftleft} {shiftright} " : "";
+            buttons += dataset.alt ? "{altleft} {altright} " : "";
+            buttons += simpleKeyboardKeyNames[dataset.keycode] ? simpleKeyboardKeyNames[dataset.keycode] : String.fromCharCode(dataset.keycode).toUpperCase();
+            return buttons;
+        }
+        return "";
     }
 }
 
