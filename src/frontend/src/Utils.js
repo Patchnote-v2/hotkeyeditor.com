@@ -32,6 +32,16 @@ var Utils = {
             id: event.target.id
         }
     },
+    
+    getDatasetFromElement(element) {
+        return {
+            ctrl: element.dataset.ctrl.toLowerCase() === "true" ? true : false,
+            shift: element.dataset.shift.toLowerCase() === "true" ? true : false,
+            alt: element.dataset.alt.toLowerCase() === "true" ? true : false,
+            keycode: parseInt(element.dataset.keycode),
+            id: element.id
+        }
+    },
 
     datasetToKeyString(dataset) {
         console.log("datasetToKeyString");

@@ -185,6 +185,7 @@ $row-hover-button: linear-gradient(#DA767655, #DA767655);
 $row-setting-button: linear-gradient(#DD434355, #DD434355);
 $button-hover-passive-button: linear-gradient(#87e8ff55, #87e8ff55);
 $button-hover-setting-button: linear-gradient(#DA767655, #DA767655);
+$menu-group-select-button: linear-gradient(#007655AA, #007655AA);
 
 
                           /* V "what is being hovered"-"state"-"what it applies to" */
@@ -202,6 +203,9 @@ $button-hover-setting-button: linear-gradient(#DA767655, #DA767655);
   }
   &.button-hover-setting-button {
     background: $button-hover-setting-button;
+  }
+  &.menu-group-select-button {
+    background: $menu-group-select-button;
   }
 }
 
@@ -242,6 +246,10 @@ $button-hover-setting-button: linear-gradient(#DA767655, #DA767655);
       &.hotkey-row-find {
         background-color: #FEFE00;
       }
+      
+      &.hotkey-row-group {
+        background-color: #11FF00AA;
+      }
 
       .hotkey-text {
         pointer-events: none;
@@ -255,5 +263,4 @@ $button-hover-setting-button: linear-gradient(#DA767655, #DA767655);
       }
     }
   }
-
 }

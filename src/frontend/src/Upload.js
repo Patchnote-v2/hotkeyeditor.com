@@ -17,6 +17,7 @@ const Upload = () => {
     const dataLoadedRef = useRef();
     const [settingKeybind, setSettingKeybind] = useState(false);
     const [highlighted, setHighlighted] = useState(null);
+    const [highlightedGroup, setHighlightedGroup] = useState(null);
     const [buffer, setBuffer] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
     const [filterRows, setFilterRows] = useState(false);
@@ -107,6 +108,7 @@ const Upload = () => {
             // Update highlights to go from keybind row hover to setting keybind colors
             setHighlightedKeys({
                 "keybind-row-setting-button": [dataset],
+                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
             });
             
             setBuffer(dataset);
@@ -122,6 +124,7 @@ const Upload = () => {
             // Update highlighted keys to finalized buffer
             setHighlightedKeys({
                 "keybind-row-hover-button": [buffer],
+                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []    
             });
             
             setBuffer(null);
@@ -132,6 +135,7 @@ const Upload = () => {
         console.log("updateBuffer");
         setHighlightedKeys({
             "keybind-row-setting-button": [dataset],
+            "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
         });
         setBuffer(dataset);
     }
@@ -218,6 +222,7 @@ const Upload = () => {
             setHighlightedKeys({
                 "keybind-row-setting-button": [buffer],
                 "keybind-row-hover-button": [dataset],
+                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
             });
         }
         else if (event.type === "mouseout") {
@@ -232,6 +237,7 @@ const Upload = () => {
             });
             setHighlightedKeys({
                 "keybind-row-setting-button": [buffer],
+                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
             });
         }
     }
@@ -247,6 +253,37 @@ const Upload = () => {
                                .map(([k]) => k)
                                : []
             setFoundRows(foundRows);
+        }
+    }
+    
+    // todo: make group highlight on mouse hover
+    // todo: FIX setting then confirming keybind overriding keybind row group highlight class
+    // todo: make setting keybind color most important somehow so it's always visible, despite group selection colors.
+    // This includes modifier keys, since there's no visible way to see them getting removed when group selected
+    // todo: determine how filtering should work with group select.  Currently it overrides all row CSS class styling,
+    // while keeping key highlights.  Should filtering after group selection only show filtered keys in the selected group??
+    const selectMenu = (event) => {
+        console.log("selectMenu");        
+        if (!highlightedGroup) {
+            let row = event.target;
+            let rows = []
+            while (row = row.nextElementSibling) {
+                rows.push(Utils.getDatasetFromElement(row));
+                row.classList.add("hotkey-row-group");
+            }
+            setHighlightedKeys({"menu-group-select-button": rows});
+            setHighlightedGroup(event.target.textContent);
+        }
+        
+        if (event.target.textContent === highlightedGroup) {
+            let row = event.target;
+            let rows = []
+            while (row = row.nextElementSibling) {
+                rows.push(Utils.getDatasetFromElement(row));
+                row.classList.remove("hotkey-row-group");
+            }
+            clearHighlightedKeys({"menu-group-select-button": rows})
+            setHighlightedGroup(null);
         }
     }
     
@@ -279,7 +316,8 @@ const Upload = () => {
                   updateCurrentHoverCallback={updateCurrentHover}
                   handleSettingKeybind={handleSettingKeybind}
                   foundRows={foundRows}
-                  filterRows={filterRows} />
+                  filterRows={filterRows}
+                  selectMenu={selectMenu} />
         </>
     );
 };

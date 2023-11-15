@@ -76,7 +76,7 @@ const Keybinds = (data) => {
                     });
                     return (
                         <div className="menu">
-                            <h3>{value}</h3>
+                            <h3 onClick={(event) => data.selectMenu(event)}>{value}</h3>
                             {menuRows}
                         </div>
                     );
