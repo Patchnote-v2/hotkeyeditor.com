@@ -53,7 +53,20 @@ var Utils = {
             return buttons;
         }
         return "";
-    }
+    },
+    
+    getGroupRowsFromHeader(element, callback=null) {
+        let rows = []
+        var row = element;
+        while (row = row.nextElementSibling) {
+            rows.push(Utils.getDatasetFromElement(row));
+            if (callback) {
+                callback(row);
+            }
+        }
+        
+        return rows;
+    },
 }
 
 export default Utils;

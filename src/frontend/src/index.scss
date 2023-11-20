@@ -181,31 +181,44 @@ input {
   text-align: center;
 }
 
+$key-transition-time: 1s;
+
 $row-hover-button: linear-gradient(#DA767655, #DA767655);
 $row-setting-button: linear-gradient(#DD434355, #DD434355);
 $button-hover-passive-button: linear-gradient(#87e8ff55, #87e8ff55);
 $button-hover-setting-button: linear-gradient(#DA767655, #DA767655);
+$menu-group-hover-button: linear-gradient(#009966AA, #009966AA);
 $menu-group-select-button: linear-gradient(#007655AA, #007655AA);
 
 
-                          /* V "what is being hovered"-"state"-"what it applies to" */
 
 .hg-button {
+  transition: all $key-transition-time linear;
+  /* V "what is being hovered"-"state"-"what it applies to" */
   &.keybind-row-hover-button {
     background: $row-hover-button;
+    transition: all $key-transition-time linear;
   }
   &.keybind-row-setting-button {
     background: $row-setting-button;
+    transition: all $key-transition-time linear;
   }
   &.button-hover-passive-button {
     cursor: default;
     background: $button-hover-passive-button;
+    transition: all $key-transition-time linear;
   }
   &.button-hover-setting-button {
     background: $button-hover-setting-button;
+    transition: all $key-transition-time linear;
   }
   &.menu-group-select-button {
     background: $menu-group-select-button;
+    transition: all $key-transition-time linear;
+  }
+  &.menu-group-hover-button {
+    background: $menu-group-hover-button;
+    transition: all $key-transition-time linear;
   }
 }
 

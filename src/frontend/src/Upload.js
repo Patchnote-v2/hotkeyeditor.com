@@ -143,6 +143,7 @@ const Upload = () => {
     const clearHighlightedKeys = (data=null) => {
         console.log("clearHighlightedKeys");
         
+        // todo: update highlighted state to remove anything passed in data
         if (data) {
             let cssClasses = Object.keys(data);
             if (cssClasses.length) {
@@ -160,8 +161,7 @@ const Upload = () => {
                 });
             }
         }
-        
-        if (highlighted) {
+        else if (highlighted) {
             let highlightedCSSClasses = Object.keys(highlighted);
             if (highlightedCSSClasses.length) {
                 highlightedCSSClasses.forEach((test1) => {
@@ -177,17 +177,19 @@ const Upload = () => {
                     }
                 });
             }
+            setHighlighted(null);
         }
-        setHighlighted(null);
     }
     
     /*
         Used to set the CSS class of the keys that need to be highlighted.
         Used to highlight when hovering over a keybind, and when setting a keybind.
     */
-    const setHighlightedKeys = (data) => {
+    const setHighlightedKeys = (data, clear=true) => {
         console.log("setHighlightedKeys");
-        clearHighlightedKeys();
+        if (clear) {
+            clearHighlightedKeys();
+        }
         
         
         let cssClasses = Object.keys(data);
@@ -256,7 +258,7 @@ const Upload = () => {
         }
     }
     
-    // todo: make group highlight on mouse hover
+    // todo: make group rows and header highlight on mouse hover
     // todo: FIX setting then confirming keybind overriding keybind row group highlight class
     // todo: make setting keybind color most important somehow so it's always visible, despite group selection colors.
     // This includes modifier keys, since there's no visible way to see them getting removed when group selected
@@ -265,25 +267,35 @@ const Upload = () => {
     const selectMenu = (event) => {
         console.log("selectMenu");        
         if (!highlightedGroup) {
-            let row = event.target;
-            let rows = []
-            while (row = row.nextElementSibling) {
-                rows.push(Utils.getDatasetFromElement(row));
+            let rows = Utils.getGroupRowsFromHeader(event.target, (row) => {
                 row.classList.add("hotkey-row-group");
-            }
+            });
+            
             setHighlightedKeys({"menu-group-select-button": rows});
             setHighlightedGroup(event.target.textContent);
         }
         
         if (event.target.textContent === highlightedGroup) {
-            let row = event.target;
-            let rows = []
-            while (row = row.nextElementSibling) {
-                rows.push(Utils.getDatasetFromElement(row));
+            let rows = Utils.getGroupRowsFromHeader(event.target, (row) => {
                 row.classList.remove("hotkey-row-group");
-            }
+            });
             clearHighlightedKeys({"menu-group-select-button": rows})
             setHighlightedGroup(null);
+        }
+    }
+    
+    const hoverMenu = (event) => {
+        console.log("updateCurrentHover");
+        // let dataset = Utils.getDatasetFromEvent(event);
+        if (event.type === "mouseover") {
+            console.log("GROUP MOUESOVER");
+            let rows = Utils.getGroupRowsFromHeader(event.target);
+            setHighlightedKeys({"menu-group-hover-button": rows}, false);
+        }
+        else if (event.type === "mouseout") {
+            console.log("GROUP MOUESOUT");
+            let rows = Utils.getGroupRowsFromHeader(event.target);
+            clearHighlightedKeys({"menu-group-hover-button": rows});
         }
     }
     
@@ -317,7 +329,8 @@ const Upload = () => {
                   handleSettingKeybind={handleSettingKeybind}
                   foundRows={foundRows}
                   filterRows={filterRows}
-                  selectMenu={selectMenu} />
+                  selectMenu={selectMenu}
+                  hoverMenu={hoverMenu} />
         </>
     );
 };
