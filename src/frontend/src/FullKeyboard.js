@@ -195,10 +195,11 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     
     // If actively setting keybind
     if (props.buffer) {
+      let newBuffer = JSON.parse(JSON.stringify(props.buffer))
       // If a modifier was pressed
       if (Object.keys(modifiers).includes(key)) {
-        props.buffer[modifiers[key]] = !(props.buffer[modifiers[key]]);
-        props.updateBuffer(props.buffer);
+        newBuffer[modifiers[key]] = !(newBuffer[modifiers[key]]);
+        props.updateBuffer(newBuffer);
       }
     }
     else if (!props.buffer) {
