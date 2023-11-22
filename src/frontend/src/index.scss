@@ -192,7 +192,7 @@ $menu-group-select-button: linear-gradient(#007655AA, #007655AA);
 
 
 
-.hg-button {
+.hg-button, .hotkey-row {
   transition: all $key-transition-time linear;
   /* V "what is being hovered"-"state"-"what it applies to" */
   &.keybind-row-hover-button {
@@ -257,7 +257,7 @@ $menu-group-select-button: linear-gradient(#007655AA, #007655AA);
       }
 
       &.hotkey-row-find {
-        background-color: #FEFE00;
+        background-color: #FEFE00AA;
       }
       
       &.hotkey-row-group {

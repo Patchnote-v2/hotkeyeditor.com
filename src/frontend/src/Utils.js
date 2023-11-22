@@ -55,14 +55,12 @@ var Utils = {
         return "";
     },
     
-    getGroupRowsFromHeader(element, callback=null) {
-        let rows = []
-        var row = element;
+    getGroupRowsFromHeader(element, value="") {
+        var rows = {}
+        let row = element;
+        // eslint-disable-next-line
         while (row = row.nextElementSibling) {
-            rows.push(Utils.getDatasetFromElement(row));
-            if (callback) {
-                callback(row);
-            }
+            rows[Utils.getDatasetFromElement(row).id] = value;
         }
         
         return rows;

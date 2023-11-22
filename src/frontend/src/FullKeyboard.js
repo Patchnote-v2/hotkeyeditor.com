@@ -48,7 +48,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
                 button.addEventListener('mouseout', (event) => {
                     button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
                     if (!filterRowsRef.current) {
-                      console.log("NULLING");
                       props.findRowsByKeycode(null);
                     }
                 })

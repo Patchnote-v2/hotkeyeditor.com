@@ -37,8 +37,9 @@ const Keybinds = (data) => {
                         var hotkey = menuRows[UUID];
                         
                         let rowClassNames = "hotkey-row";
-                        rowClassNames += data.buffer && UUID === data.buffer.id ? " keybind-row-setting" : "";
-                        rowClassNames += !data.buffer && data.foundRows.includes(UUID) ? " hotkey-row-find" : ""
+                        if (Object.keys(data.highlighted).includes(UUID)) {
+                            rowClassNames += " " + data.highlighted[UUID].join(" ");
+                        }
                         
                         return (
                             <li key={UUID}
@@ -47,8 +48,8 @@ const Keybinds = (data) => {
                                 data-ctrl={hotkey.ctrl}
                                 data-shift={hotkey.shift}
                                 data-alt={hotkey.alt}
-                                onMouseOver={data.updateCurrentHoverCallback}
-                                onMouseOut={data.updateCurrentHoverCallback}
+                                onMouseOver={data.updateCurrentHover}
+                                onMouseOut={data.updateCurrentHover}
                                 onClick={(event) => data.handleSettingKeybind(event)}
                                 className={rowClassNames}>
                             <span key={`${UUID}-hotkey-uuid`} className="hotkey-uuid">{UUID}</span>

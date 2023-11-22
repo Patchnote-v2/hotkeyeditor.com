@@ -15,14 +15,15 @@ const Upload = () => {
     const [changed, setChanged] = useState();
     const [data, setData] = useState();
     const dataLoadedRef = useRef();
+    // todo: consider removing settingKeybind state in favor of just checking buffer for content
     const [settingKeybind, setSettingKeybind] = useState(false);
-    const [highlighted, setHighlighted] = useState(null);
-    const [highlightedGroup, setHighlightedGroup] = useState(null);
+    const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
     const [filterRows, setFilterRows] = useState(false);
     
     const keyboard = useRef(null);
+    const highlightedGroup = useRef(null);
     
     useEffect(() => {
         if (data) {
@@ -105,11 +106,11 @@ const Upload = () => {
             // Actively setting keybind
             _updateSettingKeybind(true);
             
-            // Update highlights to go from keybind row hover to setting keybind colors
-            setHighlightedKeys({
-                "keybind-row-setting-button": [dataset],
-                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
-            });
+            let keys = {};
+            if (dataset) {
+                keys[dataset.id] = ["keybind-row-setting-button"]
+            }
+            setHighlightedKeys(keys, false, dataset);
             
             setBuffer(dataset);
         }
@@ -121,97 +122,161 @@ const Upload = () => {
             // Add finalized buffer to changed
             updateHotkey(buffer);
             
-            // Update highlighted keys to finalized buffer
-            setHighlightedKeys({
-                "keybind-row-hover-button": [buffer],
-                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []    
-            });
-            
+            let keysSet = {};
+            let keysRemove = {}
+            if (buffer) {
+                keysSet[buffer.id] = ["keybind-row-hover-button"]
+                keysRemove[buffer.id] = ["keybind-row-setting-button", "keybind-row-hover-button"]
+            }
+            clearHighlightedKeys(keysRemove, true);
+            setHighlightedKeys(keysSet, false);
             setBuffer(null);
         }
     }
     
     const updateBuffer = (dataset) => {
         console.log("updateBuffer");
-        setHighlightedKeys({
-            "keybind-row-setting-button": [dataset],
-            "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
-        });
+        let keysSet = {};
+        let keysRemove = {}
+        if (dataset) {
+            keysSet[dataset.id] = ["keybind-row-setting-button"];
+            keysRemove[dataset.id] = ["keybind-row-setting-button", "keybind-row-hover-button"];
+        }
+        clearHighlightedKeys(keysRemove, true);
+        setHighlightedKeys(keysSet, false, dataset);
         setBuffer(dataset);
     }
     
-    const clearHighlightedKeys = (data=null) => {
-        console.log("clearHighlightedKeys");
+    // If inputData is null, all highlighted keys will be cleared.
+    // If inputData is provided, only the provided classes from the specified keys
+    // will be cleared.
+    // If useBuffer is true, then ONLY ONE KEY (UUID) must be provided.  This is
+    // an unintuitive way of doing this but I'm just trying to get it to work.
+    const clearHighlightedKeys = (inputData=null, useBuffer=false) => {
+        setHighlighted((oldHighlighted) => {
+            let current = JSON.parse(JSON.stringify(oldHighlighted))
+            let transformed = {};
+            let workingData = null;
+            if (inputData) {
+                workingData = inputData;
+            }
+            else {
+                // No need to copy since workingData isn't mutated
+                workingData = current
+            }
+            // Convert the data from: {uuid1: ["class1", "class2"], uuid2: ["class1", "class3"]}
+            // to: {class1: ["uuid1", "uuid2"], class2: ["uuid1"], class3: ["uuid2"]}a
+            // This makes it easier to pass the correct data to addButtonTheme/removeButtonTheme
+            // on the keyboard instance
+            for (let [uuid, classesArray] of Object.entries(workingData)) {
+                classesArray.forEach((string) => {
+                    // Create entry if it doesn't exist
+                    if (!transformed[string]) {
+                        transformed[string] = [];
+                    }
+                    transformed[string].push(uuid);
+                });
+                
+                // Remove classes from UUID if it exists in the highlighted state
+                if (Object.keys(current).includes(uuid)) {
+                    current[uuid] = current[uuid].filter(x => !classesArray.includes(x));
+                }
+            }
+            // Build the string to pass to the keyboard instance and call it
+            for (let [cssClass, UUIDs] of Object.entries(transformed)) {
+                let keysString = "";
+                if (useBuffer) {
+                    keysString = Utils.datasetToKeyString(buffer);
+                }
+                else {
+                    UUIDs.forEach((UUID) => {
+                        keysString += Utils.datasetToKeyString(data.hotkeys[UUID]) + " ";
+                    });
+                }
+                
+                if (keysString.trim() !== "") {
+                    keyboard.current.dispatch((instance) => {
+                        instance.removeButtonTheme(keysString, cssClass);
+                    });
+                }
+            }
+            
+            // Filter any UUIDs that no longer have classes applied
+            current = Utils.objectFilter(current, ([,cssClasses]) => {
+                return cssClasses.length;
+            })
+            // Finally update the currently highlighted
+            return current;
+        });
         
-        // todo: update highlighted state to remove anything passed in data
-        if (data) {
-            let cssClasses = Object.keys(data);
-            if (cssClasses.length) {
-                cssClasses.forEach((test123) => {
-                    let keys = "";
-                    data[test123].forEach((element) => {
-                        keys += Utils.datasetToKeyString(element) + " ";
-                    })
-                    
-                    if (keys.trim() !== "") {
-                        keyboard.current.dispatch((instance) => {
-                            instance.removeButtonTheme(keys, test123);
-                        });
-                    }
-                });
-            }
-        }
-        else if (highlighted) {
-            let highlightedCSSClasses = Object.keys(highlighted);
-            if (highlightedCSSClasses.length) {
-                highlightedCSSClasses.forEach((test1) => {
-                    let keys = "";
-                    highlighted[test1].forEach((element) => {
-                        keys += Utils.datasetToKeyString(element) + " ";
-                    })
-                    
-                    if (keys.trim() !== "") {
-                        keyboard.current.dispatch((instance) => {
-                            instance.removeButtonTheme(keys, test1);
-                        });
-                    }
-                });
-            }
-            setHighlighted(null);
-        }
     }
     
     /*
         Used to set the CSS class of the keys that need to be highlighted.
         Used to highlight when hovering over a keybind, and when setting a keybind.
+        data is an object with keys of UUID, and values of an array of CSS classes
     */
-    const setHighlightedKeys = (data, clear=true) => {
-        console.log("setHighlightedKeys");
+    const setHighlightedKeys = (inputData, clear=true, dataset=false) => {
         if (clear) {
             clearHighlightedKeys();
         }
         
-        
-        let cssClasses = Object.keys(data);
-        if (cssClasses.length) {
-            cssClasses.forEach((key) => {
-                let keys = "";
-                data[key].forEach((element) => {
-                    keys += Utils.datasetToKeyString(element) + " ";
-                })
+        setHighlighted((oldHighlighted) => {
+            let current = JSON.parse(JSON.stringify(oldHighlighted))
+            let transformed = {};
+            // Iterate over each entry in the input object
+            for (let [uuid, classesArray] of Object.entries(inputData)) {
+                classesArray.forEach((string) => {
+                    // Initialize an array if the string key doesn't exist yet
+                    if (!transformed[string]) {
+                        transformed[string] = [];
+                    }
+                    // Add the UUID to the array corresponding to the string
+                    transformed[string].push(uuid);
+                });
                 
-                if (keys) {
-                    keyboard.current.dispatch((instance) => {
-                        instance.addButtonTheme(keys, key);
+                // Also update highlighted if we didn't clear so we only iterate once
+                if (!clear) {
+                    if (Object.keys(current).includes(uuid)) {
+                        current[uuid] = [...new Set([...classesArray, ...current[uuid]])]
+                    }
+                    else {
+                        current[uuid] = [...classesArray];
+                    }
+                }
+            }
+            
+            // Normally the dataset used to determine which keys to to highlight comes
+            // from the main hotkeys data.  However, when setting a new hotkey, that data
+            // isn't updated until the hotkey is finalized.  As such, when setting a new hotkey
+            // for the changing hotkey specifically, we need to create the key string from
+            // the most up-to-date source: the buffer state
+            for (let [cssClass, UUIDs] of Object.entries(transformed)) {
+                let keysString = "";
+                if (dataset && Object.keys(inputData).includes(dataset.id)) {
+                     keysString = Utils.datasetToKeyString(dataset);
+                }
+                else {
+                    UUIDs.forEach((UUID) => {
+                        keysString += Utils.datasetToKeyString(data.hotkeys[UUID]) + " ";
                     });
                 }
-            });
-        }
-        // Need to deep-copy with JSON (why didn't Javascript have deep copy years ago?)
-        // Good thing I don't have any complex objects.
-        setHighlighted(JSON.parse(JSON.stringify(data)));
+                
+                if (keysString.trim() !== "") {
+                    keyboard.current.dispatch((instance) => {
+                        instance.addButtonTheme(keysString, cssClass);
+                    });
+                }
+            }
+            if (clear) {
+                return inputData;
+            }
+            else {
+                return current;
+            }
+        })
     }
-    
+
     /*
         Passed to Keybinds to be used as a callback for updating the keyboard highlighting
     */
@@ -219,28 +284,25 @@ const Upload = () => {
         console.log("updateCurrentHover");
         let dataset = Utils.getDatasetFromEvent(event);
         if (event.type === "mouseover") {
-            console.log("MOUESOVER");
-
-            setHighlightedKeys({
-                "keybind-row-setting-button": [buffer],
-                "keybind-row-hover-button": [dataset],
-                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
-            });
+            let keys = {};
+            if (dataset) {
+                keys[dataset.id] = ["keybind-row-hover-button"]
+            }
+            if (buffer && dataset && buffer.id === dataset.id) {
+                setHighlightedKeys(keys, false, buffer);
+            }
+            else {
+                setHighlightedKeys(keys, false);
+            }
         }
         else if (event.type === "mouseout") {
-            console.log("MOUESOUT");
             // We have to explicitly say to remove this key, otherwise
             // when the mouse moves across multiple elements in the same render
             // cycle the state isn't accurate to what highlights need to be removed
             // in clearHighlightedKeys()
             clearHighlightedKeys({
-                "keybind-row-setting-button": [dataset],
-                "keybind-row-hover-button": [dataset]
-            });
-            setHighlightedKeys({
-                "keybind-row-setting-button": [buffer],
-                "menu-group-select-button": highlighted?.["menu-group-select-button"] ? highlighted?.["menu-group-select-button"] : []
-            });
+                [dataset.id]: ["keybind-row-hover-button"]
+            })
         }
     }
     
@@ -258,47 +320,38 @@ const Upload = () => {
         }
     }
     
-    // todo: make group rows and header highlight on mouse hover
-    // todo: FIX setting then confirming keybind overriding keybind row group highlight class
     // todo: make setting keybind color most important somehow so it's always visible, despite group selection colors.
     // This includes modifier keys, since there's no visible way to see them getting removed when group selected
     // todo: determine how filtering should work with group select.  Currently it overrides all row CSS class styling,
     // while keeping key highlights.  Should filtering after group selection only show filtered keys in the selected group??
     const selectMenu = (event) => {
-        console.log("selectMenu");        
-        if (!highlightedGroup) {
-            let rows = Utils.getGroupRowsFromHeader(event.target, (row) => {
-                row.classList.add("hotkey-row-group");
-            });
+        console.log("selectMenu");
+        if (!highlightedGroup.current) {
+            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-select-button"]);
+            setHighlightedKeys(rows, false);
             
-            setHighlightedKeys({"menu-group-select-button": rows});
-            setHighlightedGroup(event.target.textContent);
+            highlightedGroup.current = event.target;
         }
         
-        if (event.target.textContent === highlightedGroup) {
-            let rows = Utils.getGroupRowsFromHeader(event.target, (row) => {
-                row.classList.remove("hotkey-row-group");
-            });
-            clearHighlightedKeys({"menu-group-select-button": rows})
-            setHighlightedGroup(null);
+        else if (event.target.textContent === highlightedGroup?.current?.textContent) {
+            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-select-button"]);
+            clearHighlightedKeys(rows);
+            
+            highlightedGroup.current = null;
         }
     }
     
     const hoverMenu = (event) => {
         console.log("updateCurrentHover");
-        // let dataset = Utils.getDatasetFromEvent(event);
         if (event.type === "mouseover") {
-            console.log("GROUP MOUESOVER");
-            let rows = Utils.getGroupRowsFromHeader(event.target);
-            setHighlightedKeys({"menu-group-hover-button": rows}, false);
+            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-hover-button"]);
+            setHighlightedKeys(rows, false);
         }
         else if (event.type === "mouseout") {
-            console.log("GROUP MOUESOUT");
-            let rows = Utils.getGroupRowsFromHeader(event.target);
-            clearHighlightedKeys({"menu-group-hover-button": rows});
+            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-hover-button"]);
+            clearHighlightedKeys(rows);
         }
     }
-    
     
     return (
         <>
@@ -325,12 +378,13 @@ const Upload = () => {
                       filterRows={filterRows} />
         <Keybinds data={data}
                   buffer={buffer}
-                  updateCurrentHoverCallback={updateCurrentHover}
+                  updateCurrentHover={updateCurrentHover}
                   handleSettingKeybind={handleSettingKeybind}
                   foundRows={foundRows}
                   filterRows={filterRows}
                   selectMenu={selectMenu}
-                  hoverMenu={hoverMenu} />
+                  hoverMenu={hoverMenu}
+                  highlighted={highlighted} />
         </>
     );
 };
