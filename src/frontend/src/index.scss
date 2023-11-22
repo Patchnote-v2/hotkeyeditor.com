@@ -263,6 +263,10 @@ $menu-group-select-button: linear-gradient(#007655AA, #007655AA);
       &.hotkey-row-group {
         background-color: #11FF00AA;
       }
+      
+      .hotkey-uuid {
+        pointer-events: none;
+      }
 
       .hotkey-text {
         pointer-events: none;
