@@ -16,7 +16,7 @@ const modifiers = {
 
 const FullKeyboard = forwardRef((props, keyboard) => {
   const settingKeybindRef = useRef();
-  const filterRowsRef = useRef();
+  const filteringRowsRef = useRef();
   
   // I don't understand this.  In the parent, even if I'm updating the state that gets passed
   // to this component's props in a useEffect in the parent, this component never recieves
@@ -26,7 +26,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   }, [props]);
   
   useEffect(() => {
-    filterRowsRef.current = props.filterRows;
+    filteringRowsRef.current = props.filteringRows;
   }, [props]);
 
   const commonKeyboardOptions = {
@@ -37,7 +37,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
                     
                     // Row highlighting based on what's currently being hovered over
                     let currentButton = event.target.dataset.skbtn;
-                    if (!filterRowsRef.current) {
+                    if (!filteringRowsRef.current) {
                       if (!(Object.keys(modifiers).includes(currentButton))) {
                         let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton, null);
                         // parseInt() always only returns the first element in an array
@@ -47,7 +47,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
                 })
                 button.addEventListener('mouseout', (event) => {
                     button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
-                    if (!filterRowsRef.current) {
+                    if (!filteringRowsRef.current) {
                       props.findRowsByKeycode(null);
                     }
                 })
@@ -202,7 +202,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
       }
     }
     else if (!props.buffer) {
-      props.setFilterRows(!props.filterRows);
+      props.setFilteringRows(!props.filteringRows);
     }
   }
   

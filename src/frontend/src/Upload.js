@@ -20,7 +20,7 @@ const Upload = () => {
     const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
-    const [filterRows, setFilterRows] = useState(false);
+    const [filteringRows, setFilteringRows] = useState(false);
     
     const keyboard = useRef(null);
     const highlightedGroup = useRef(null);
@@ -374,14 +374,14 @@ const Upload = () => {
                       updateBuffer={updateBuffer}
                       buffer={buffer}
                       findRowsByKeycode={findRowsByKeycode}
-                      setFilterRows={setFilterRows}
-                      filterRows={filterRows} />
+                      setFilteringRows={setFilteringRows}
+                      filteringRows={filteringRows} />
         <Keybinds data={data}
                   buffer={buffer}
                   updateCurrentHover={updateCurrentHover}
                   handleSettingKeybind={handleSettingKeybind}
                   foundRows={foundRows}
-                  filterRows={filterRows}
+                  filteringRows={filteringRows}
                   selectMenu={selectMenu}
                   hoverMenu={hoverMenu}
                   highlighted={highlighted} />

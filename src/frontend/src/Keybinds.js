@@ -24,7 +24,7 @@ const Keybinds = (data) => {
                 
                 // Filter all menu rows so we can determine if a menu is empty or not
                 // Only filter if filtering for insane performance improvements
-                if (data.filterRows) {
+                if (data.filteringRows) {
                     // I _think_ this way doesn't work if duplicate string_id's are across
                     // different menus
                     menuRows = Utils.objectFilter(menuRows, ([UUID, hotkey]) => {
