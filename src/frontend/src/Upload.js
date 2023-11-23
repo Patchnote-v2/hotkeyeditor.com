@@ -194,7 +194,8 @@ const Upload = () => {
                     });
                 }
                 
-                if (keysString.trim() !== "") {
+                keysString = keysString.trim()
+                if (keysString !== "") {
                     keyboard.current.dispatch((instance) => {
                         instance.removeButtonTheme(keysString, cssClass);
                     });
@@ -262,7 +263,8 @@ const Upload = () => {
                     });
                 }
                 
-                if (keysString.trim() !== "") {
+                keysString = keysString.trim()
+                if (keysString !== "") {
                     keyboard.current.dispatch((instance) => {
                         instance.addButtonTheme(keysString, cssClass);
                     });
