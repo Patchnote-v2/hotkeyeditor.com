@@ -311,7 +311,7 @@ const Upload = () => {
         current key
     */
     const findRowsByKeycode = (keycode) => {
-        if (dataLoadedRef.current && !settingKeybind) {
+        if (dataLoadedRef.current) {
             let foundRows = keycode ? Object.entries(dataLoadedRef.current.hotkeys)
                                .filter(([k, v]) => dataLoadedRef.current.hotkeys[k].keycode === keycode)
                                .map(([k]) => k)

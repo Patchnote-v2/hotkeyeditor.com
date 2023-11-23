@@ -40,7 +40,7 @@ const Keybinds = (data) => {
                         if (Object.keys(data.highlighted).includes(UUID)) {
                             rowClassNames += " " + data.highlighted[UUID].join(" ");
                         }
-                        if (!data.buffer && data.foundRows.includes(UUID)) {
+                        if (data.foundRows.includes(UUID)) {
                             rowClassNames += " hotkey-row-find";
                         }
                         
