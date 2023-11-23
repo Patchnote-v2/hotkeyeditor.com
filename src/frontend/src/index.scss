@@ -181,44 +181,43 @@ input {
   text-align: center;
 }
 
-$key-transition-time: 1s;
-
-$row-hover-button: linear-gradient(#DA767655, #DA767655);
-$row-setting-button: linear-gradient(#DD434355, #DD434355);
-$button-hover-passive-button: linear-gradient(#87e8ff55, #87e8ff55);
-$button-hover-setting-button: linear-gradient(#DA767655, #DA767655);
-$menu-group-hover-button: linear-gradient(#009966AA, #009966AA);
-$menu-group-select-button: linear-gradient(#007655AA, #007655AA);
-
-
-
-.hg-button, .hotkey-row {
-  transition: all $key-transition-time linear;
-  /* V "what is being hovered"-"state"-"what it applies to" */
-  &.keybind-row-hover-button {
-    background: $row-hover-button;
-    transition: all $key-transition-time linear;
-  }
-  &.keybind-row-setting-button {
-    background: $row-setting-button;
-    transition: all $key-transition-time linear;
-  }
-  &.button-hover-passive-button {
-    cursor: default;
-    background: $button-hover-passive-button;
-    transition: all $key-transition-time linear;
-  }
-  &.button-hover-setting-button {
-    background: $button-hover-setting-button;
-    transition: all $key-transition-time linear;
-  }
-  &.menu-group-select-button {
-    background: $menu-group-select-button;
-    transition: all $key-transition-time linear;
-  }
-  &.menu-group-hover-button {
-    background: $menu-group-hover-button;
-    transition: all $key-transition-time linear;
+$key-transition-time: 0.1s;
+#root {
+  .hg-button, .hotkey-row {
+    background:
+                var(--im1, linear-gradient(transparent, transparent)),
+                var(--im2, linear-gradient(transparent, transparent)),
+                var(--im3, linear-gradient(transparent, transparent)),
+                var(--im4, linear-gradient(transparent, transparent)),
+                var(--im5, linear-gradient(transparent, transparent)),
+                var(--im6, linear-gradient(transparent, transparent)),
+                var(--im7, linear-gradient(transparent, transparent)),
+                var(--im8, linear-gradient(transparent, transparent)),
+                var(--im9, linear-gradient(transparent, transparent)),
+                linear-gradient(white, white);
+    /* V "what is being hovered"-"state"-"what it applies to" */
+    &.keybind-row-hover-button {
+      --im2: linear-gradient(#DA767655, #DA767655);
+    }
+    &.keybind-row-setting-button {
+      --im3: linear-gradient(#DD434355, #DD434355);
+    }
+    &.button-hover-passive-button {
+      cursor: default;
+      --im4: linear-gradient(#87e8ff55, #87e8ff55);
+    }
+    &.button-hover-setting-button {
+      --im5: linear-gradient(#DA767655, #DA767655);
+    }
+    &.menu-group-select-button {
+      --im6: linear-gradient(#007655AA, #007655AA);
+    }
+    &.menu-group-hover-button {
+      --im7: linear-gradient(#009966AA, #009966AA);
+    }
+    &.hotkey-row-find {
+      --im8: linear-gradient(#FEFE00AA, #FEFE00AA);
+    }
   }
 }
 
@@ -247,22 +246,6 @@ $menu-group-select-button: linear-gradient(#007655AA, #007655AA);
       padding: 3px;
       pointer-events: auto;
       justify-content: space-between;
-
-      &:hover {
-        background-color: #DA7676AA;
-      }
-
-      &.keybind-row-setting {
-        background-color: #DD4343AA;
-      }
-
-      &.hotkey-row-find {
-        background-color: #FEFE00AA;
-      }
-      
-      &.hotkey-row-group {
-        background-color: #11FF00AA;
-      }
       
       .hotkey-uuid {
         pointer-events: none;
