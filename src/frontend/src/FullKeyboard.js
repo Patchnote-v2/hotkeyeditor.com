@@ -33,20 +33,23 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     onRender: (keyboard2) => {
                 keyboard2.recurseButtons((button) => {
                   button.addEventListener('mouseover', (event) => {
+                    // Determines keyboard key hover color
                     button.classList.add(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
                     
                     // Row highlighting based on what's currently being hovered over
                     let currentButton = event.target.dataset.skbtn;
                     if (!filteringRowsRef.current) {
                       if (!(Object.keys(modifiers).includes(currentButton))) {
-                        let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton, null);
+                        let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
                         // parseInt() always only returns the first element in an array
                         props.findRowsByKeycode(parseInt(found));
                       }
                     }
                 })
                 button.addEventListener('mouseout', (event) => {
+                    // Determines keyboard key hover color
                     button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+                    
                     if (!filteringRowsRef.current) {
                       props.findRowsByKeycode(null);
                     }
