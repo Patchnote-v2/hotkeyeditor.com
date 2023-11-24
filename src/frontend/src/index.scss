@@ -21,9 +21,16 @@ input {
   width: 100%;
 }
 
+#root {
+  align-items: center;
+  display: flex;
+  flex-flow: column wrap;
+}
+
 #keyboard-wrapper {
   position: sticky;
   top: 0px;
+  width: fit-content;
 }
 
 .keyboardContainer {
@@ -225,6 +232,8 @@ $key-transition-time: 0.1s;
   column-width: 250px;
   text-align: center;
   user-select: none;
+  width: 100%;
+  
   .menu {
     border: 2px solid darkgray;
     border-radius: 3px;
