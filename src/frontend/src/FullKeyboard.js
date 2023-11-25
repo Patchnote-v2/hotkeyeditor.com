@@ -71,21 +71,29 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     // debug: true
   };
   
+  let keyboardLayoutDefault = [
+    "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
+    "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
+    "{tab} Q W E R T Y U I O P [ ] \\",
+    "{capslock} A S D F G H J K L ; ' {enter}",
+    "{shiftleft} Z X C V B N M , . / {shiftright}",
+    "{controlleft} {metaleft} {altleft} {space} {altright} {metaright} {controlright}"
+  ];
   const keyboardOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardLayoutDefault.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     /**
      * Layout by:
      * Sterling Butters (https://github.com/SterlingButters)
      */
     layout: {
-      default: [
-        "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
-        "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
-        "{tab} Q W E R T Y U I O P [ ] \\",
-        "{capslock} A S D F G H J K L ; ' {enter}",
-        "{shiftleft} Z X C V B N M , . / {shiftright}",
-        "{controlleft} {metaleft} {altleft} {space} {altright} {metaright} {controlright}"
-      ]
+      default: keyboardLayoutDefault,
     },
     display: {
       "{escape}": "esc ⎋",
@@ -116,59 +124,107 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     }
   };
 
+  let keyboardControlPadLayout = [
+    "{prtscr} {scrolllock} {pause}",
+    "{insert} {home} {pageup}",
+    "{delete} {end} {pagedown}"
+  ];
   const keyboardControlPadOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardControlPadLayout.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     layout: {
-      default: [
-        "{prtscr} {scrolllock} {pause}",
-        "{insert} {home} {pageup}",
-        "{delete} {end} {pagedown}"
-      ]
+      default: keyboardControlPadLayout,
     }
   };
 
+  let keyboardArrowsLayout = ["{arrowup}", "{arrowleft} {arrowdown} {arrowright}"]
   const keyboardArrowsOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardArrowsLayout.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     layout: {
-      default: ["{arrowup}", "{arrowleft} {arrowdown} {arrowright}"]
+      default: keyboardArrowsLayout,
     }
   };
 
+  let keyboardNumPadLayout = [
+    "{numlock} {numpaddivide} {numpadmultiply}",
+    "{numpad7} {numpad8} {numpad9}",
+    "{numpad4} {numpad5} {numpad6}",
+    "{numpad1} {numpad2} {numpad3}",
+    "{numpad0} {numpaddecimal}"
+  ];
   const keyboardNumPadOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardNumPadLayout.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     layout: {
-      default: [
-        "{numlock} {numpaddivide} {numpadmultiply}",
-        "{numpad7} {numpad8} {numpad9}",
-        "{numpad4} {numpad5} {numpad6}",
-        "{numpad1} {numpad2} {numpad3}",
-        "{numpad0} {numpaddecimal}"
-      ]
+      default: keyboardNumPadLayout,
     }
   };
 
+  let keyboardNumPadEndLayout = ["{numpadsubtract}", "{numpadadd}", "{numpadenter}"];
   const keyboardNumPadEndOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardNumPadEndLayout.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     layout: {
-      default: ["{numpadsubtract}", "{numpadadd}", "{numpadenter}"]
+      default: keyboardNumPadEndLayout,
     }
   };
 
+  let keyboardMouseExtraLayout = ["{mouseextra2}", "{mouseextra1}"];
   const keyboardMouseExtraOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardMouseExtraLayout.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     layout: {
-      default: ["{mouseextra2}", "{mouseextra1}"]
+      default: keyboardMouseExtraLayout,
     },
     display: {
       "{mouseextra2}": "Mouse Extra 2 ↑",
       "{mouseextra1}": "↓ Mouse Extra 1",
     }
   };
-
+  
+  let keyboardMousePrimaryLayout = ["{wheelup}", "{mouse1} {mousemiddle} {mouse2}", "{wheeldown}"];
   const keyboardMousePrimaryOptions = {
     ...commonKeyboardOptions,
+    buttonAttributes: [
+      {
+        attribute: "draggable",
+        value: "true",
+        buttons: keyboardMousePrimaryLayout.reduce((previous, current) => previous.concat(" " + current)),
+      },
+    ],
     layout: {
-      default: ["{wheelup}", "{mouse1} {mousemiddle} {mouse2}", "{wheeldown}"]
+      default: keyboardMousePrimaryLayout,
     },
     display: {
       "{mouse1}": "Mouse 1",
@@ -209,6 +265,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         props.updateBuffer(newBuffer);
       }
     }
+    // If not setting a keybind, filter out all keybind rows other than key pressed
     else if (!props.buffer) {
       props.setFilteringRows(!props.filteringRows);
     }
