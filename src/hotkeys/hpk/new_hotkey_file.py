@@ -1,5 +1,4 @@
-import uuid
-from collections import namedtuple
+import hashlib
 
 from .izip import compress, decompress
 from .parse import HkParser, HkUnparser, FileType
@@ -67,8 +66,6 @@ class HotkeyFile:
 
     def update(self, changed):
         for key, value in changed.items():
-            # Cast to int because JSON keys must be strings
-            key = int(key)
             if key in self:
                 self[key] = value
 
@@ -80,12 +77,27 @@ class HotkeyFile:
             for key in menu:
                 if key['id'] <= 0:
                     continue
+
+                # The string ID isn't guaranteed to be unique, so we we hash it
+                # and then rehash the hash until it provides a unique hash that
+                # isn't already in self.data.  This means that all keys are not
+                # only guaranteed to be unique eventually, but that given the
+                # same starting string ID the keys are repeatably the same.
+                # The keys being the same is important since we read the a
+                # hotkey file twice per user: once when loading the interface
+                # and once when handing them the new file.  This means that keys
+                # need to be unique but repeatably generatable betweenr reads.
+                md5 = hashlib.md5()
+                md5.update(str(key['id']).encode('utf-8'))
+                dataKey = md5.hexdigest()
+                while dataKey in self.data:
+                    md5.update(dataKey.encode('utf-8'))
+                    dataKey = md5.hexdigest()
+
                 # It's important that string_text is blank if it fails to find a string match
                 # Looking for blank strings is what is used by the grabstrings command when
                 # looking for missing strings when an update happens.
-                # Additionally, string_id isn't guaranteed to be unique so use
-                # UUID for unique keys
-                self.data[str(uuid.uuid4())] = {"string_text": hk_mapping[key['id']] if key['id'] in hk_mapping else "",  # noqa
+                self.data[dataKey] = {"string_text": hk_mapping[key['id']] if key['id'] in hk_mapping else "",  # noqa
                                            "string_id": key['id'],
                                            "keycode": key['code'],
                                            "ctrl": key['ctrl'],
