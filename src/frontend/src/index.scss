@@ -257,7 +257,9 @@ $key-transition-time: 0.1s;
       justify-content: space-between;
       
       .hotkey-uuid {
+        color: darkgray;
         pointer-events: none;
+        overflow: hidden;
       }
 
       .hotkey-text {
