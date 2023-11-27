@@ -15,8 +15,6 @@ const Upload = () => {
     const [changed, setChanged] = useState();
     const [data, setData] = useState();
     const dataLoadedRef = useRef();
-    // todo: consider removing settingKeybind state in favor of just checking buffer for content
-    const [settingKeybind, setSettingKeybind] = useState(false);
     const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
@@ -88,10 +86,6 @@ const Upload = () => {
     }
     
     const _updateSettingKeybind = (state) => {
-        keyboard.current.setOptions({
-            physicalKeyboardHighlight: state
-        });
-        setSettingKeybind(state);
     }
     
     /*
@@ -104,7 +98,9 @@ const Upload = () => {
         if (!buffer) {
             console.log("Setting buffer");
             // Actively setting keybind
-            _updateSettingKeybind(true);
+            keyboard.current.setOptions({
+                physicalKeyboardHighlight: true
+            });
             
             let keys = {};
             if (dataset) {
@@ -117,7 +113,9 @@ const Upload = () => {
         else if (buffer && buffer.id === dataset.id) {
             console.log("Clearing buffer");
             // No longer setting keybind
-            _updateSettingKeybind(false);
+            keyboard.current.setOptions({
+                physicalKeyboardHighlight: false
+            });
             
             // Add finalized buffer to changed
             updateHotkey(buffer);
@@ -372,7 +370,6 @@ const Upload = () => {
             <button type="submit">Load Defaults</button>
         </form>
         <FullKeyboard ref={keyboard}
-                      settingKeybind={settingKeybind}
                       updateBuffer={updateBuffer}
                       buffer={buffer}
                       findRowsByKeycode={findRowsByKeycode}

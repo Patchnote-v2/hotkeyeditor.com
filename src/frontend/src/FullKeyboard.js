@@ -15,16 +15,11 @@ const modifiers = {
 }
 
 const FullKeyboard = forwardRef((props, keyboard) => {
-  const settingKeybindRef = useRef();
   const filteringRowsRef = useRef();
   
   // I don't understand this.  In the parent, even if I'm updating the state that gets passed
   // to this component's props in a useEffect in the parent, this component never recieves
   // the updated prop.  For some reason, using a ref works though?
-  useEffect(() => {
-    settingKeybindRef.current = props.settingKeybind;
-  }, [props]);
-  
   useEffect(() => {
     filteringRowsRef.current = props.filteringRows;
   }, [props]);
@@ -34,7 +29,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         keyboard2.recurseButtons((button) => {
           button.addEventListener('mouseover', (event) => {
             // Determines keyboard key hover color
-            button.classList.add(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+            button.classList.add(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
 
             // Row highlighting based on what's currently being hovered over
             let currentButton = event.target.dataset.skbtn;
@@ -48,7 +43,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         });
         button.addEventListener('mouseout', (event) => {
             // Determines keyboard key hover color
-            button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
+            button.classList.remove(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
 
             if (!filteringRowsRef.current) {
               props.findRowsByKeycode(null);
@@ -273,7 +268,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   
   return (
     <div id="keyboard-wrapper"
-         className={props.settingKeybind ? "" : "disable-keyboard"}>
+         className={props.buffer ? "" : "disable-keyboard"}>
       <div className={"keyboardContainer"}>
         <Keyboard
           ref={keyboard}
