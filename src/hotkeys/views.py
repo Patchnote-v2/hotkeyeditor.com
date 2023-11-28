@@ -2,6 +2,8 @@ import json
 import io
 import zipfile
 
+from pathlib import Path
+
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.templatetags.static import static
@@ -19,7 +21,6 @@ from .hpk.strings import hk_groups
 @method_decorator(csrf_exempt, name="dispatch")
 class HKPView(View):
     def post(self, request):
-
         # Determine which user file is larger and use that to determine which file is
         # Base.hkp.
         user_files = {'base': None, 'profile': None}
@@ -33,7 +34,7 @@ class HKPView(View):
                 user_files['profile'] = each
 
         # Save the name of the profile file for later
-        profile_name = user_files['profile'].name
+        profile_name = Path(user_files['profile'].name).stem
 
         # Parse the user files
         user_files['base'] = HotkeyFile(user_files['base'].read(),
@@ -77,8 +78,10 @@ class GenerateHKPView(View):
         # for later; otherwise, if editing from default, probably ad a text box
         # that lets the user set their own name (with default text value)
 
-        # todo: generate a .zip file that has Base.hkp in a folder already
-        changed = json.loads(request.body.decode("UTF-8"))
+        data = json.loads(request.body.decode("UTF-8"))
+        changed = data["changed"]
+        profile_name = data["profileName"] if data["profileName"] else "Editted Hotkeys"
+
         default_files = load_default_files()
 
         default_files['base'].update(changed)
@@ -86,8 +89,8 @@ class GenerateHKPView(View):
 
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w') as zipper:
-            zipper.writestr("Profile/Base.hkp", default_files['base'].serialize())
-            zipper.writestr("Profile.hkp", default_files['profile'].serialize())
+            zipper.writestr(f"{profile_name}/Base.hkp", default_files['base'].serialize())
+            zipper.writestr(f"{profile_name}.hkp", default_files['profile'].serialize())
 
         response = HttpResponse(buffer.getvalue(),
                                 content_type="application/x-zip-compressed")
