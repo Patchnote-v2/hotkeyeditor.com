@@ -8,6 +8,8 @@ import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
 import Utils from './Utils.js';
 
+// todo: if changes have been made, confirm that Load Defaults wants to happen
+// todo: input box for profile file name
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -83,9 +85,6 @@ const Upload = () => {
         let newChanged = {...changed};
         newChanged[dataset.id] = hotkey;
         setChanged(newChanged);
-    }
-    
-    const _updateSettingKeybind = (state) => {
     }
     
     /*

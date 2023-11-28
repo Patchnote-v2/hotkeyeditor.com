@@ -44,7 +44,6 @@ var Utils = {
     },
 
     datasetToKeyString(dataset) {
-        console.log("datasetToKeyString");
         if (dataset) {
             let buttons = dataset.ctrl ? "{controlleft} {controlright} " : "";
             buttons += dataset.shift ? "{shiftleft} {shiftright} " : "";

@@ -231,9 +231,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   };
   
   const onKeyPress = (key, event) => {
-    console.log("onKeyPress");
-    console.log(event)
-    console.log(key);
+    // console.log("onKeyPress");
+    // console.log(event)
+    // console.log(key);
     // if (event.repeat) {
       // console.log("repeating");
       // event.preventDefault();
@@ -242,9 +242,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   }
 
   const onKeyReleased = (key, event) => {
-    console.log("onKeyReleased");
-    console.log(event)
-    console.log(key);
+    // console.log("onKeyReleased");
+    // console.log(event)
+    // console.log(key);
     
     // If actively setting keybind
     if (props.buffer) {
