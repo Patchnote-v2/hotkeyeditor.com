@@ -1,12 +1,13 @@
 import json
 
+from django.conf import settings
 from django.http import JsonResponse, HttpResponse
+from django.templatetags.static import static
 from django.utils.encoding import smart_str
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
-
-from .utils import serialize_all_files
+from .utils import serialize_all_files, load_default_files
 
 from .hpk.new_hotkey_file import HotkeyFile
 from .hpk.parse import FileType
@@ -23,59 +24,50 @@ class HKPView(View):
         # 'data': response_data},
         # status=200)
 
-        files = {'base': None, 'profile': None}
+        settings.CURRENT_VERSION
+
+        user_files = {'base': None, 'profile': None}
+
+        # todo: check uploaded files length
+
         for each in request.FILES.getlist("files", None):
-            if each.name == "Base.hkp":
-                files['base'] = HotkeyFile(each.read(), False, each.name, FileType.HKP)
+            if not user_files['base']:
+                user_files['base'] = each
+            elif user_files['base'].size < each.size:
+                user_files['profile'] = user_files['base']
+                user_files['base'] = each
             else:
-                files['profile'] = HotkeyFile(each.read(), False, each.name, FileType.HKI)
+                user_files['profile'] = each
+            print(each.name)
 
-        # files['base'].serialize_to_file()
+        user_files['base'] = HotkeyFile(user_files['base'].read(),
+                                        False,
+                                        user_files['base'].name,
+                                        FileType.HKP)
+        user_files['profile'] = HotkeyFile(user_files['profile'].read(),
+                                           False,
+                                           user_files['profile'].name,
+                                           FileType.HKI)
 
-        serialize_all_files(files)
+        # Load default hotkey files so they can be updated with the user-uploaded files
+        # This is more robust since if the user uploads either files a version ahead or
+        # a version behind, no error will be thrown, at worst some hotkeys might be missing
+        default_files = load_default_files()
 
-        # serialize_all_files(files)
-        # print(f"{files['base']._file_type.value} -- {files['base'].id_to_file_type}")
-        # print(f"{files['profile']._file_type.value} -- {files['profile'].id_to_file_type}")
+        changed = serialize_all_files(user_files)
+        default_files['base'].update(changed)
+        default_files['profile'].update(changed)
 
-        with open("Base.hkp", "wb") as file:
-            file.write(files['base'].serialize())
-            file.close()
-
-        # with open("output.txt", 'w') as file:
-        #     file.write(f"hk_names: {files['base']._hk_names}\n\n\n")
-        #     file.write(f"hk_map: {files['base'].hk_map}\n\n\n")
-        #     file.write(f"hk_ids: {files['base']._hk_ids}\n\n\n")
-        #     file.write(f"_valid_ids: {files['base']._valid_ids}\n\n\n")
-        #     file.write(f"hk_desc: {files['base']._hk_desc}\n\n\n")
-        #     file.write(f"hk_groups: {files['base']._hk_groups}\n\n\n")
-        #     file.write(f"data: {files['base'].data}\n\n\n")
-        #     file.write(f"hk_dict: {files['base'].hk_dict}\n\n\n")
-
-        # print(f"hk_names: {files['base']._hk_names}")
-        # print(f"hk_ids: {files['base']._hk_ids}")
-        # print(f"_valid_ids: {files['base']._valid_ids}")
-        # print(f"hk_desc: {files['base']._hk_desc}")
-        # print(f"hk_groups: {files['base']._hk_groups}")
-
-        # print(files['base'].get_file_size() + files['profile'].get_file_size())
-
-        return JsonResponse(data={"test": True}, status=200)
+        return JsonResponse(data={"hotkeys": serialize_all_files(default_files),
+                                  "groups": hk_groups},
+                            status=200)
 
     def get(self, response):
         # todo: find a way to automate getting the highest version number
         # otherwise it has to be updated manually
-        base_path = f"hotkeys/static/hotkeys/defaults/95810/Base.hkp"
-        dev_path = f"hotkeys/static/hotkeys/defaults/95810/Dev.hkp"
+        default_files = load_default_files()
 
-        files = {'base': None, 'profile': None}
-        with open(base_path, "rb") as file:
-            files["base"] = HotkeyFile(file.read(), False, "Base.hkp", FileType.HKP)
-
-        with open(dev_path, "rb") as file:
-            files["profile"] = HotkeyFile(file.read(), False, "Dev.hkp", FileType.HKI)
-
-        return JsonResponse(data={"hotkeys": serialize_all_files(files),
+        return JsonResponse(data={"hotkeys": serialize_all_files(default_files),
                                   "groups": hk_groups},
                             status=200)
 
@@ -87,28 +79,23 @@ class GenerateHKPView(View):
         # if the user uploaded their own files, figure out a way to save that name
         # for later; otherwise, if editing from default, probably ad a text box
         # that lets the user set their own name (with default text value)
+
+        # todo: generate a .zip file that has Base.hkp in a folder already
         changed = json.loads(request.body.decode("UTF-8"))
-        base_path = f"hotkeys/static/hotkeys/defaults/95810/Base.hkp"
-        dev_path = f"hotkeys/static/hotkeys/defaults/95810/Dev.hkp"
+        default_files = load_default_files()
 
-        files = {'base': None, 'profile': None}
-        with open(base_path, "rb") as file:
-            files["base"] = HotkeyFile(file.read(), False, "Base.hkp", FileType.HKP)
-        with open(dev_path, "rb") as file:
-            files["profile"] = HotkeyFile(file.read(), False, "Dev.hkp", FileType.HKI)
-
-        files['base'].update(changed)
-        files['profile'].update(changed)
+        default_files['base'].update(changed)
+        default_files['profile'].update(changed)
 
         with open("Base.hkp", "wb") as file:
-            file.write(files['base'].serialize())
+            file.write(default_files['base'].serialize())
             file.close()
 
         with open("Test.hkp", "wb") as file:
-            file.write(files['profile'].serialize())
+            file.write(default_files['profile'].serialize())
             file.close()
 
-        response = HttpResponse(files['profile'].serialize(),
+        response = HttpResponse(default_files['profile'].serialize(),
                                 content_type="application/octet-stream")
         # https://stackoverflow.com/a/37931084/2368714
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
