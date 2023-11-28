@@ -1,4 +1,6 @@
 import json
+import io
+import zipfile
 
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
@@ -17,6 +19,9 @@ from .hpk.strings import hk_groups
 @method_decorator(csrf_exempt, name="dispatch")
 class HKPView(View):
     def post(self, request):
+
+        # Determine which user file is larger and use that to determine which file is
+        # Base.hkp.
         user_files = {'base': None, 'profile': None}
         for each in request.FILES.getlist("files", None):
             if not user_files['base']:
@@ -27,8 +32,10 @@ class HKPView(View):
             else:
                 user_files['profile'] = each
 
+        # Save the name of the profile file for later
         profile_name = user_files['profile'].name
 
+        # Parse the user files
         user_files['base'] = HotkeyFile(user_files['base'].read(),
                                         False,
                                         user_files['base'].name,
@@ -77,18 +84,15 @@ class GenerateHKPView(View):
         default_files['base'].update(changed)
         default_files['profile'].update(changed)
 
-        with open("Base.hkp", "wb") as file:
-            file.write(default_files['base'].serialize())
-            file.close()
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, 'w') as zipper:
+            zipper.writestr("Profile/Base.hkp", default_files['base'].serialize())
+            zipper.writestr("Profile.hkp", default_files['profile'].serialize())
 
-        with open("Test.hkp", "wb") as file:
-            file.write(default_files['profile'].serialize())
-            file.close()
-
-        response = HttpResponse(default_files['profile'].serialize(),
-                                content_type="application/octet-stream")
+        response = HttpResponse(buffer.getvalue(),
+                                content_type="application/x-zip-compressed")
         # https://stackoverflow.com/a/37931084/2368714
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
-        response['Content-Disposition'] = f"attachment; filename={smart_str('Test.hkp')}"
+        response['Content-Disposition'] = f"attachment; filename={smart_str('Hotkeys.zip')}"
 
         return response
