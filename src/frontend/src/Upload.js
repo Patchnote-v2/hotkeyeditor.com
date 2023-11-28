@@ -84,14 +84,16 @@ const Upload = () => {
     
     const uploadChanged = (event) => {
         event.preventDefault();
-        console.log(changed);
         axios({
             method: 'post',
             url: '/generate/',
-            data: changed,
+            data: {changed: changed, profileName: profileName},
             responseType: 'blob',
-        }).then((response) => {fileDownload(response.data, "Hotkeys.zip");})
-        .catch((error) => {console.log(error);});
+        }).then((response) => {
+            fileDownload(response.data, "Hotkeys.zip");
+        }).catch((error) => {
+            console.log(error);
+        });
     }
     
     const updateHotkey = (dataset) => {
