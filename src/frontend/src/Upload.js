@@ -15,6 +15,7 @@ axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
     const [changed, setChanged] = useState();
+    const [profileName, setProfileName] = useState(null);
     const [data, setData] = useState();
     const dataLoadedRef = useRef();
     const [highlighted, setHighlighted] = useState({});
@@ -43,8 +44,13 @@ const Upload = () => {
             method: 'post',
             url: '/upload/',
             data: formData,
-        }).then((response) => {console.log(response.data);setData(response.data)})
-          .catch((error) => {console.log(error);});
+        }).then((response) => {
+            console.log(response.data);
+            setProfileName(response.data.name)
+            setData(response.data.data)
+        }).catch((error) => {
+            console.log(error);
+        });
     }
     
     const _getDefaultFiles = (event) => {
@@ -56,6 +62,7 @@ const Upload = () => {
         }).then((response) => {
             console.log(response.data);
             setData(response.data);
+            setProfileName(null);
         }).catch((error) => {console.log(error);});
     }
     

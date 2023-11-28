@@ -17,19 +17,7 @@ from .hpk.strings import hk_groups
 @method_decorator(csrf_exempt, name="dispatch")
 class HKPView(View):
     def post(self, request):
-        # Check for valid Content-Type header, otherwise return given JSON response
-
-        # response_data = json.dumps(response_data, cls=serializers.json.DjangoJSONEncoder)
-        # return JsonResponse(data={'message': message,
-        # 'data': response_data},
-        # status=200)
-
-        settings.CURRENT_VERSION
-
         user_files = {'base': None, 'profile': None}
-
-        # todo: check uploaded files length
-
         for each in request.FILES.getlist("files", None):
             if not user_files['base']:
                 user_files['base'] = each
@@ -38,7 +26,8 @@ class HKPView(View):
                 user_files['base'] = each
             else:
                 user_files['profile'] = each
-            print(each.name)
+
+        profile_name = user_files['profile'].name
 
         user_files['base'] = HotkeyFile(user_files['base'].read(),
                                         False,
@@ -58,8 +47,9 @@ class HKPView(View):
         default_files['base'].update(changed)
         default_files['profile'].update(changed)
 
-        return JsonResponse(data={"hotkeys": serialize_all_files(default_files),
-                                  "groups": hk_groups},
+        return JsonResponse(data={"data": {"hotkeys": serialize_all_files(default_files),
+                                           "groups": hk_groups},
+                                  "name": profile_name},
                             status=200)
 
     def get(self, response):
