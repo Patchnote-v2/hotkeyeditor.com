@@ -1,7 +1,7 @@
 from django.conf import settings
 
-from .hpk.new_hotkey_file import HotkeyFile
-from .hpk.parse import FileType
+from .hkp.new_hotkey_file import HotkeyFile
+from .hkp.parse import FileType
 
 
 def serialize_all_files(files: dict) -> dict:

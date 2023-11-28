@@ -53,6 +53,8 @@ class HotkeyFile:
 
         # File size, used to determine version
         self._file_size = data['size']
+
+        # todo: graceful wrong hotkey file version handling
         self.version = self._find_version(self._file_size, self._header)
         # Raw menu data
         # self.data = hk_dict['menus']

@@ -13,9 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 from .utils import serialize_all_files, load_default_files
 
-from .hpk.new_hotkey_file import HotkeyFile
-from .hpk.parse import FileType
-from .hpk.strings import hk_groups
+from .hkp.new_hotkey_file import HotkeyFile
+from .hkp.parse import FileType
+from .hkp.strings import hk_groups
 
 
 @method_decorator(csrf_exempt, name="dispatch")
