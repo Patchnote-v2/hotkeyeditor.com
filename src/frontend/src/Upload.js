@@ -10,6 +10,7 @@ import Utils from './Utils.js';
 
 // todo: if changes have been made, confirm that Load Defaults wants to happen
 // todo: input box for profile file name
+// todo: fix changed default state so it doesn't pass undefined when uploading changes
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -74,7 +75,7 @@ const Upload = () => {
             url: '/generate/',
             data: changed,
             responseType: 'blob',
-        }).then((response) => {fileDownload(response.data, "test.hkp");})
+        }).then((response) => {fileDownload(response.data, "Hotkeys.zip");})
         .catch((error) => {console.log(error);});
     }
     
