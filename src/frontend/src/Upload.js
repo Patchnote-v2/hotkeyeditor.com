@@ -8,14 +8,12 @@ import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
 import Utils from './Utils.js';
 
-// todo: if changes have been made, confirm that Load Defaults wants to happen
 // todo: input box for profile file name
-// todo: fix changed default state so it doesn't pass undefined when uploading changes
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = () => {
-    const [changed, setChanged] = useState();
+    const [changed, setChanged] = useState({});
     const [profileName, setProfileName] = useState(null);
     const [data, setData] = useState();
     const dataLoadedRef = useRef();
@@ -41,14 +39,22 @@ const Upload = () => {
         const form = event.target;
         const formData = new FormData(form);
         
+        // Check for changes and ask if they want to be overriden
+        if (Object.keys(changed).length) {
+            if (!window.confirm("You have changes made to the current hotkeys.  Loading from new files will erase all changes.")) {
+                return;
+            }
+        }
+        
         axios({
             method: 'post',
             url: '/upload/',
             data: formData,
         }).then((response) => {
             console.log(response.data);
-            setProfileName(response.data.name)
+            setChanged({});
             setData(response.data.data)
+            setProfileName(response.data.name)
         }).catch((error) => {
             console.log(error);
         });
@@ -57,14 +63,23 @@ const Upload = () => {
     const _getDefaultFiles = (event) => {
         event.preventDefault();
         
+        // Check for changes and ask if they want to be overriden
+        if (Object.keys(changed).length) {
+            if (!window.confirm("You have changes made to the current hotkeys.  Loading the default hotkeys will erase all changes.")) {
+                return;
+            }
+        }
         axios({
             method: 'get',
             url: '/upload/',
         }).then((response) => {
             console.log(response.data);
+            setChanged({});
             setData(response.data);
             setProfileName(null);
-        }).catch((error) => {console.log(error);});
+        }).catch((error) => {
+            console.log(error);
+        });
     }
     
     const uploadChanged = (event) => {
