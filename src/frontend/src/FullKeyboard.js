@@ -266,8 +266,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   }
   
   return (
-    <div id="keyboard-wrapper"
-         className={settingKeybindRef.current ? "" : "disable-keyboard"}>
       <div className={"keyboardContainer"}>
         <Keyboard
           ref={keyboard}
@@ -308,7 +306,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
           />
         </div>
       </div>
-    </div>
   );
 });
 export default FullKeyboard;

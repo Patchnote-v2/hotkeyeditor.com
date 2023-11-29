@@ -32,6 +32,8 @@ const Upload = () => {
     const [foundRows, setFoundRows] = useState([]);
     const [filteringRows, setFilteringRows] = useState(false);
     
+    const cancel = useRef(null);
+    const confirm = useRef(null);
     const keyboard = useRef(null);
     const highlightedGroup = useRef(null);
     
@@ -107,6 +109,36 @@ const Upload = () => {
         });
     }
     
+    const confirmKeybinds = (newKeybinds, key) => {
+        newKeybinds = JSON.parse(JSON.stringify(newKeybinds));
+        clearHighlightedKeys(Utils.bufferToHighlights(newKeybinds, ["keybind-row-setting-button", "keybind-row-hover-button"]),
+                                     true);
+            
+        // Update data and changed state variables
+        let newHotkeys = {...data.hotkeys};
+        let newChanged = {...changed};
+        for (let [uuid,] of Object.entries(newKeybinds)) {
+            // If key is provided, also update all keycodes
+            if (key) {
+                let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
+                newKeybinds[uuid].keycode = parseInt(keycode);
+                newHotkeys[uuid].keycode = newKeybinds[uuid].keycode;
+            }
+            
+            newHotkeys[uuid].ctrl = newKeybinds[uuid].ctrl;
+            newHotkeys[uuid].shift = newKeybinds[uuid].shift;
+            newHotkeys[uuid].alt = newKeybinds[uuid].alt;
+            
+            newChanged[uuid] = newKeybinds[uuid];
+        }
+        setData({groups: data.groups, hotkeys: {...newHotkeys}});
+        setChanged(newChanged);
+        
+        setSettingKeybind(false);
+        disableButtons(true);
+        return {};
+    }
+    
     const handleSettingKeybind = (event) => {
         // console.log("beginSettingKeybind");
         let dataset = Utils.getDatasetFromEvent(event);
@@ -143,12 +175,14 @@ const Upload = () => {
                                              false);
 
                 setSettingKeybind(true);
+                disableButtons(false);
             }
             
             // If there's nothing in the buffer anymore, that means that there's no
             // active rows setting a keybind, so leave setting keybind state
             if (Object.keys(oldBuffer).length === 0) {
                 setSettingKeybind(false);
+                disableButtons(true);
             }
             return oldBuffer;
         });
@@ -184,31 +218,32 @@ const Upload = () => {
             }
             // Not modifier key
             else {
-                clearHighlightedKeys(Utils.bufferToHighlights(oldBuffer, ["keybind-row-setting-button", "keybind-row-hover-button"]),
-                                     true);
-            
-                // Update data and changed state variables
-                let newHotkeys = {...data.hotkeys};
-                let newChanged = {...changed};
-                for (let [uuid,] of Object.entries(oldBuffer)) {
-                    let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
-                    oldBuffer[uuid].keycode = parseInt(keycode);
-                    
-                    newHotkeys[uuid].ctrl = oldBuffer[uuid].ctrl;
-                    newHotkeys[uuid].shift = oldBuffer[uuid].shift;
-                    newHotkeys[uuid].alt = oldBuffer[uuid].alt;
-                    newHotkeys[uuid].keycode = oldBuffer[uuid].keycode;
-                    
-                    newChanged[uuid] = oldBuffer[uuid];
-                }
-                setData({groups: data.groups, hotkeys: {...newHotkeys}});
-                setChanged(newChanged);
-                
-                oldBuffer = {};
-                setSettingKeybind(false);
+                oldBuffer = confirmKeybinds(oldBuffer, key);
             }
             return oldBuffer;
         });
+    }
+    
+    // Sets state of cancel/confirm buttons on keyboard
+    const disableButtons = (state) => {
+        confirm.current.disabled = state;
+        cancel.current.disabled = state;
+    }
+    
+    // Handles the actions of the cancel/confirm buttons
+    const handleButtons = (event) => {
+        if (settingKeybind) {
+            if (event.target.value === "cancel") {
+                clearHighlightedKeys(Utils.bufferToHighlights(buffer, ["keybind-row-setting-button", "keybind-row-hover-button"]),
+                                     true);
+                setSettingKeybind(false);
+                setBuffer({});
+            }
+            else if (event.target.value === "confirm") {
+                confirmKeybinds(buffer);
+            }
+            disableButtons(true);
+        }
     }
     
     // If inputData is null, all highlighted keys will be cleared.
@@ -436,16 +471,38 @@ const Upload = () => {
             <button type="submit">Upload Files</button>
         </form>
         <button onClick={uploadChanged}>Upload Changes</button>
+        
         <form method="POST" onSubmit={_getDefaultFiles}>
             <label htmlFor="loadDefaults">Load Defaults</label>
             <button type="submit">Load Defaults</button>
         </form>
-        <FullKeyboard ref={keyboard}
-                      updateBuffer={updateBuffer}
-                      settingKeybind={settingKeybind}
-                      findRowsByKeycode={findRowsByKeycode}
-                      setFilteringRows={setFilteringRows}
-                      filteringRows={filteringRows} />
+        
+        <div id="keyboard-wrapper"
+             className={settingKeybind ? "" : "disable-keyboard"}>
+            <FullKeyboard ref={keyboard}
+                          updateBuffer={updateBuffer}
+                          settingKeybind={settingKeybind}
+                          findRowsByKeycode={findRowsByKeycode}
+                          setFilteringRows={setFilteringRows}
+                          filteringRows={filteringRows} />
+            <div id="confirmCancelWrapper">
+                <button ref={cancel}
+                        id="cancel"
+                        className="cancel"
+                        value="cancel"
+                        onClick={(e) => handleButtons(e)}>
+                    Cancel
+                </button>
+                <button ref={confirm}
+                        id="confirm"
+                        className="confirm"
+                        value="confirm"
+                        onClick={(e) => handleButtons(e)}>
+                    Confirm
+                </button>
+            </div>
+        </div>
+        
         <Keybinds data={data}
                   buffer={buffer}
                   updateCurrentHover={updateCurrentHover}
