@@ -1,6 +1,15 @@
 import { simpleKeyboardKeyNames } from './keyNames.js';
 
 var Utils = {
+    modifiers: {
+      "{shiftleft}": "shift",
+      "{shiftright}": "shift",
+      "{controlleft}": "ctrl",
+      "{controlright}": "ctrl",
+      "{altleft}":  "alt",
+      "{altright}": "alt"
+    },
+    
     // https://stackoverflow.com/a/28191966/2368714
     findKeyByValue(object, value) {
         return Object.keys(object).filter(key => object[key] === value);
@@ -12,6 +21,16 @@ var Utils = {
     
     objectFilter(object, func) {
         return Object.fromEntries(Object.entries(object).filter(func));
+    },
+    
+    // Used to convert a data-like object (i.e. buffer) and converts it to
+    // the structure used by [clear|set]HighlightedKeys
+    bufferToHighlights(object, classes) {
+        let output = JSON.parse(JSON.stringify(object));
+        Object.keys(output).forEach((key) => {
+            output[key] = classes;
+        });
+        return output;
     },
     
     /*

@@ -5,21 +5,17 @@ import { useEffect, forwardRef, useRef } from 'react';
 import { simpleKeyboardKeyNames } from './keyNames.js';
 import Utils from './Utils.js';
 
-const modifiers = {
-  "{shiftleft}": "shift",
-  "{shiftright}": "shift",
-  "{controlleft}": "ctrl",
-  "{controlright}": "ctrl",
-  "{altleft}":  "alt",
-  "{altright}": "alt"
-}
-
 const FullKeyboard = forwardRef((props, keyboard) => {
+  const settingKeybindRef = useRef();
   const filteringRowsRef = useRef();
   
   // I don't understand this.  In the parent, even if I'm updating the state that gets passed
   // to this component's props in a useEffect in the parent, this component never recieves
   // the updated prop.  For some reason, using a ref works though?
+  useEffect(() => {
+    settingKeybindRef.current = props.settingKeybind;
+  }, [props]);
+  
   useEffect(() => {
     filteringRowsRef.current = props.filteringRows;
   }, [props]);
@@ -29,12 +25,12 @@ const FullKeyboard = forwardRef((props, keyboard) => {
       keyboard2.recurseButtons((button) => {
         button.addEventListener('mouseover', (event) => {
           // Determines keyboard key hover color
-          button.classList.add(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
+          button.classList.add(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
 
           // Row highlighting based on what's currently being hovered over
           let currentButton = event.target.dataset.skbtn;
           if (!filteringRowsRef.current) {
-            if (!(Object.keys(modifiers).includes(currentButton))) {
+            if (!(Object.keys(Utils.modifiers).includes(currentButton))) {
               let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
               // parseInt() always only returns the first element in an array
               props.findRowsByKeycode(parseInt(found));
@@ -43,7 +39,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         });
         button.addEventListener('mouseout', (event) => {
           // Determines keyboard key hover color
-          button.classList.remove(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
+          button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
 
           if (!filteringRowsRef.current) {
             props.findRowsByKeycode(null);
@@ -252,21 +248,11 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     // console.log(key);
     
     // If actively setting keybind
-    if (props.buffer) {
-      let newBuffer = JSON.parse(JSON.stringify(props.buffer))
-      // If a modifier was pressed
-      if (Object.keys(modifiers).includes(key)) {
-        newBuffer[modifiers[key]] = !(newBuffer[modifiers[key]]);
-        props.updateBuffer(newBuffer);
-      }
-      else {
-        let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
-        newBuffer.keycode = parseInt(keycode);
-        props.updateBuffer(newBuffer);
-      }
+    if (settingKeybindRef.current) {
+      props.updateBuffer(key);
     }
     // If not setting a keybind, filter out all keybind rows other than key pressed
-    else if (!props.buffer) {
+    else if (!settingKeybindRef.current) {
       // Left mouse button blick
       if (event.button === 0) {
         props.setFilteringRows(!props.filteringRows);
@@ -281,7 +267,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   
   return (
     <div id="keyboard-wrapper"
-         className={props.buffer ? "" : "disable-keyboard"}>
+         className={settingKeybindRef.current ? "" : "disable-keyboard"}>
       <div className={"keyboardContainer"}>
         <Keyboard
           ref={keyboard}
