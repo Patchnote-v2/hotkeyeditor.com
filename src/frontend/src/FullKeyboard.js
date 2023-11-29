@@ -187,7 +187,10 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     ],
     layout: {
       default: keyboardNumPadEndLayout,
-    }
+    },
+    display: {
+      "{numpadenter}": "↵",
+    },
   };
 
   let keyboardMouseExtraLayout = ["{mouseextra2}", "{mouseextra1}"];
