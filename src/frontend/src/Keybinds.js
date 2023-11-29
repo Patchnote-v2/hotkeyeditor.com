@@ -55,8 +55,8 @@ const Keybinds = (data) => {
                                 onMouseOut={data.updateCurrentHover}
                                 onClick={(event) => data.handleSettingKeybind(event)}
                                 className={rowClassNames}>
-                            <span key={`${UUID}-hotkey-uuid`} className="hotkey-uuid">{UUID}</span>
-                            {/*<span key={`${UUID}-hotkey-text`} className="hotkey-text">{hotkey.string_text}</span>*/}
+                            {/*<span key={`${UUID}-hotkey-uuid`} className="hotkey-uuid">{UUID}</span>*/}
+                            <span key={`${UUID}-hotkey-text`} className="hotkey-text">{hotkey.string_text}</span>
                             <span key={`${UUID}-hotkey-code`} className="hotkey-code">
                                 {hotkey.ctrl ? "Ctrl+" : ""}
                                 {hotkey.shift ? "Shift+" : ""}
