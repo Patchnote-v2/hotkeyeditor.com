@@ -49,8 +49,8 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         // Prevent context menu (right mouse button) from opening when clicking keys
         button.addEventListener('contextmenu', (event) => {
           event.preventDefault();
-        })
-      })
+        });
+      });
     },
     onKeyPress: (key, event) => onKeyPress(key, event),
     onKeyReleased: (key, event) => onKeyReleased(key, event),
@@ -310,5 +310,5 @@ const FullKeyboard = forwardRef((props, keyboard) => {
       </div>
     </div>
   );
-})
+});
 export default FullKeyboard;

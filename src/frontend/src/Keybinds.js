@@ -18,9 +18,9 @@ const Keybinds = (data) => {
                     if (hotkeyIndex.length) {
                         hotkeyIndex.forEach((UUID) => {
                             menuRows[UUID] = data.data.hotkeys[UUID];
-                        })
+                        });
                     }
-                })
+                });
                 
                 // Filter all menu rows so we can determine if a menu is empty or not
                 // Only filter if filtering for insane performance improvements
@@ -92,7 +92,7 @@ const Keybinds = (data) => {
                 else {
                     return null;
                 }
-            })
+            });
             setKeybinds(mapping);
         }
     }, [data])

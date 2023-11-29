@@ -348,7 +348,7 @@ const Upload = () => {
             else {
                 return current;
             }
-        })
+        });
     }
 
     /*
@@ -371,7 +371,7 @@ const Upload = () => {
             // in clearHighlightedKeys()
             clearHighlightedKeys({
                 [dataset.id]: ["keybind-row-hover-button"]
-            })
+            });
         }
     }
     
