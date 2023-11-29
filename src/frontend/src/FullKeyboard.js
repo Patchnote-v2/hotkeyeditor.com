@@ -26,29 +26,34 @@ const FullKeyboard = forwardRef((props, keyboard) => {
 
   const commonKeyboardOptions = {
     onRender: (keyboard2) => {
-        keyboard2.recurseButtons((button) => {
-          button.addEventListener('mouseover', (event) => {
-            // Determines keyboard key hover color
-            button.classList.add(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
+      keyboard2.recurseButtons((button) => {
+        button.addEventListener('mouseover', (event) => {
+          // Determines keyboard key hover color
+          button.classList.add(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
 
-            // Row highlighting based on what's currently being hovered over
-            let currentButton = event.target.dataset.skbtn;
-            if (!filteringRowsRef.current) {
-              if (!(Object.keys(modifiers).includes(currentButton))) {
-                let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
-                // parseInt() always only returns the first element in an array
-                props.findRowsByKeycode(parseInt(found));
-              }
+          // Row highlighting based on what's currently being hovered over
+          let currentButton = event.target.dataset.skbtn;
+          if (!filteringRowsRef.current) {
+            if (!(Object.keys(modifiers).includes(currentButton))) {
+              let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
+              // parseInt() always only returns the first element in an array
+              props.findRowsByKeycode(parseInt(found));
             }
+          }
         });
         button.addEventListener('mouseout', (event) => {
-            // Determines keyboard key hover color
-            button.classList.remove(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
+          // Determines keyboard key hover color
+          button.classList.remove(props.buffer ? "button-hover-setting-button" : "button-hover-passive-button");
 
-            if (!filteringRowsRef.current) {
-              props.findRowsByKeycode(null);
-            }
+          if (!filteringRowsRef.current) {
+            props.findRowsByKeycode(null);
+          }
         });
+        
+        // Prevent context menu (right mouse button) from opening when clicking keys
+        button.addEventListener('contextmenu', (event) => {
+          event.preventDefault();
+        })
       })
     },
     onKeyPress: (key, event) => onKeyPress(key, event),
@@ -242,7 +247,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   }
 
   const onKeyReleased = (key, event) => {
-    // console.log("onKeyReleased");
+    console.log("onKeyReleased");
     // console.log(event)
     // console.log(key);
     
@@ -262,7 +267,15 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     }
     // If not setting a keybind, filter out all keybind rows other than key pressed
     else if (!props.buffer) {
-      props.setFilteringRows(!props.filteringRows);
+      // Left mouse button blick
+      if (event.button === 0) {
+        props.setFilteringRows(!props.filteringRows);
+      }
+      // Right mouse button click
+      else if (event.button === 2) {
+        // event.preventDefault();
+        // props.
+      }
     }
   }
   
