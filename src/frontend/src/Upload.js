@@ -72,6 +72,7 @@ const Upload = () => {
         });
     }
     
+    // todo: reset more things, like filtering, foundRows, etc
     const _getDefaultFiles = (event) => {
         event.preventDefault();
         
@@ -410,6 +411,9 @@ const Upload = () => {
         }
     }
     
+    // todo: filtering then clicking another key cancels the filter, but clicking on a
+    // new key filters by the first filtering's key
+    // todo: when actively filtering, add background to active key
     /*
         Given a keycode, returns an array of all UUIDs that have that keycode as their
         current key
@@ -433,14 +437,20 @@ const Upload = () => {
     const selectMenu = (event) => {
         console.log("selectMenu");
         if (!highlightedGroup.current) {
-            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-select-button"]);
+            let rows = {}
+            data.groups[event.target.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-select-button"];
+            });
             setHighlightedKeys(rows, false);
             
             highlightedGroup.current = event.target;
         }
         
         else if (event.target.textContent === highlightedGroup?.current?.textContent) {
-            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-select-button"]);
+            let rows = {}
+            data.groups[event.target.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-select-button"];
+            });
             clearHighlightedKeys(rows);
             
             highlightedGroup.current = null;
@@ -450,11 +460,17 @@ const Upload = () => {
     const hoverMenu = (event) => {
         console.log("updateCurrentHover");
         if (event.type === "mouseover") {
-            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-hover-button"]);
+            let rows = {}
+            data.groups[event.target.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-hover-button"];
+            });
             setHighlightedKeys(rows, false);
         }
         else if (event.type === "mouseout") {
-            let rows = Utils.getGroupRowsFromHeader(event.target, ["menu-group-hover-button"]);
+            let rows = {}
+            data.groups[event.target.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-hover-button"];
+            });
             clearHighlightedKeys(rows);
         }
     }
@@ -498,7 +514,7 @@ const Upload = () => {
                         id="cancel"
                         className="cancel"
                         value="cancel"
-                        disabled="true"
+                        disabled={true}
                         onClick={(e) => handleButtons(e)}>
                     Cancel
                 </button>
@@ -506,7 +522,7 @@ const Upload = () => {
                         id="confirm"
                         className="confirm"
                         value="confirm"
-                        disabled="true"
+                        disabled={true}
                         onClick={(e) => handleButtons(e)}>
                     Confirm
                 </button>

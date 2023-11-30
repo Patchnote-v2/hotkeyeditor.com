@@ -11,15 +11,8 @@ const Keybinds = (data) => {
             let mapping = Object.keys(data.data.groups).map((value, key) => {
                 // Using data.groups, build an array of this menu's hotkeys with UUID keys
                 var menuRows = {}
-                data.data.groups[value].forEach((value) => {
-                    let hotkeyIndex = Utils.findKeyByValueAttribute(data.data.hotkeys, value, "string_id");
-                    if (hotkeyIndex.length === 2) {
-                    }
-                    if (hotkeyIndex.length) {
-                        hotkeyIndex.forEach((UUID) => {
-                            menuRows[UUID] = data.data.hotkeys[UUID];
-                        });
-                    }
+                data.data.groups[value].forEach((UUID) => {
+                    menuRows[UUID] = data.data.hotkeys[UUID]
                 });
                 
                 // Filter all menu rows so we can determine if a menu is empty or not

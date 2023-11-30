@@ -11,7 +11,8 @@ from django.utils.encoding import smart_str
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
-from .utils import serialize_all_files, load_default_files
+
+from .utils import serialize_all_files, load_default_files, format_groups
 
 from .hkp.new_hotkey_file import HotkeyFile
 from .hkp.parse import FileType
@@ -23,6 +24,7 @@ class HKPView(View):
     def post(self, request):
         # Determine which user file is larger and use that to determine which file is
         # Base.hkp.
+        # todo: ensure that the user uploads BOTH files
         user_files = {'base': None, 'profile': None}
         for each in request.FILES.getlist("files", None):
             if not user_files['base']:
@@ -56,7 +58,7 @@ class HKPView(View):
         default_files['profile'].update(changed)
 
         return JsonResponse(data={"data": {"hotkeys": serialize_all_files(default_files),
-                                           "groups": hk_groups},
+                                           "groups": format_groups(hk_groups)},
                                   "name": profile_name},
                             status=200)
 
@@ -66,7 +68,7 @@ class HKPView(View):
         default_files = load_default_files()
 
         return JsonResponse(data={"hotkeys": serialize_all_files(default_files),
-                                  "groups": hk_groups},
+                                  "groups": format_groups(hk_groups)},
                             status=200)
 
 
