@@ -386,7 +386,6 @@ $key-transition-time: 0.1s;
       --im3: linear-gradient(#DD434355, #DD434355);
     }
     &.button-hover-passive-button {
-      cursor: default;
       --im4: linear-gradient(#87E8FF55, #87E8FF55);
     }
     &.button-hover-setting-button {
@@ -400,6 +399,9 @@ $key-transition-time: 0.1s;
     }
     &.hotkey-row-find {
       --im8: linear-gradient(#FEFE00AA, #FEFE00AA);
+    }
+    &.button-hover-filtering-button {
+      --im9: linear-gradient(#98F9FF66, #98F9FF66);
     }
   }
   
@@ -423,7 +425,6 @@ $key-transition-time: 0.1s;
       --im3: linear-gradient(#DD434355, #DD434355);
     }
     &.button-hover-passive-button {
-      cursor: default;
       --im4: linear-gradient(#87E8FF55, #87E8FF55);
     }
     &.button-hover-setting-button {

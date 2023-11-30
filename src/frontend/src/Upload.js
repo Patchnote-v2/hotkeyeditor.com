@@ -411,7 +411,6 @@ const Upload = () => {
         }
     }
     
-    // todo: when actively filtering, add background to active key
     /*
         Given a keycode, returns an array of all UUIDs that have that keycode as their
         current key
@@ -436,10 +435,18 @@ const Upload = () => {
         if (!filteringKey) {
             setFilteringRows(true);
             setFilteringKey(keycode);
+            
+            // Highlight currently key being filtered
+            keyboard.current.dispatch((instance) => {
+                instance.addButtonTheme(key, "button-hover-filtering-button");
+            });
         }
         else if (filteringKey && keycode === filteringKey) {
             setFilteringKey(null);
             setFilteringRows(false);
+            keyboard.current.dispatch((instance) => {
+                instance.removeButtonTheme(key, "button-hover-filtering-button");
+            });
         }
     }
     
