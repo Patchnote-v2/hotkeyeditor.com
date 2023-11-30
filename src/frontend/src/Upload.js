@@ -67,12 +67,13 @@ const Upload = () => {
             setChanged({});
             setData(response.data.data)
             setProfileName(response.data.name)
+            setFilteringRows(false);
+            setFoundRows([])
         }).catch((error) => {
             console.log(error);
         });
     }
     
-    // todo: reset more things, like filtering, foundRows, etc
     const _getDefaultFiles = (event) => {
         event.preventDefault();
         
@@ -90,6 +91,8 @@ const Upload = () => {
             setChanged({});
             setData(response.data);
             setProfileName(null);
+            setFilteringRows(false);
+            setFoundRows([])
         }).catch((error) => {
             console.log(error);
         });
