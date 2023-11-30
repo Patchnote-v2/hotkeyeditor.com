@@ -461,21 +461,29 @@ const Upload = () => {
     
     return (
         <>
-        <form method="POST" onSubmit={_handleSubmit}>
-            <label htmlFor="files">Select Files</label>
-            <input
-                type="file"
-                name="files"
-                multiple
-            />
-            <button type="submit">Upload Files</button>
-        </form>
-        <button onClick={uploadChanged}>Upload Changes</button>
-        
-        <form method="POST" onSubmit={_getDefaultFiles}>
-            <label htmlFor="loadDefaults">Load Defaults</label>
-            <button type="submit">Load Defaults</button>
-        </form>
+        <div id="controls">
+            <div id="upload">
+                <h4>Edit Custom Hotkeys</h4>
+                <form method="POST" onSubmit={_handleSubmit}>
+                    <input
+                        type="file"
+                        name="files"
+                        multiple
+                    />
+                    <button type="submit" className="confirm">Upload</button>
+                </form>
+            </div>
+            
+            <div id="get-changes">
+                <button onClick={uploadChanged} className="confirm">Download Changes</button>
+            </div>
+            
+            <div id="load-defaults">
+                <form method="POST" onSubmit={_getDefaultFiles}>
+                    <button type="submit">Load Default Hotkeys</button>
+                </form>
+            </div>
+        </div>
         
         <div id="keyboard-wrapper"
              className={settingKeybind ? "" : "disable-keyboard"}>
@@ -490,6 +498,7 @@ const Upload = () => {
                         id="cancel"
                         className="cancel"
                         value="cancel"
+                        disabled="true"
                         onClick={(e) => handleButtons(e)}>
                     Cancel
                 </button>
@@ -497,6 +506,7 @@ const Upload = () => {
                         id="confirm"
                         className="confirm"
                         value="confirm"
+                        disabled="true"
                         onClick={(e) => handleButtons(e)}>
                     Confirm
                 </button>

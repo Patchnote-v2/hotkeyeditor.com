@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
 
 body {
+  color: #EAEAEA;
   background-color: #242424;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -19,15 +20,33 @@ input {
   border: none;
   box-sizing: border-box;
   font-size: 20px;
-  height: 100px;
+  // height: 100px;
   padding: 20px;
   width: 100%;
 }
 
-button {
-  background-color: #e6e6e6;
-  border: transparent;
+$default-button-background: #494949;
+$default-button-color: #EAEAEA;
+// $default-button-border-color: #EAFF0055;
+$default-button-border-color: black;
+
+input[type='file']::file-selector-button {
+  background-color: $default-button-background;
+  border: 1px solid $default-button-border-color;
   border-radius: 3px;
+  color: $default-button-color;
+  cursor: pointer;
+  font-size: 100%;
+  padding: 11px 15px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+}
+
+button {
+  background-color: $default-button-background;
+  border: 1px solid $default-button-border-color;
+  border-radius: 3px;
+  color: $default-button-color;
   cursor: pointer;
   font-size: 100%;
   padding: 11px 15px;
@@ -42,18 +61,20 @@ button {
   }
   
   &.confirm {
-    background: rgb(28, 184, 65);
+    background: rgb(40, 110, 40);
+    border: none;
     color: #F0F0F0;
     
     &:disabled {
-      background: rgba(28, 184, 65, 0.2);
+      background: rgba(15, 110, 10, 0.2);
       color: #616161;
       cursor: default;
     }
   }
   
   &.cancel {
-    background: rgb(202, 60, 60);
+    background: rgb(175, 40, 40);
+    border: none;
     color: #F0F0F0;
     
     &:disabled {
@@ -64,22 +85,96 @@ button {
   }  
 }
 
-header {
-  background-color: #121212;
-  border-bottom: 1px solid #EAFF00;
-  color: #F0F0F0;
-  font-family: Georgia;
-  font-size: 25pt;
-  // font-weight: 700;
-  height: fit-content;
-  padding: 20px 0 20px 30px;
-}
-
-
 #root {
   align-items: center;
   display: flex;
   flex-flow: column wrap;
+}
+
+header {
+  background-color: #121212;
+  border-bottom: 2px solid #EAFF00;
+  color: #F0F0F0;
+  font-family: Georgia;
+  font-size: 25pt;
+  height: fit-content;
+  padding: 20px 0 20px 30px;
+}
+
+@mixin menu {
+  border: 2px solid #414141;
+  border-radius: 5px;
+  box-shadow: black 0px 0px 5px 0px;
+  background-color: #2f2f2f;
+  margin-bottom: 10px;
+}
+
+@mixin menu-header {
+  background-color: #242424;
+  border: 1px solid black;
+  border-radius: 5px 5px 0 0;
+  box-sizing: border-box;
+  margin: 0;
+  text-align: center;
+}
+
+#controls {
+  display: flex;
+  background-color: #212121;
+  border-top: 1px solid black;
+  border-bottom: 1px solid #EAFF00;
+  height: 175px;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  
+  h4 {
+    @include menu-header;
+    color: white;
+    cursor: default;
+    font-size: 15pt;
+    font-weight: 600;
+    padding: 10px;
+    width: 100%;
+  }
+  
+  #upload {
+    @include menu;
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 0;
+    
+    form {
+      align-content: center;
+      align-items: center;
+      display: flex;
+      flex-flow: column;
+      padding: 5px;
+      
+      input {
+        padding: 0;
+        margin: 0;
+        font-size: 12pt;
+      }
+    }
+  }
+  
+  #get-changes {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    display: flex;
+    flex-flow: column;
+  }
+  
+  #load-defaults {
+    form {
+      display: flex;
+      height: 50%;
+      flex-flow: column;
+    }
+  }
 }
 
 #keyboard-wrapper {
@@ -94,6 +189,8 @@ header {
     top: -50px;
     position: relative;
     padding-right: 10px;
+    // Fixes buttons preventing interaction with hotkey rows underneath
+    margin-bottom: -42px;
     
     button:first-child {
       margin-right: 10px;
@@ -104,9 +201,10 @@ header {
 .keyboardContainer {
   display: flex;
   background-color: #121212CC;
-  border: 2px solid #515151;
+  border: 1px solid #515151;
   border-top: none;
   border-radius: 0px 0px 10px 10px;
+  box-shadow: black 3px 3px 3px 0px;
   justify-content: center;
   margin: 0 auto;
   width: fit-content;
@@ -278,7 +376,8 @@ $key-transition-time: 0.1s;
                 var(--im7, linear-gradient(transparent, transparent)),
                 var(--im8, linear-gradient(transparent, transparent)),
                 var(--im9, linear-gradient(transparent, transparent)),
-                linear-gradient(#404040, #404040);
+                // linear-gradient(#404040, #404040);
+                linear-gradient(#303030, #303030);
     /* V "what is being hovered"-"state"-"what it applies to" */
     &.keybind-row-hover-button {
       --im2: linear-gradient(#DA767655, #DA767655);
@@ -347,33 +446,29 @@ $key-transition-time: 0.1s;
   column-gap: 35px;
   font-family: Noto Sans;
   font-weight: 400;
+  margin-top: 30px;
   text-align: center;
   user-select: none;
   width: 98%;
   
   .menu {
-    border: 2px solid #414141;
-    border-radius: 5px;
-    box-shadow: black 0px 0px 5px 0px;
-    margin-bottom: 10px;
+    @include menu;
     break-inside: avoid;
 
     h3 {
-      background-color: #242424;
-      border: 1px solid black;
-      border-radius: 5px 5px 0 0;
+      @include menu-header;
       color: white;
       cursor: default;
       font-size: 15pt;
       font-weight: 600;
-      margin: 0;
       padding: 10px;
     }
 
     .hotkey-row {
       align-items: center;
       border-bottom: 1px solid black;
-      border-top: 1px solid #505050;
+      // border-top: 1px solid #505050;
+      border-top: 1px solid #EAFF0030;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
