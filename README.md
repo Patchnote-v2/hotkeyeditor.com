@@ -12,10 +12,9 @@ Invaluble Resources:
 * https://gist.github.com/KSneijders/9231eeec1a66b314c3402729f0c455fa
 
 ## Features
- - Editing your hotkeys!
+ - Editing your hotkeys, even multiple at a time!
  - Hover over a key to highlight all keybinds that use it
  - Select a key to filter to hotkeys that _only_ use that key
- - WIP: Hover over a group to highlight all keys that group uses
- - WIP: Select a group to highlight all keys
+ - Hover over a group to highlight all keys that group (e.g. Barracks) uses
+ - Select a group to toggle highlighting of all keys that group uses
  - WIP: Change the grid layout by bulk-changing keybinds (i.e. all hotkeys that use Q can be changed simultaneously)
- - WIP: Highlight all hotkeys pertaining to a certain building (e.g. Barracks shows unit/technology hotkeys, in addition to go-to, etc)
