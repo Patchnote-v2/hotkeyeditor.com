@@ -459,7 +459,7 @@ $key-transition-time: 0.1s;
     h3 {
       @include menu-header;
       color: white;
-      cursor: default;
+      cursor: pointer;
       font-size: 15pt;
       font-weight: 600;
       padding: 10px;
