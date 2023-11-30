@@ -9,14 +9,6 @@ import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
 import Utils from './Utils.js';
 
-// TODO: When setting a new keybind, there needs to be a better way to
-// confirm.  Right now if:
-// - only editing one keybind then you have to click the key
-//   already being used... unintuitive.
-// - if editing multiple and only modifiers are changed then there's no way
-//   to confirm without setting the keycode for all of them
-// - no way to cancel except for unselecting all active rows
-
 // todo: input box for profile file name?
 
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -419,8 +411,6 @@ const Upload = () => {
         }
     }
     
-    // todo: filtering then clicking another key cancels the filter, but clicking on a
-    // new key filters by the first filtering's key
     // todo: when actively filtering, add background to active key
     /*
         Given a keycode, returns an array of all UUIDs that have that keycode as their
@@ -453,12 +443,6 @@ const Upload = () => {
         }
     }
     
-    // todo: filtering, then selecting a menu, then unfiltering only shows highlighted menu
-    // keys of the key that was filtered.  On unfilter the entire menu should be highlighted
-    // todo: make setting keybind color most important somehow so it's always visible, despite group selection colors.
-    // This includes modifier keys, since there's no visible way to see them getting removed when group selected
-    // todo: determine how filtering should work with group select.  Currently it overrides all row CSS class styling,
-    // while keeping key highlights.  Should filtering after group selection only show filtered keys in the selected group??
     const selectMenu = (event) => {
         if (!highlightedGroup.current) {
             let rows = {}
