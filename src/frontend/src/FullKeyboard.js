@@ -246,7 +246,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   }
 
   const onKeyReleased = (key, event) => {
-    console.log("onKeyReleased");
+    // console.log("onKeyReleased");
     // console.log(event)
     // console.log(key);
     

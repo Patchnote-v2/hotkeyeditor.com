@@ -141,7 +141,6 @@ const Upload = () => {
     }
     
     const handleSettingKeybind = (event) => {
-        // console.log("beginSettingKeybind");
         let dataset = Utils.getDatasetFromEvent(event);
         
         setBuffer((currentBuffer) => {
@@ -190,7 +189,6 @@ const Upload = () => {
     }
     
     const updateBuffer = (key) => {
-        // console.log("updateBuffer");
         setBuffer((currentBuffer) => {
             let oldBuffer = JSON.parse(JSON.stringify(currentBuffer));
             // Is modifier key
@@ -287,10 +285,8 @@ const Upload = () => {
                 let keysString = "";
                 if (useBuffer) {
                     Object.keys(buffer).forEach((key) => {
-                        console.log(buffer[key])
                         keysString += Utils.datasetToKeyString(buffer[key]) + " ";
                     });
-                    console.log(keysString);
                 }
                 else {
                     UUIDs.forEach((UUID) => {
@@ -391,7 +387,6 @@ const Upload = () => {
         Passed to Keybinds to be used as a callback for updating the keyboard highlighting
     */
     const updateCurrentHover = (event) => {
-        console.log("updateCurrentHover");
         let dataset = Utils.getDatasetFromEvent(event);
         if (event.type === "mouseover") {
             let keys = {};
@@ -435,7 +430,6 @@ const Upload = () => {
     // todo: determine how filtering should work with group select.  Currently it overrides all row CSS class styling,
     // while keeping key highlights.  Should filtering after group selection only show filtered keys in the selected group??
     const selectMenu = (event) => {
-        console.log("selectMenu");
         if (!highlightedGroup.current) {
             let rows = {}
             data.groups[event.target.textContent].forEach((UUID) => {
@@ -458,7 +452,6 @@ const Upload = () => {
     }
     
     const hoverMenu = (event) => {
-        console.log("updateCurrentHover");
         if (event.type === "mouseover") {
             let rows = {}
             data.groups[event.target.textContent].forEach((UUID) => {
