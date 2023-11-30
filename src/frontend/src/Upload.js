@@ -29,6 +29,8 @@ const Upload = () => {
     const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
+    
+    const [filteringKey, setFilteringKey] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
     const [filteringRows, setFilteringRows] = useState(false);
     
@@ -425,19 +427,29 @@ const Upload = () => {
         current key
     */
     const findRowsByKeycode = (keycode) => {
-        // Change this to take a dataset and process the keycode here
-        
-        // Need to save the currently filtered key
-        // Need to only setFilteringRows(false) if clicked key is not the
-        // currently filtered key
-        
-        
         if (dataLoadedRef.current) {
-            let foundRows = keycode ? Object.entries(dataLoadedRef.current.hotkeys)
-                               .filter(([k, v]) => dataLoadedRef.current.hotkeys[k].keycode === keycode)
-                               .map(([k]) => k)
-                               : []
+           let foundRows = [];
+            if (keycode) {
+                foundRows = Object.entries(dataLoadedRef.current.hotkeys)
+                    .filter(([k, v]) => dataLoadedRef.current.hotkeys[k].keycode === keycode)
+                    .map(([k]) => k);
+            }
             setFoundRows(foundRows);
+        }
+    }
+    
+    const toggleFilteringRows = (key) => {
+        let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key));
+        
+        // If there's currently a filteringKey set and the user clicked
+        // on the currently stored key
+        if (!filteringKey) {
+            setFilteringRows(true);
+            setFilteringKey(keycode);
+        }
+        else if (filteringKey && keycode === filteringKey) {
+            setFilteringKey(null);
+            setFilteringRows(false);
         }
     }
     
@@ -518,7 +530,7 @@ const Upload = () => {
                           updateBuffer={updateBuffer}
                           settingKeybind={settingKeybind}
                           findRowsByKeycode={findRowsByKeycode}
-                          setFilteringRows={setFilteringRows}
+                          toggleFilteringRows={toggleFilteringRows}
                           filteringRows={filteringRows} />
             <div id="confirmCancelWrapper">
                 <button ref={cancel}

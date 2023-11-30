@@ -258,7 +258,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     else if (!settingKeybindRef.current) {
       // Left mouse button blick
       if (event.button === 0) {
-        props.setFilteringRows(!props.filteringRows);
+        props.toggleFilteringRows(key);
       }
       // Right mouse button click
       else if (event.button === 2) {
