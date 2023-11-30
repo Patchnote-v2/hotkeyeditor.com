@@ -37,6 +37,14 @@ const Upload = () => {
     const keyboard = useRef(null);
     const highlightedGroup = useRef(null);
     
+    // Initially set as disabled this way, otherwise if the buttons use an attribute
+    // to be disabled then it just straight up doesn't work.
+    useEffect(() => {
+        if (cancel.current && confirm.current) {
+            disableButtons(true);
+        }
+    }, []);
+    
     useEffect(() => {
         if (data) {
             // Dear God please someone put me out of my misery
@@ -417,6 +425,13 @@ const Upload = () => {
         current key
     */
     const findRowsByKeycode = (keycode) => {
+        // Change this to take a dataset and process the keycode here
+        
+        // Need to save the currently filtered key
+        // Need to only setFilteringRows(false) if clicked key is not the
+        // currently filtered key
+        
+        
         if (dataLoadedRef.current) {
             let foundRows = keycode ? Object.entries(dataLoadedRef.current.hotkeys)
                                .filter(([k, v]) => dataLoadedRef.current.hotkeys[k].keycode === keycode)
@@ -497,8 +512,8 @@ const Upload = () => {
             </div>
         </div>
         
-        <div id="keyboard-wrapper"
-             className={settingKeybind ? "" : "disable-keyboard"}>
+        <div id="keyboard-wrapper">
+             {/*className={settingKeybind ? "" : "disable-keyboard"}>*/}
             <FullKeyboard ref={keyboard}
                           updateBuffer={updateBuffer}
                           settingKeybind={settingKeybind}
@@ -510,7 +525,6 @@ const Upload = () => {
                         id="cancel"
                         className="cancel"
                         value="cancel"
-                        disabled={true}
                         onClick={(e) => handleButtons(e)}>
                     Cancel
                 </button>
@@ -518,7 +532,6 @@ const Upload = () => {
                         id="confirm"
                         className="confirm"
                         value="confirm"
-                        disabled={true}
                         onClick={(e) => handleButtons(e)}>
                     Confirm
                 </button>
