@@ -24,7 +24,11 @@ class HKPView(View):
     def post(self, request):
         # Determine which user file is larger and use that to determine which file is
         # Base.hkp.
-        # todo: ensure that the user uploads BOTH files
+
+        if len(request.FILES.getlist("files", None)) != 2:
+            return JsonResponse(data={"message": "Please select only two files."},
+                                status=400)
+
         user_files = {'base': None, 'profile': None}
         for each in request.FILES.getlist("files", None):
             if not user_files['base']:
