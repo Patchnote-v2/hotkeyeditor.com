@@ -1,12 +1,20 @@
 // import logo from './logo.svg';
 import './App.scss';
 
-import Upload from './Upload.js'
+import { useRef } from "react";
 
-function App() {
+import Upload from './Upload.js'
+import Notifications from './Notification.js'
+
+ const App = () => {
+    const notification = useRef();
+    
     return (
-        <Upload />
+        <>
+        <Notifications ref={notification} />
+        <Upload notifications={notification} />
+        </>
     )
-}
+};
 
 export default App;

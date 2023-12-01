@@ -1,0 +1,32 @@
+#notifications-wrapper {
+  align-items: center;
+  flex-flow: column nowrap;
+  display: flex;
+  max-height: 0px;
+  position: sticky;
+  overflow: visible;
+  top: 0px;
+  width: 100%;
+  z-index: 10;
+  
+  .notification {
+    background: linear-gradient(#121212EE, #121212EE);
+    border: 2px solid #DD4444;
+    border-radius: 10px;
+    box-shadow: #000000 0px 0px 10px 1px;
+    font-size: 13pt;
+    margin: 10px;
+    padding: 25px;
+    position: relative;
+    text-align: left;
+    width: 350px;
+    
+    span {
+      font-size: 15pt;
+      position: absolute;
+      right: 10px;
+      top: 3px;
+      user-select: none;
+    }
+  }
+}
