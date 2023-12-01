@@ -26,7 +26,7 @@ class HKPView(View):
         # Base.hkp.
 
         if len(request.FILES.getlist("files", None)) != 2:
-            return JsonResponse(data={"message": "Please select only two files."},
+            return JsonResponse(data={"message": "Please select only the two correct files (<b>&lt;profile_name>.hkp</b> and <b>&lt;profile_name>/Base.hkp</b>)."},
                                 status=400)
 
         user_files = {'base': None, 'profile': None}
