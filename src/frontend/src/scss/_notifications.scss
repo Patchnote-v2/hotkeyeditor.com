@@ -10,23 +10,40 @@
   z-index: 10;
   
   .notification {
-    background: linear-gradient(#121212EE, #121212EE);
-    border: 2px solid #DD4444;
+    background-color: #121212EE;
+    border: 2px solid #EE5555CC;
     border-radius: 10px;
     box-shadow: #000000 0px 0px 10px 1px;
     font-size: 13pt;
     margin: 10px;
     padding: 25px;
     position: relative;
+    transition: 0.05s ease-in-out;
     text-align: left;
     width: 350px;
     
-    span {
+    &:hover {
+      background-color:  #000000EE;
+      border: 2px solid #EE5555FF;
+      color: #EEEEEE;
+    }
+    
+    span.close-notification {
+      cursor: pointer;
       font-size: 15pt;
+      font-weight: 900;
       position: absolute;
       right: 10px;
-      top: 3px;
+      top: 2px;
       user-select: none;
+      
+      &:hover {
+        color: #EAFF00FF;
+      }
+      
+      &:active {
+        color: #EAFF00CC;
+      }
     }
   }
 }

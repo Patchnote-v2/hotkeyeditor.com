@@ -18,8 +18,8 @@ const Notifications = forwardRef((props, ref) => {
     const listNotifications = notifications.map((each) => {
         return (
             <div className="notification">
-                {each}
-                <span onClick>✕</span>
+                <span className="messaeg" dangerouslySetInnerHTML={{ __html: each }} />
+                <span className="close-notification">✕</span>
             </div>
         );
     })
