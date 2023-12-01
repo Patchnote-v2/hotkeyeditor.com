@@ -1,0 +1,65 @@
+$default-button-background: #494949;
+$default-button-color: #EAEAEA;
+// $default-button-border-color: #EAFF0055;
+$default-button-border-color: black;
+
+input[type='file']::file-selector-button {
+  background-color: $default-button-background;
+  border: 1px solid $default-button-border-color;
+  border-radius: 3px;
+  color: $default-button-color;
+  cursor: pointer;
+  font-size: 100%;
+  padding: 11px 15px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+}
+
+button {
+  background-color: $default-button-background;
+  border: 1px solid $default-button-border-color;
+  border-radius: 3px;
+  color: $default-button-color;
+  cursor: pointer;
+  font-size: 100%;
+  padding: 11px 15px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background-image: linear-gradient(transparent,rgba(0,0,0,.1) 40%,rgba(0,0,0,.1));
+  }
+  &:active {
+    border-color: #000;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.15),inset 0 0 6px rgba(0,0,0,.2);
+  }
+  
+  &.confirm {
+    background: rgb(40, 110, 40);
+    border: none;
+    color: #F0F0F0;
+    
+    &:disabled {
+      background: rgba(15, 110, 10, 0.2);
+      color: #616161;
+      cursor: default;
+    }
+  }
+  
+  &.cancel {
+    background: rgb(175, 40, 40);
+    border: none;
+    color: #F0F0F0;
+    
+    &:disabled {
+      background: rgba(202, 60, 60, 0.2);
+      color: #616161;
+      cursor: default;
+    }
+  }  
+}
+
+#root {
+  align-items: center;
+  display: flex;
+  flex-flow: column wrap;
+}

@@ -1,0 +1,228 @@
+#keyboard-wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  position: sticky;
+  top: 0px;
+  width: fit-content;
+  
+  #confirmCancelWrapper {
+    top: -50px;
+    position: relative;
+    padding-right: 10px;
+    // Fixes buttons preventing interaction with hotkey rows underneath
+    margin-bottom: -42px;
+    
+    button:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.keyboardContainer {
+  display: flex;
+  background-color: #121212CC;
+  border: 1px solid #515151;
+  border-top: none;
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: black 3px 3px 3px 0px;
+  justify-content: center;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.simple-keyboard {
+  .hg-row {
+    justify-content: center;
+    
+    .hg-button {
+      font-family: Noto Sans;
+      font-weight: 400;
+      border: 1px solid #707070;
+      box-shadow: black 0px 0px 5px 0px;
+      
+      &.emptySpace {
+        background: none;
+        border: none;
+        box-shadow: none;
+        pointer-events: none;
+      }
+      
+      &.selectedButton {
+        background: rgba(5, 25, 70, 0.53);
+        color: white;
+      }
+    }
+  }
+  
+  &.hg-theme-default {
+    background: none;
+    display: inline-block;
+    font-weight: 600;
+  }
+  
+  &.simple-keyboard-main {
+    background: none;
+    min-width: 640px;
+    width: 640px;
+    
+    .hg-row {
+      &:first-child {
+        margin-bottom: 10px;
+      }
+      .hg-button-space {
+        width: 350px;
+      }
+    }
+  }
+  
+  &.simple-keyboard-arrows {
+    align-self: flex-end;
+    background: none;
+  }
+  
+  &.simple-keyboard-arrows {
+    .hg-button {
+      align-items: center;
+      display: flex;
+      flex-grow: 0;
+      justify-content: center;
+      width: 50px;
+    }
+  }
+  
+  &.simple-keyboard-control {
+    background: none;
+    
+    .hg-row {
+      &:first-child {
+        margin-bottom: 10px;
+      }
+      .hg-button {
+        align-items: center;
+        display: flex;
+        flex-grow: 0;
+        justify-content: center;
+        width: 50px;
+      }
+    }
+  }
+  
+  &.simple-keyboard-numpad {
+    background: none;
+    width: 160px;
+    
+    .hg-button {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      width: 50px;
+    }
+  }
+  
+  &.simple-keyboard-numpadEnd {
+    background: none;
+    margin: 0;
+    padding: 5px 5px 5px 0;
+    width: 50px;
+    
+    .hg-button {
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      
+      &.hg-button-plus {
+        height: 85px;
+      }
+      &.hg-button-enter {
+        height: 85px;
+      }
+    }
+  }
+  
+  &.simple-keyboard-mouse-extra {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100px;
+    
+    .hg-button-mouseextra1, .hg-button-mouseextra2 {
+      height: 85px;
+    }
+  }
+  
+  &.simple-keyboard-mouse-primary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    .hg-button-wheelup {
+      flex: 0 0 100px;
+    }
+    .hg-button-wheeldown {
+      flex: 0 0 100px;
+    }
+  }
+}
+
+.controlArrows {
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.numPad {
+  align-items: flex-end;
+  display: flex;
+}
+
+.mouse {
+  display: flex;
+  display-items: flex-end;
+  text-align: center;
+}
+
+$key-transition-time: 0.1s;
+#root {
+  .hg-button {
+    color: #EAEAEA;
+    background:
+                var(--im1, linear-gradient(transparent, transparent)),
+                var(--im2, linear-gradient(transparent, transparent)),
+                var(--im3, linear-gradient(transparent, transparent)),
+                var(--im4, linear-gradient(transparent, transparent)),
+                var(--im5, linear-gradient(transparent, transparent)),
+                var(--im6, linear-gradient(transparent, transparent)),
+                var(--im7, linear-gradient(transparent, transparent)),
+                var(--im8, linear-gradient(transparent, transparent)),
+                var(--im9, linear-gradient(transparent, transparent)),
+                // linear-gradient(#404040, #404040);
+                linear-gradient(#303030, #303030);
+    /* V "what is being hovered"-"state"-"what it applies to" */
+    &.keybind-row-hover-button {
+      --im2: linear-gradient(#DA767655, #DA767655);
+    }
+    &.keybind-row-setting-button {
+      --im3: linear-gradient(#DD434355, #DD434355);
+    }
+    &.button-hover-passive-button {
+      --im4: linear-gradient(#87E8FF55, #87E8FF55);
+    }
+    &.button-hover-setting-button {
+      --im5: linear-gradient(#DA767655, #DA767655);
+    }
+    &.menu-group-select-button {
+      --im6: linear-gradient(#00765555, #00765555);
+    }
+    &.menu-group-hover-button {
+      --im7: linear-gradient(#007655AA, #007655AA);
+    }
+    &.hotkey-row-find {
+      --im8: linear-gradient(#FEFE00AA, #FEFE00AA);
+    }
+    &.button-hover-filtering-button {
+      --im9: linear-gradient(#98F9FF66, #98F9FF66);
+    }
+  }
+}
