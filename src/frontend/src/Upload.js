@@ -9,8 +9,6 @@ import FullKeyboard from './FullKeyboard.js';
 import Keybinds from './Keybinds.js';
 import Utils from './Utils.js';
 
-// todo: input box for profile file name?
-
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Upload = (props) => {
