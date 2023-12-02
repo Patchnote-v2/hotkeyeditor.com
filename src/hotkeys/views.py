@@ -79,11 +79,6 @@ class HKPView(View):
 @method_decorator(csrf_exempt, name="dispatch")
 class GenerateHKPView(View):
     def post(self, request):
-        # todo: figure out best way to determine <profile> naming when downloading
-        # if the user uploaded their own files, figure out a way to save that name
-        # for later; otherwise, if editing from default, probably ad a text box
-        # that lets the user set their own name (with default text value)
-
         data = json.loads(request.body.decode("UTF-8"))
         changed = data["changed"]
         profile_name = data["profileName"] if data["profileName"] else "Edited Hotkeys"
