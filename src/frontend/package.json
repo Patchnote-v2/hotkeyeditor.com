@@ -15,7 +15,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "react-simple-keyboard": "^3.7.31",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -43,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "react-simple-keyboard": "^3.7.46",
     "sass": "^1.69.5"
   }
 }
