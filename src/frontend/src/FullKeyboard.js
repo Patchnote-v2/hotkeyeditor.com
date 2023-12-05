@@ -57,11 +57,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
     disableCaretPositioning: true,
-    // physicalKeyboardHighlight: true,
+    physicalKeyboardHighlight: settingKeybindRef.current, // Start false, true when setting keybind
     physicalKeyboardHighlightPress: true,
     physicalKeyboardHighlightPressUsePointerEvents: true,
-    physicalKeyboardHighlightPreventDefault: true,
-    physicalKeyboardHighlightPressUseClick: true,
     syncInstanceInputs: true,
     mergeDisplay: true,
     // debug: true

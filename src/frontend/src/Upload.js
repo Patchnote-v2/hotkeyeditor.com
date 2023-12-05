@@ -176,14 +176,10 @@ const Upload = (props) => {
             else {
                 // todo: update when keyboard events are fixed, also add inverse
                 // where exiting setting keybind state happens
-                // keyboard.current.setOptions({
-                //     physicalKeyboardHighlight: true
-                // });
                 oldBuffer[dataset.id] = dataset;
                 setHighlightedKeys(
                     Utils.bufferToHighlights(oldBuffer, ["keybind-row-setting-button"]),
                                              false);
-
                 setSettingKeybind(true);
                 disableButtons(false);
             }
