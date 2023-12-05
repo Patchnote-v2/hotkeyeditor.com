@@ -52,7 +52,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         });
       });
     },
-    onKeyPress: (key, event) => onKeyPress(key, event),
     onKeyReleased: (key, event) => onKeyReleased(key, event),
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
@@ -231,17 +230,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
       "{wheeldown}": "Wheel Down",
     }
   };
-  
-  const onKeyPress = (key, event) => {
-    // console.log("onKeyPress");
-    // console.log(event)
-    // console.log(key);
-    // if (event.repeat) {
-      // console.log("repeating");
-      // event.preventDefault();
-      // event.stopPropagation();
-    // }
-  }
 
   const onKeyReleased = (key, event) => {
     // console.log("onKeyReleased");
