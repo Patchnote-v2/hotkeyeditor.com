@@ -245,7 +245,7 @@ const Upload = (props) => {
                 setBuffer({});
             }
             else if (event.target.value === "confirm") {
-                confirmKeybinds(buffer);
+                setBuffer(confirmKeybinds(buffer));
             }
             disableButtons(true);
         }
