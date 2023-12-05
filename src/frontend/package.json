@@ -2,6 +2,10 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=21.3.0",
+    "npm": ">=10.2.4"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
