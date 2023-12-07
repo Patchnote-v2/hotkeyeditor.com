@@ -11,6 +11,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.0",
+    "copyfiles": "^2.4.1",
     "js-file-download": "^0.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,6 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "copyfiles -u 1 \"build/**/*\" $SITE_ROOT",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
