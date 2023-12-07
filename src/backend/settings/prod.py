@@ -11,7 +11,11 @@ environ.Env.read_env(str(Path(__file__).parent / "prod.env"),
 
 from .base import *  # noqa
 
+ROOT_DIR = "/var"
+
 SECRET_KEY = env("SECRET_KEY")
+
+ALLOWED_HOSTS = ['hotkeyeditor.com']
 
 LOGGING['handlers']['file'] = {
     'backupCount': 3,
@@ -23,3 +27,7 @@ LOGGING['handlers']['file'] = {
 }
 
 LOGGING['root']['handlers'].append('file')
+
+CSRF_COOKIE_SECURE = True
+
+STATIC_ROOT = os.path.join(ROOT_DIR, 'www', 'hotkeyeditor.com', 'static')
