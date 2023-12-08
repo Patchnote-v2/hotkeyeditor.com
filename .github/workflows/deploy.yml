@@ -4,7 +4,7 @@ name: Deploy main
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ testing ]
+    branches: testing
 
 jobs:
   # This workflow contains a single job called "build"
