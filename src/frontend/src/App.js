@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import './App.scss';
+import './scss/App.scss';
 
 import { useRef } from "react";
 
