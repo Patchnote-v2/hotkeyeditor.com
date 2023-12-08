@@ -30,6 +30,10 @@ const Upload = (props) => {
     const keyboard = useRef(null);
     const highlightedGroup = useRef(null);
     
+    let baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+                    ? "localhost:8000"
+                    : "http://www.hotkeyeditor.com"
+    
     useEffect(() => {
         // Initially set as disabled this way, otherwise if the buttons use an attribute
         // to be disabled then it just straight up doesn't work.
@@ -67,7 +71,8 @@ const Upload = (props) => {
         
         axios({
             method: 'post',
-            url: '/upload/',
+            baseUrl: baseUrl,
+            url: '/api/upload/',
             data: formData,
         }).then((response) => {
             console.log(response.data);
@@ -83,7 +88,6 @@ const Upload = (props) => {
     
     const _getDefaultFiles = (event) => {
         event.preventDefault();
-        
         // Check for changes and ask if they want to be overriden
         if (Object.keys(changed).length) {
             if (!window.confirm("You have changes made to the current hotkeys.  Loading the default hotkeys will erase all changes.")) {
@@ -92,7 +96,8 @@ const Upload = (props) => {
         }
         axios({
             method: 'get',
-            url: '/upload/',
+            baseUrl: baseUrl,
+            url: '/api/upload/',
         }).then((response) => {
             console.log(response.data);
             setChanged({});
@@ -109,7 +114,8 @@ const Upload = (props) => {
         event.preventDefault();
         axios({
             method: 'post',
-            url: '/generate/',
+            baseUrl: baseUrl,
+            url: '/api/generate/',
             data: {changed: changed, profileName: profileName},
             responseType: 'blob',
         }).then((response) => {
