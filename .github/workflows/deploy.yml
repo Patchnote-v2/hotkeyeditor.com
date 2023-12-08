@@ -35,4 +35,6 @@ jobs:
           cd src/frontend
           npm install
           npm run build
+          echo "I am $GENERATE_SOURCEMAP"
+          echo "I am $SITE_ROOT"
           sudo /bin/systemctl restart uwsgi
