@@ -16,6 +16,9 @@ jobs:
     steps:
     - name: Deploy using ssh
       uses: appleboy/ssh-action@master
+      env:
+        GENERATE_SOURCEMAP: ${{ secrets.GENERATE_SOURCEMAP }}
+        SITE_ROOT: ${{ secrets.SITE_ROOT }}
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
