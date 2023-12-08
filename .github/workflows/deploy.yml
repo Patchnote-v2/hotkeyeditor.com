@@ -1,0 +1,35 @@
+name: Deploy main
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ testing ]
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd hotkeyeditor.com
+          source .venv/bin/activate
+          git pull origin main
+          pip3 install -r requirements.txt
+          cd src/frontend
+          npm install
+          npm run build
+          npm run postbuild
+          cd ..
+          python3 manage.py clearcache
+          /bin/systemctl restart uwsgi
