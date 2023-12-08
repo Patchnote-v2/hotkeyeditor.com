@@ -35,5 +35,4 @@ jobs:
           cd src/frontend
           npm install
           npm run build
-          npm run postbuild
           sudo /bin/systemctl restart uwsgi
