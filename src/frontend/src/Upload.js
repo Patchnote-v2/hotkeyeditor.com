@@ -71,7 +71,7 @@ const Upload = (props) => {
         
         axios({
             method: 'post',
-            baseUrl: baseUrl,
+            baseURL: baseUrl,
             url: '/api/upload/',
             data: formData,
         }).then((response) => {
@@ -96,7 +96,7 @@ const Upload = (props) => {
         }
         axios({
             method: 'get',
-            baseUrl: baseUrl,
+            baseURL: baseUrl,
             url: '/api/upload/',
         }).then((response) => {
             console.log(response.data);
@@ -114,7 +114,7 @@ const Upload = (props) => {
         event.preventDefault();
         axios({
             method: 'post',
-            baseUrl: baseUrl,
+            baseURL: baseUrl,
             url: '/api/generate/',
             data: {changed: changed, profileName: profileName},
             responseType: 'blob',
