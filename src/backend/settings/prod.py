@@ -27,6 +27,8 @@ LOGGING['handlers']['file'] = {
 }
 
 LOGGING['root']['handlers'].append('file')
+LOGGING['loggers']['django']['handlers'].append('file')
+LOGGING['loggers']['django.request']['handlers'].append('file')
 
 CSRF_COOKIE_SECURE = True
 
