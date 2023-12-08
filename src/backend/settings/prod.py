@@ -15,7 +15,7 @@ ROOT_DIR = "/var"
 
 SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = ['hotkeyeditor.com']
+ALLOWED_HOSTS = ['hotkeyeditor.com', 'www.hotkeyeditor.com']
 
 LOGGING['handlers']['file'] = {
     'backupCount': 3,
