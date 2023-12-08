@@ -25,6 +25,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.PORT }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        envs: GENERATE_SOURCEMAP,SITE_ROOT
         script: |
           source .nvm/nvm.sh
           cd hotkeyeditor.com
