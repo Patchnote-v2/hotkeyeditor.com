@@ -23,6 +23,7 @@ jobs:
         port: ${{ secrets.PORT }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
+          source .nvm/nvm.sh
           cd hotkeyeditor.com
           source .venv/bin/activate
           git pull origin main
