@@ -33,4 +33,4 @@ jobs:
           npm run postbuild
           cd ..
           python3 manage.py clearcache
-          /bin/systemctl restart uwsgi
+          sudo /bin/systemctl restart uwsgi
