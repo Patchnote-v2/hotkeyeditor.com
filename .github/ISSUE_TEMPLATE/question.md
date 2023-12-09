@@ -7,5 +7,5 @@ assignees: Patchnote-v2
 
 ---
 
-**Describe what you want**
+**What's up?**
 Have a question about the code?  Is there confusion about something?  Or something else...
