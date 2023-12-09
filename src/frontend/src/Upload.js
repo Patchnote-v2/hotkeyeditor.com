@@ -32,7 +32,7 @@ const Upload = (props) => {
     
     let baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
                     ? "localhost:8000"
-                    : "https://www.hotkeyeditor.com"
+                    : "https://hotkeyeditor.com"
     
     useEffect(() => {
         // Initially set as disabled this way, otherwise if the buttons use an attribute
