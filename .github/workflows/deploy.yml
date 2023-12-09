@@ -1,18 +1,14 @@
 name: Deploy main
 
-# Controls when the action will run. 
+# Fire on release creation
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: testing
+  release:
+    types: [published]
 
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: Deploy using ssh
       uses: appleboy/ssh-action@master
@@ -28,13 +24,16 @@ jobs:
         envs: GENERATE_SOURCEMAP,SITE_ROOT
         script: |
           source .nvm/nvm.sh
+          cp /etc/nginx/sites-available/hotkeyeditor.com.maintenance /etc/nginx/sites-available/hotkeyeditor.com
+          sudo /usr/sbin/nginx -s reload
           cd hotkeyeditor.com
           source .venv/bin/activate
           git pull origin main
           pip3 install -r requirements.txt
           cd src/frontend
           npm install
+          rm -rf $SITE_ROOT/*
           npm run build
-          echo "I am $GENERATE_SOURCEMAP"
-          echo "I am $SITE_ROOT"
           sudo /bin/systemctl restart uwsgi
+          cp /etc/nginx/sites-available/hotkeyeditor.com.production /etc/nginx/sites-available/hotkeyeditor.com
+          sudo /usr/sbin/nginx -s reload
