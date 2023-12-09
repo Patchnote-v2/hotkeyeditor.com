@@ -1,6 +1,5 @@
-import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 
-import Utils from "./Utils.js";
 
 const Notifications = forwardRef((props, ref) => {
     const [notifications, setNotifications] = useState([]);
