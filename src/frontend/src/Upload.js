@@ -31,7 +31,7 @@ const Upload = (props) => {
     const highlightedGroup = useRef(null);
     
     let baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-                    ? "localhost:8000"
+                    ? "http://localhost:8000"
                     : "https://hotkeyeditor.com"
     
     useEffect(() => {
