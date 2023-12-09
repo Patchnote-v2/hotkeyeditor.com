@@ -81,7 +81,7 @@ class GenerateHKPView(View):
     def post(self, request):
         data = json.loads(request.body.decode("UTF-8"))
         changed = data["changed"]
-        profile_name = data["profileName"] if data["profileName"] else "Edited Hotkeys"
+        profile_name = f'{data["profileName"]} (2)' if data["profileName"] else "Edited Hotkeys"
 
         default_files = load_default_files()
 
