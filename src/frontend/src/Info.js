@@ -3,7 +3,7 @@ const Info = () => {
         <div id="info">
         <section>
             <h3>Supported Versions</h3>
-            <ul style={{"font-size": "12.5pt"}}>
+            <ul style={{fontSize: "12.5pt"}}>
                 <li><b>83607</b> (May 15, 2023) is the oldest supported version.</li>
                 <li><b>96976</b> is the latest supported version.</li>
             </ul>
@@ -11,7 +11,7 @@ const Info = () => {
         <section>
             <h3>How?</h3>
             <div>
-                <h4 style={{"margin-top": "5px"}}>Starting from scratch:</h4>
+                <h4 style={{marginTop: "5px"}}>Starting from scratch:</h4>
                 <ul>
                     <li>Click <pre>Load Default Hotkeys</pre> to start with the default hotkeys.</li>
                     <li>Edit your hotkeys as you see fit.</li>
