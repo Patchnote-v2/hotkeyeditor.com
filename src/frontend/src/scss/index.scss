@@ -29,6 +29,50 @@ input {
   width: 100%;
 }
 
+p {
+  margin: 0;
+}
+
+h3 {
+  font-size: 17pt;
+  font-weight: 700;
+  margin: 15px 0 0 0;
+}
+
+h4 {
+  font-size: 13pt;
+  font-weight: 600;
+  margin: 15px 0;
+}
+
+ul {
+  margin: 0;
+  
+  li {
+    margin: 3px 0;
+  }
+}
+
+pre {
+  background-color: #00000044;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 11pt;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+a {
+  color: white;
+  
+  &:hover {
+    color: #EAFF00;
+  }
+  &:active {
+    color: #EAFF00DD;
+  }
+}
+
 #root {
   align-items: center;
   display: flex;
@@ -40,10 +84,26 @@ header {
   background-color: #121212;
   border-bottom: 2px solid #EAFF00;
   color: #F0F0F0;
-  font-family: Georgia;
-  font-size: 25pt;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: fit-content;
-  padding: 20px 0 20px 30px;
+  padding: 20px 30px 20px 30px;
+  
+  #logo {
+    font-family: Georgia;
+    font-size: 25pt;
+  }
+  
+  #disclaimer {
+    color: #E0E0E0;
+    font-size: 9pt;
+  }
+}
+
+#info {
+  padding-bottom: 25px;
+  width: 700px;
 }
 
 @mixin menu {
@@ -66,8 +126,9 @@ header {
 #controls {
   display: flex;
   background-color: #212121;
-  border-top: 1px solid black;
-  border-bottom: 1px solid #EAFF00;
+  border-top: 1px solid #EAFF00;
+  // border-bottom: 1px solid #EAFF00;
+  border-bottom: 1px solid #434343;
   height: 175px;
   justify-content: space-evenly;
   align-items: center;
@@ -167,6 +228,7 @@ $key-transition-time: 0.1s;
   font-family: Noto Sans;
   font-weight: 400;
   margin-top: 30px;
+  min-height: 525px;
   text-align: center;
   user-select: none;
   width: 98%;
