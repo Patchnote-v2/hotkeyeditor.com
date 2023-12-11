@@ -1,10 +1,17 @@
 const Info = () => {
     return (
         <div id="info">
-        <div>
+        <section>
+            <h3>Supported Versions</h3>
+            <ul style={{"font-size": "12.5pt"}}>
+                <li><b>83607</b> (May 15, 2023) is the oldest supported version.</li>
+                <li><b>96976</b> is the latest supported version.</li>
+            </ul>
+        </section>
+        <section>
             <h3>How?</h3>
             <div>
-                <h4>Starting from scratch:</h4>
+                <h4 style={{"margin-top": "5px"}}>Starting from scratch:</h4>
                 <ul>
                     <li>Click <pre>Load Default Hotkeys</pre> to start with the default hotkeys.</li>
                     <li>Edit your hotkeys as you see fit.</li>
@@ -45,9 +52,9 @@ const Info = () => {
                     <li><pre>{"C:\\Program Files (x86)\\Steam\\userdata\\[random number]\\813780\\remote\\"}</pre></li>
                 </ul>
             </div>
-        </div>
+        </section>
         
-        <div>
+        <section>
             <h3>Features</h3>
             <ul>
                 <li>Select any number of hotkeys to edit.</li>
@@ -57,17 +64,17 @@ const Info = () => {
                 <li>Select a group to toggle highlighting of all keys that group uses.</li>
                 <li>Change the grid layout by bulk-changing keybinds (i.g. all hotkeys that use Q can be changed simultaneously).</li>
             </ul>
-        </div>
+        </section>
 
-        <div>
+        <section>
             <h3>Contact</h3>
             <p>The best way to contact me is through a <a href="https://github.com/Patchnote-v2/aoe2de-hotkeys/issues">GitHub ticket.</a></p>
-        </div>
+        </section>
 
-        <div>
+        <section>
             <h3>About</h3>
-            <p>I've always wanted a better way to visualize how hotkeys all tie in and overlap, and I needed a project to learn React with.  Thanks to the work put in by crimsoncantab for <a href="https://aokhotkeys.appspot.com/">Hotkey Editor for AoE II</a>, I was able to update <a href="https://github.com/crimsoncantab/aok-hotkeys">his code</a> that deserializes the .hkp files to accomodate the new two-file system.  If you want support for earlier version of DE, or any version of the game pre-DE, go there!</p>
-        </div>
+            <p>I've always wanted a better way to visualize how hotkeys all tie in and overlap and find under- or over-utilized keys, and I needed a project to learn React with.  Thanks to the work put in by crimsoncantab for <a href="https://aokhotkeys.appspot.com/">Hotkey Editor for AoE II</a>, I was able to update <a href="https://github.com/crimsoncantab/aok-hotkeys">his code</a> that deserializes the .hkp files to accomodate the new two-file system.  If you want support for earlier versions of DE, or any version of the game pre-DE, go there!</p>
+        </section>
         </div>
     )
 };
