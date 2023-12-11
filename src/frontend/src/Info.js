@@ -6,9 +6,9 @@ const Info = () => {
             <div>
                 <h4>Starting from scratch:</h4>
                 <ul>
-                    <li>Click <pre style={{display: "inline"}}>Load Default Hotkeys</pre> to start with the default hotkeys.</li>
+                    <li>Click <pre>Load Default Hotkeys</pre> to start with the default hotkeys.</li>
                     <li>Edit your hotkeys as you see fit.</li>
-                    <li>When you're done, click <pre style={{display: "inline"}}>Download Changes</pre>.</li>
+                    <li>When you're done, click <pre>Download Changes</pre>.</li>
                 </ul>
             </div>
             <div>
@@ -23,13 +23,13 @@ const Info = () => {
                     <li>There are two files you need.  They are both .hkp files.
                         <ul>
                             <li>The first one is the name of your profile.</li>
-                            <li>The second is <pre style={{display: "inline"}}>Base.hkp</pre> in the folder with the same name as your profile.</li>
+                            <li>The second is <pre>Base.hkp</pre> in the folder with the same name as your profile.</li>
                         </ul>
                     </li>
                     <li>Copy these two files to another directory.</li>
-                    <li>Click <pre style={{display: "inline"}}>Browse</pre>, select your two .hkp files, then click <pre style={{display: "inline", color: "lightgreen"}}>Upload</pre></li>
+                    <li>Click <pre>Browse</pre>, select your two .hkp files, then click <pre style={{color: "lightgreen"}}>Upload</pre></li>
                     <li>Edit your hotkeys as you see fit.</li>
-                    <li>When you're done, click <pre style={{display: "inline"}}>Download Changes</pre>.</li>
+                    <li>When you're done, click <pre>Download Changes</pre>.</li>
                 </ul>
             </div>
             <div>
