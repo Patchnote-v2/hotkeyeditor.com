@@ -1,8 +1,9 @@
 #keyboard-wrapper {
+  align-items: flex-end;
   display: flex;
   flex-flow: column;
-  align-items: flex-end;
   position: sticky;
+  text-transform: capitalize;
   top: 0px;
   width: fit-content;
   

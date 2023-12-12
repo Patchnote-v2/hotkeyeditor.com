@@ -137,7 +137,7 @@ const Upload = (props) => {
         for (let [uuid,] of Object.entries(newKeybinds)) {
             // If key is provided, also update all keycodes
             if (key) {
-                let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
+                let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key.toUpperCase());
                 newKeybinds[uuid].keycode = parseInt(keycode);
                 newHotkeys[uuid].keycode = newKeybinds[uuid].keycode;
             }
