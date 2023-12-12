@@ -5,7 +5,7 @@ const Info = () => {
             <h3>Supported Versions</h3>
             <ul style={{fontSize: "12.5pt"}}>
                 <li><b>83607</b> (May 15, 2023) is the oldest supported version.</li>
-                <li><b>96976</b> is the latest supported version.</li>
+                <li><b>99311</b> is the latest supported version.</li>
             </ul>
         </section>
         <section>
