@@ -129,7 +129,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 # Used to update the current patch hotkey files
-CURRENT_VERSION = 96976
+CURRENT_VERSION = 99311
 
 
 LOGGING = {

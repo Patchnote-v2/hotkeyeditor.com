@@ -207,7 +207,7 @@ hk_mapping = {
     0x4c17: 'Tech: Atonement',
     0x4c18: 'Tech: Fervor',
     0x4c19: 'Tech: Sanctity',
-    0x4c1a: 'Tech: Faith',
+    0x4c1a: 'Tech: Devotion, Faith',
     0x4c1b: 'Tech: Illumination',
     0x4c1c: 'Tech: Block Printing',
     0x4c1d: 'Tech: Heresy',
