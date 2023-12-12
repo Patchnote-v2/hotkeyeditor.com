@@ -172,7 +172,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     }
   };
 
-  let keyboardNumPadEndLayout = ["{numpadsubtract}", "{numpadadd}", "{numpadenter}"];
+  let keyboardNumPadEndLayout = ["{numpadsubtract}", "{numpadadd}", "{enter}"];
   const keyboardNumPadEndOptions = {
     ...commonKeyboardOptions,
     buttonAttributes: [
@@ -186,7 +186,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
       default: keyboardNumPadEndLayout,
     },
     display: {
-      "{numpadenter}": "↵",
+      "{enter}": "↵",
     },
   };
 
