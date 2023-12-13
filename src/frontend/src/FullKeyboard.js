@@ -32,8 +32,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
           if (!filteringRowsRef.current) {
             if (!(Object.keys(Utils.modifiers).includes(currentButton))) {
               let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
+                                         // (value) => String.prototype.toLowerCase.call(value)));
               // parseInt() always only returns the first element in an array
-              props.findRowsByKeycode(parseInt(found));
+              props.hoverFilteringRows(parseInt(found));
             }
           }
         });
@@ -42,7 +43,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
           button.classList.remove(settingKeybindRef.current ? "button-hover-setting-button" : "button-hover-passive-button");
 
           if (!filteringRowsRef.current) {
-            props.findRowsByKeycode(null);
+            props.hoverFilteringRows(null);
           }
         });
         
@@ -242,7 +243,18 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     else if (!settingKeybindRef.current) {
       // Left mouse button blick
       if (event.button === 0) {
-        props.toggleFilteringRows(key);
+        // Since modifiers aren't saved as a keycode, iterating through data to find
+        // the valid rows would need different logic.  So for now just prevent
+        // filtering of modifier keys since it's simpler.
+        if (!(Object.keys(Utils.modifiers).includes(key))) {
+          if (!(Object.keys(Utils.modifiers).includes(key))) {
+            let found = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
+                                       // (value) => String.prototype.toLowerCase.call(value)));
+            // parseInt() always only returns the first element in an array
+            props.hoverFilteringRows(parseInt(found));
+          }
+          props.toggleFilteringRows(key);
+        }
       }
       // Right mouse button click
       else if (event.button === 2) {

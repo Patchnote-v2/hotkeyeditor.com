@@ -137,7 +137,7 @@ const Upload = (props) => {
         for (let [uuid,] of Object.entries(newKeybinds)) {
             // If key is provided, also update all keycodes
             if (key) {
-                let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key.toUpperCase());
+                let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key.toLowerCase());
                 newKeybinds[uuid].keycode = parseInt(keycode);
                 newHotkeys[uuid].keycode = newKeybinds[uuid].keycode;
             }
@@ -429,35 +429,43 @@ const Upload = (props) => {
     */
     const findRowsByKeycode = (keycode) => {
         if (dataLoadedRef.current) {
-           let foundRows = [];
+            let foundRows = [];
             if (keycode) {
                 foundRows = Object.entries(dataLoadedRef.current.hotkeys)
                     .filter(([k, v]) => dataLoadedRef.current.hotkeys[k].keycode === keycode)
                     .map(([k]) => k);
             }
-            setFoundRows(foundRows);
+            return foundRows;
         }
     }
     
-    const toggleFilteringRows = (key) => {
-        let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key));
-        
-        // If there's currently a filteringKey set and the user clicked
-        // on the currently stored key
-        if (!filteringKey) {
-            setFilteringRows(true);
-            setFilteringKey(keycode);
-            
-            // Highlight currently key being filtered
-            keyboard.current.dispatch((instance) => {
-                instance.addButtonTheme(key, "button-hover-filtering-button");
-            });
+    const hoverFilteringRows = (keycode) => {
+        let foundRows = [];
+        if (keycode) {
+            foundRows = findRowsByKeycode(keycode);
         }
-        else if (filteringKey && keycode === filteringKey) {
-            setFilteringKey(null);
+        setFoundRows(foundRows);
+    }
+    
+    const toggleFilteringRows = (key) => {
+        if (key === filteringKey) {
             setFilteringRows(false);
+            setFilteringKey(null);
+            // Doesn't use setHighlightedKeys because we haven't grabbed a dataset here
             keyboard.current.dispatch((instance) => {
                 instance.removeButtonTheme(key, "button-hover-filtering-button");
+            });
+        }
+        else {
+            if (filteringKey) {
+                keyboard.current.dispatch((instance) => {
+                    instance.removeButtonTheme(filteringKey, "button-hover-filtering-button");
+                });
+            }
+            setFilteringRows(true);
+            setFilteringKey(key);
+            keyboard.current.dispatch((instance) => {
+                instance.addButtonTheme(key, "button-hover-filtering-button");
             });
         }
     }
@@ -534,7 +542,8 @@ const Upload = (props) => {
                           settingKeybind={settingKeybind}
                           findRowsByKeycode={findRowsByKeycode}
                           toggleFilteringRows={toggleFilteringRows}
-                          filteringRows={filteringRows} />
+                          filteringRows={filteringRows}
+                          hoverFilteringRows={hoverFilteringRows} />
             <div id="confirmCancelWrapper">
                 <button ref={cancel}
                         id="cancel"
