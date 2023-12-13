@@ -240,6 +240,57 @@ const Upload = (props) => {
         });
     }
     
+    const bulkChange = (key) => {
+        let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key));
+        
+        let UUIDs = findRowsByKeycode(keycode);
+        
+        setBuffer((currentBuffer) => {
+            let oldBuffer = JSON.parse(JSON.stringify(buffer));
+            
+            if (settingKeybind) {
+                for (const UUID of UUIDs) {
+                    if (oldBuffer.hasOwnProperty(UUID)) {
+                        clearHighlightedKeys({
+                            [UUID]: ["keybind-row-setting-button", "keybind-row-hover-button"]
+                        }, true);
+                        delete oldBuffer[UUID];
+                    }
+                    else {
+                        // It doesn't matter that this includes attributes that a dataset
+                        // doesn't have, like menu_id or string_id
+                        oldBuffer[UUID] = data.hotkeys[UUID];
+                        setHighlightedKeys(
+                            Utils.bufferToHighlights(oldBuffer, ["keybind-row-setting-button"]),
+                            false
+                       );
+                    }
+                }
+            }
+            else {
+                for (const UUID of UUIDs) {
+                    // todo: update when keyboard events are fixed, also add inverse
+                    // where exiting setting keybind state happens
+                    oldBuffer[UUID] = data.hotkeys[UUID];
+                    setHighlightedKeys(
+                        Utils.bufferToHighlights(oldBuffer, ["keybind-row-setting-button"]),
+                        false
+                    );
+                    setSettingKeybind(true);
+                    disableButtons(false);
+                }
+            }
+            
+            // If there's nothing in the buffer anymore, that means that there's no
+            // active rows setting a keybind, so leave setting keybind state
+            if (Object.keys(oldBuffer).length === 0) {
+                setSettingKeybind(false);
+                disableButtons(true);
+            }
+            return oldBuffer;
+        });
+    }
+    
     // Sets state of cancel/confirm buttons on keyboard
     const disableButtons = (state) => {
         confirm.current.disabled = state;

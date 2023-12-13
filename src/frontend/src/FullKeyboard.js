@@ -45,9 +45,9 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         });
         
         // Prevent context menu (right mouse button) from opening when clicking keys
-        button.addEventListener('contextmenu', (event) => {
-          event.preventDefault();
-        });
+        // button.addEventListener('contextmenu', (event) => {
+        //   event.preventDefault();
+        // });
       });
     },
     onKeyReleased: (key, event) => onKeyReleased(key, event),
@@ -234,6 +234,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     
     // If actively setting keybind
     if (settingKeybindRef.current) {
+      // todo: detect left/right button click
       props.updateBuffer(key);
     }
     // If not setting a keybind, filter out all keybind rows other than key pressed
@@ -254,9 +255,10 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         }
       }
       // Right mouse button click
+      // Unable to use since blocking contextmenu on the keyboard doesn't work when
+      // the keyboard re-renders on right-click.  Thanks Obama.
       else if (event.button === 2) {
-        // event.preventDefault();
-        // props.
+        // props.bulkChange(key);
       }
     }
   }
