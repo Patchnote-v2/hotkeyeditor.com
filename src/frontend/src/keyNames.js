@@ -139,8 +139,8 @@ export const keyNames = {
     161 : 'Rshift', // Right SHIFT key
     162 : 'Lcontrol', // Left CONTROL key
     163 : 'Rcontrol', // Right CONTROL key
-    164 : 'Left Menu', // Left MENU key
-    165 : 'Right Menu', // Right MENU key
+    164 : 'Lalt', // Left ALT key
+    165 : 'Ralt', // Right ALT key
     166 : 'Browser Back', // Browser Back key
     167 : 'Browser Forward', // Browser Forward key
     168 : 'Browser Refresh', // Browser Refresh key
@@ -342,8 +342,8 @@ export const simpleKeyboardKeyNames = {
     161 : '{shiftright}', // Right SHIFT key
     162 : '{controlleft}', // Left CONTROL key
     163 : '{controlright}', // Right CONTROL key
-    164 : 'Left Menu', // Left MENU key
-    165 : 'Right Menu', // Right MENU key
+    164 : '{altleft}', // Left MENU key
+    165 : '{altright}', // Right MENU key
     166 : 'Browser Back', // Browser Back key
     167 : 'Browser Forward', // Browser Forward key
     168 : 'Browser Refresh', // Browser Refresh key
