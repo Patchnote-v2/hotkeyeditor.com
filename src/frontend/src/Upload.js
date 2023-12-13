@@ -130,7 +130,7 @@ const Upload = (props) => {
         newKeybinds = JSON.parse(JSON.stringify(newKeybinds));
         clearHighlightedKeys(Utils.bufferToHighlights(newKeybinds, ["keybind-row-setting-button", "keybind-row-hover-button"]),
                                      true);
-            
+        
         // Update data and changed state variables
         let newHotkeys = {...data.hotkeys};
         let newChanged = {...changed};
@@ -141,6 +141,11 @@ const Upload = (props) => {
                 newKeybinds[uuid].keycode = parseInt(keycode);
                 newHotkeys[uuid].keycode = newKeybinds[uuid].keycode;
             }
+            
+            // Since datasets from rows don't include menu_id or string_id, we have to
+            // make sure to copy them over "manually"
+            newKeybinds[uuid]["menu_id"] = data.hotkeys[uuid]["menu_id"];
+            newKeybinds[uuid]["string_id"] = data.hotkeys[uuid]["string_id"];
             
             newHotkeys[uuid].ctrl = newKeybinds[uuid].ctrl;
             newHotkeys[uuid].shift = newKeybinds[uuid].shift;
