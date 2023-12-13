@@ -11,8 +11,13 @@ var Utils = {
     },
     
     // https://stackoverflow.com/a/28191966/2368714
-    findKeyByValue(object, value) {
-        return Object.keys(object).filter(key => object[key] === value);
+    findKeyByValue(object, value, fn=null) {
+        return Object.keys(object).filter(key => {
+            if (fn && object[key]) {
+                return (fn(object[key]) === fn(value))
+            }
+            return object[key] === value;
+        });
     },
     
     findKeyByValueAttribute(object, value, attribute=null) {
