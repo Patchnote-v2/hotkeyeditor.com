@@ -439,10 +439,15 @@ const Upload = (props) => {
         }
     }
     
-    const hoverFilteringRows = (keycode) => {
+    const hoverFilteringRows = (key) => {
+        if (!key) {
+            return [];
+        }
         let foundRows = [];
-        if (keycode) {
-            foundRows = findRowsByKeycode(keycode);
+        if (key) {
+            let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
+            // parseInt() always only returns the first element in an array
+            foundRows = findRowsByKeycode(parseInt(keycode));
         }
         setFoundRows(foundRows);
     }

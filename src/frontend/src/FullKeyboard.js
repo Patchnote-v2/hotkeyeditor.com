@@ -31,10 +31,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
           let currentButton = event.target.dataset.skbtn;
           if (!filteringRowsRef.current) {
             if (!(Object.keys(Utils.modifiers).includes(currentButton))) {
-              let found = Utils.findKeyByValue(simpleKeyboardKeyNames, currentButton);
-                                         // (value) => String.prototype.toLowerCase.call(value)));
-              // parseInt() always only returns the first element in an array
-              props.hoverFilteringRows(parseInt(found));
+              props.hoverFilteringRows(currentButton);
             }
           }
         });
@@ -247,12 +244,12 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         // the valid rows would need different logic.  So for now just prevent
         // filtering of modifier keys since it's simpler.
         if (!(Object.keys(Utils.modifiers).includes(key))) {
-          if (!(Object.keys(Utils.modifiers).includes(key))) {
-            let found = Utils.findKeyByValue(simpleKeyboardKeyNames, key);
-                                       // (value) => String.prototype.toLowerCase.call(value)));
-            // parseInt() always only returns the first element in an array
-            props.hoverFilteringRows(parseInt(found));
-          }
+          // hoverFilteringRows is poorly named, as all it does is update key highlights
+          // and more importantly finds the rows that use the given key.
+          // toggleFilteringRows needs that to happen anyway, so we just call it beforehand
+          // The main reason for this is so the user doesn't have to unfilter before filtering
+          // a new key
+          props.hoverFilteringRows(key);
           props.toggleFilteringRows(key);
         }
       }
