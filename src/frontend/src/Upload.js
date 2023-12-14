@@ -502,7 +502,8 @@ const Upload = (props) => {
     
     const hoverFilteringRows = (key) => {
         if (!key) {
-            return [];
+            setFoundRows([]);
+            return;
         }
         let foundRows = [];
         if (key) {
