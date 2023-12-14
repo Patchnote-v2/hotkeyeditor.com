@@ -153,12 +153,15 @@ const Upload = (props) => {
         let newChanged = {...changed};
         for (let [uuid,] of Object.entries(newKeybinds)) {
             // If key is provided, also update all keycodes
-            let keycode = 0;
             if (key) {
-                keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key.toLowerCase()));
+                let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key.toLowerCase()));
+                newHotkeys[uuid].keycode = keycode;
+                newKeybinds[uuid].keycode = keycode;
             }
-            newKeybinds[uuid].keycode = keycode;
-            newHotkeys[uuid].keycode = keycode;
+            else if (key === 0) {
+                newHotkeys[uuid].keycode = key;
+                newKeybinds[uuid].keycode = key;
+            }
             
             // Since datasets from rows don't include menu_id or string_id, we have to
             // make sure to copy them over "manually"
