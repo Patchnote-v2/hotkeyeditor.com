@@ -18,11 +18,29 @@ const Keybinds = (data) => {
                 // Filter all menu rows so we can determine if a menu is empty or not
                 // Only filter if filtering for insane performance improvements
                 if (data.filteringRows) {
+                    if (data.searchFilter.length !== 0) {
+                        menuRows = Utils.objectFilter(menuRows, ([UUID,]) => {
+                            return data.foundRows.includes(UUID) && data.searchFilter.includes(UUID);
+                        });
+                    }
                     // I _think_ this way doesn't work if duplicate string_id's are across
                     // different menus
-                    menuRows = Utils.objectFilter(menuRows, ([UUID, hotkey]) => {
-                        return data.foundRows.includes(UUID)
-                    });
+                    else {
+                        menuRows = Utils.objectFilter(menuRows, ([UUID,]) => {
+                            return data.foundRows.includes(UUID);
+                        });
+                    }
+                }
+                else if (data.searchFilter) {
+                    // If no results found, skip filtering by just setting as blank
+                    if (data.searchFilter.length === 0) {
+                        menuRows = {};
+                    }
+                    else {
+                        menuRows = Utils.objectFilter(menuRows, ([UUID,]) => {
+                            return data.searchFilter.includes(UUID);
+                        });
+                    }
                 }
                 
                 if (menuRows && Object.keys(menuRows).length) {

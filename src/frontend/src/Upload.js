@@ -25,7 +25,7 @@ const Upload = (props) => {
     const [filteringKey, setFilteringKey] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
     const [filteringRows, setFilteringRows] = useState(false);
-    const [searchFilter, setSearchFilter] = useState([]);
+    const [searchFilter, setSearchFilter] = useState(null);
     
     const notifications = useRef(null);
     const clear = useRef(null);
@@ -581,14 +581,14 @@ const Upload = (props) => {
         if (dataLoadedRef.current) {
             let searchText = event.target.value.toLowerCase();
             if (searchText === "") {
-                setSearchFilter([]);
+                setSearchFilter(null);
                 return;
             }
             
-            let foundRows = Utils.objectFilter(data.hotkeys, (element, index) => {
-                return element[1]["string_text"].toLowerCase().includes(searchText);
+            let foundRows = Utils.objectFilter(data.hotkeys, ([, hotkey]) => {
+                return hotkey["string_text"].toLowerCase().includes(searchText);
             });
-            setSearchFilter(foundRows);
+            setSearchFilter(Object.keys(foundRows));
         }
     }
     
@@ -661,7 +661,8 @@ const Upload = (props) => {
                   filteringRows={filteringRows}
                   selectMenu={selectMenu}
                   hoverMenu={hoverMenu}
-                  highlighted={highlighted} />
+                  highlighted={highlighted}
+                  searchFilter={searchFilter} />
         </>
     );
 };
