@@ -93,8 +93,18 @@ header {
 }
 
 #info {
+  align-content: space-between;
+  justify-content: space-evenly;
+  display: flex;
   padding-bottom: 25px;
-  width: 700px;
+  width: 80%;
+  
+  
+  > div {
+    flex: 1 0 0;
+    padding: 10px;
+    width: 10%;
+  }
 }
 
 @mixin menu {
