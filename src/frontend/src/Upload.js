@@ -603,7 +603,7 @@ const Upload = (props) => {
                         name="files"
                         multiple
                     />
-                    <button type="submit" className="confirm">Upload</button>
+                    <button type="submit" className="confirm">Load Custom Hotkeys</button>
                 </form>
             </div>
             

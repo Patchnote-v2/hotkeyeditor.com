@@ -34,7 +34,7 @@ const Info = () => {
                         </ul>
                     </li>
                     <li>Copy these two files to another directory.</li>
-                    <li>Click <pre>Browse</pre>, select your two .hkp files, then click <pre style={{color: "lightgreen"}}>Upload</pre></li>
+                    <li>Click <pre>Browse</pre>, select your two .hkp files, then click <pre style={{color: "lightgreen"}}>Load Custom Hotkeys</pre></li>
                     <li>Edit your hotkeys as you see fit.</li>
                     <li>When you're done, click <pre>Download Changes</pre>.</li>
                 </ul>
