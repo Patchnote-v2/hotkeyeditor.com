@@ -18,7 +18,7 @@ const Keybinds = (data) => {
                 // Filter all menu rows so we can determine if a menu is empty or not
                 // Only filter if filtering for insane performance improvements
                 if (data.filteringRows) {
-                    if (data.searchFilter.length !== 0) {
+                    if (data.searchFilter && data.searchFilter.length !== 0) {
                         menuRows = Utils.objectFilter(menuRows, ([UUID,]) => {
                             return data.foundRows.includes(UUID) && data.searchFilter.includes(UUID);
                         });
