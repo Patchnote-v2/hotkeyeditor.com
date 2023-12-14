@@ -281,26 +281,32 @@ const FullKeyboard = forwardRef((props, keyboard) => {
             {...keyboardArrowsOptions}
           />
         </div>
-
-        <div className="numPad">
-          <Keyboard
-            baseClass={"simple-keyboard-numpad"}
-            {...keyboardNumPadOptions}
-          />
-          <Keyboard
-            baseClass={"simple-keyboard-numpadEnd"}
-            {...keyboardNumPadEndOptions}
-          />
-        </div>
-        <div className="mouse">
-          <Keyboard
-            baseClass={"simple-keyboard-mouse-extra"}
-            {...keyboardMouseExtraOptions}
-          />
-          <Keyboard
-            baseClass={"simple-keyboard-mouse-primary"}
-            {...keyboardMousePrimaryOptions}
-          />
+        
+        <div className="rightSide">
+          <div id="search">
+            <input type="text"
+                   placeholder="Filter hotkeys by text" />
+          </div>
+          <div className="numPad">
+            <Keyboard
+              baseClass={"simple-keyboard-numpad"}
+              {...keyboardNumPadOptions}
+            />
+            <Keyboard
+              baseClass={"simple-keyboard-numpadEnd"}
+              {...keyboardNumPadEndOptions}
+            />
+          </div>
+          <div className="mouse">
+            <Keyboard
+              baseClass={"simple-keyboard-mouse-extra"}
+              {...keyboardMouseExtraOptions}
+            />
+            <Keyboard
+              baseClass={"simple-keyboard-mouse-primary"}
+              {...keyboardMousePrimaryOptions}
+            />
+          </div>
         </div>
       </div>
   );
