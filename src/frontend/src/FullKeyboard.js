@@ -5,6 +5,7 @@ import { useEffect, forwardRef, useRef } from 'react';
 import Utils from './Utils.js';
 
 const FullKeyboard = forwardRef((props, keyboard) => {
+  const search = useRef();
   const settingKeybindRef = useRef();
   const filteringRowsRef = useRef();
   
@@ -262,6 +263,11 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     }
   }
   
+  const clearSearch = (event) => {
+    search.current.value = "";
+    props.onSearchInput(event);
+  }
+  
   return (
       <div className={"keyboardContainer"}>
         <Keyboard
@@ -284,9 +290,15 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         
         <div className="rightSide">
           <div id="search">
-            <input type="text"
+            <input ref={search}
+                   type="text"
                    placeholder="Filter hotkeys by description"
                    onInput={(e) => props.onSearchInput(e)} />
+            <button className="clear-search"
+                    value=""
+                    onClick={(e) => clearSearch(e)}>
+              X
+            </button>
           </div>
           <div className="numPad">
             <Keyboard

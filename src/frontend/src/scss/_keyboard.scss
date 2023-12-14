@@ -183,7 +183,16 @@
     box-sizing: border-box;
     text-align: right;
     padding: 10px;
+    position: relative;
     width: 100%;
+    
+    .clear-search {
+      height: 30px;
+      right: 10px;
+      padding: 5px;
+      position: absolute;
+      width: 25px;
+    }
     
     input[type=text] {
       background-color: #545454;
@@ -192,11 +201,13 @@
       box-shadow: inset 0px 0px 5px -1px rgba(0, 0, 0, 0.8), 0px 0px 4px 0px transparent;
       box-sizing: border-box;
       color: #EAEAEA;
-      font-size: 12pt;
+      font-size: 13pt;
+      height: 30px;
+      margin-right: 26px;
       outline: transparent;
       transition: all 0.1s linear;
       padding: 5px;
-      width: 100%;
+      width: 53%;
       
       &::placeholder {
         color: white;
