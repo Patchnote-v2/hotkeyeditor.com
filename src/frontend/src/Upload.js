@@ -131,7 +131,17 @@ const Upload = (props) => {
     const confirmKeybinds = (newKeybinds, key) => {
         newKeybinds = JSON.parse(JSON.stringify(newKeybinds));
         clearHighlightedKeys(Utils.bufferToHighlights(newKeybinds, ["keybind-row-setting-button", "keybind-row-hover-button"]),
-                                     true);
+                             true);
+        
+        // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
+        if (highlightedGroup.current) {
+            let rows = {}
+            data.groups[highlightedGroup.current.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-select-button"];
+            });
+            console.log(rows);
+            clearHighlightedKeys(rows, true);
+        }
         
         // Update data and changed state variables
         let newHotkeys = {...data.hotkeys};
@@ -161,6 +171,18 @@ const Upload = (props) => {
         
         setSettingKeybind(false);
         disableButtons(true);
+        
+        // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
+        if (highlightedGroup.current) {
+            let rows = {};
+            data.groups[highlightedGroup.current.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-select-button"];
+            });
+            
+            console.log(rows);
+            setHighlightedKeys(rows, false);
+        }
+        
         return {};
     }
     
