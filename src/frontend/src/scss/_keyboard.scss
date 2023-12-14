@@ -10,11 +10,10 @@
   #confirmCancelWrapper {
     top: -50px;
     position: relative;
-    padding-right: 10px;
     // Fixes buttons preventing interaction with hotkey rows underneath
     margin-bottom: -42px;
     
-    button:first-child {
+    button {
       margin-right: 10px;
     }
   }

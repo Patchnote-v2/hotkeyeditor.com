@@ -11,6 +11,8 @@ import Utils from './Utils.js';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
+// todo: split this into smaller components?
+// Sounds annoying since sharing data between child components always feels weird
 const Upload = (props) => {
     const [changed, setChanged] = useState({});
     const [profileName, setProfileName] = useState(null);
@@ -25,6 +27,7 @@ const Upload = (props) => {
     const [filteringRows, setFilteringRows] = useState(false);
     
     const notifications = useRef(null);
+    const clear = useRef(null);
     const cancel = useRef(null);
     const confirm = useRef(null);
     const keyboard = useRef(null);
@@ -37,7 +40,7 @@ const Upload = (props) => {
     useEffect(() => {
         // Initially set as disabled this way, otherwise if the buttons use an attribute
         // to be disabled then it just straight up doesn't work.
-        if (cancel.current && confirm.current) {
+        if (clear.current && cancel.current && confirm.current) {
             disableButtons(true);
         }
     }, []);
@@ -75,7 +78,6 @@ const Upload = (props) => {
             url: '/api/upload/',
             data: formData,
         }).then((response) => {
-            console.log(response.data);
             setChanged({});
             setData(response.data.data)
             setProfileName(response.data.name)
@@ -99,7 +101,6 @@ const Upload = (props) => {
             baseURL: baseUrl,
             url: '/api/upload/',
         }).then((response) => {
-            console.log(response.data);
             setChanged({});
             setData(response.data);
             setProfileName(null);
@@ -136,11 +137,12 @@ const Upload = (props) => {
         let newChanged = {...changed};
         for (let [uuid,] of Object.entries(newKeybinds)) {
             // If key is provided, also update all keycodes
+            let keycode = 0;
             if (key) {
-                let keycode = Utils.findKeyByValue(simpleKeyboardKeyNames, key.toLowerCase());
-                newKeybinds[uuid].keycode = parseInt(keycode);
-                newHotkeys[uuid].keycode = newKeybinds[uuid].keycode;
+                keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key.toLowerCase()));
             }
+            newKeybinds[uuid].keycode = keycode;
+            newHotkeys[uuid].keycode = keycode;
             
             // Since datasets from rows don't include menu_id or string_id, we have to
             // make sure to copy them over "manually"
@@ -205,6 +207,7 @@ const Upload = (props) => {
         });
     }
     
+    // key _can be_ 0, so we cannot use if (key)
     const updateBuffer = (key) => {
         setBuffer((currentBuffer) => {
             let oldBuffer = JSON.parse(JSON.stringify(currentBuffer));
@@ -240,6 +243,7 @@ const Upload = (props) => {
         });
     }
     
+    // eslint-disable-next-line
     const bulkChange = (key) => {
         let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key));
         
@@ -293,14 +297,20 @@ const Upload = (props) => {
     
     // Sets state of cancel/confirm buttons on keyboard
     const disableButtons = (state) => {
-        confirm.current.disabled = state;
+        clear.current.disabled = state;
         cancel.current.disabled = state;
+        confirm.current.disabled = state;
     }
     
     // Handles the actions of the cancel/confirm buttons
     const handleButtons = (event) => {
         if (settingKeybind) {
-            if (event.target.value === "cancel") {
+            if (event.target.value === "clear") {
+                clearHighlightedKeys(Utils.bufferToHighlights(buffer, ["keybind-row-setting-button", "keybind-row-hover-button"]),
+                                     true);
+                setBuffer(confirmKeybinds(buffer, 0));
+            }
+            else if (event.target.value === "cancel") {
                 clearHighlightedKeys(Utils.bufferToHighlights(buffer, ["keybind-row-setting-button", "keybind-row-hover-button"]),
                                      true);
                 setSettingKeybind(false);
@@ -601,6 +611,13 @@ const Upload = (props) => {
                           filteringRows={filteringRows}
                           hoverFilteringRows={hoverFilteringRows} />
             <div id="confirmCancelWrapper">
+                <button ref={clear}
+                        id="clear"
+                        className="clear"
+                        value="clear"
+                        onClick={(e) => handleButtons(e)}>
+                    Unset Key
+                </button>
                 <button ref={cancel}
                         id="cancel"
                         className="cancel"
