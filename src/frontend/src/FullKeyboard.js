@@ -285,7 +285,8 @@ const FullKeyboard = forwardRef((props, keyboard) => {
         <div className="rightSide">
           <div id="search">
             <input type="text"
-                   placeholder="Filter hotkeys by text" />
+                   placeholder="Filter hotkeys by description"
+                   onInput={(e) => props.onSearchInput(e)} />
           </div>
           <div className="numPad">
             <Keyboard

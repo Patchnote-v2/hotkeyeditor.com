@@ -25,6 +25,7 @@ const Upload = (props) => {
     const [filteringKey, setFilteringKey] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
     const [filteringRows, setFilteringRows] = useState(false);
+    const [searchFilter, setSearchFilter] = useState([]);
     
     const notifications = useRef(null);
     const clear = useRef(null);
@@ -576,6 +577,21 @@ const Upload = (props) => {
         }
     }
     
+    const onSearchInput = (event) => {
+        if (dataLoadedRef.current) {
+            let searchText = event.target.value.toLowerCase();
+            if (searchText === "") {
+                setSearchFilter([]);
+                return;
+            }
+            
+            let foundRows = Utils.objectFilter(data.hotkeys, (element, index) => {
+                return element[1]["string_text"].toLowerCase().includes(searchText);
+            });
+            setSearchFilter(foundRows);
+        }
+    }
+    
     return (
         <>
         <div id="controls">
@@ -610,7 +626,8 @@ const Upload = (props) => {
                           findRowsByKeycode={findRowsByKeycode}
                           toggleFilteringRows={toggleFilteringRows}
                           filteringRows={filteringRows}
-                          hoverFilteringRows={hoverFilteringRows} />
+                          hoverFilteringRows={hoverFilteringRows}
+                          onSearchInput={onSearchInput} />
             <div id="confirmCancelWrapper">
                 <button ref={clear}
                         id="clear"
