@@ -59,6 +59,12 @@ const Upload = (props) => {
         }
     }, [data]);
     
+    useEffect(() => {
+        keyboard.current.dispatch((instance) => {
+            instance.setOptions({physicalKeyboardHighlight: settingKeybind});
+        });
+    }, [settingKeybind]);
+    
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
         event.preventDefault();
@@ -139,7 +145,6 @@ const Upload = (props) => {
             data.groups[highlightedGroup.current.textContent].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
-            console.log(rows);
             clearHighlightedKeys(rows, true);
         }
         
@@ -179,7 +184,6 @@ const Upload = (props) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             
-            console.log(rows);
             setHighlightedKeys(rows, false);
         }
         

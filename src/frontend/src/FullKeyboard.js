@@ -54,7 +54,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
     theme: "simple-keyboard hg-theme-default hg-layout-default",
     disableButtonHold: true,
     disableCaretPositioning: true,
-    physicalKeyboardHighlight: settingKeybindRef.current, // Start false, true when setting keybind
     physicalKeyboardHighlightPress: true,
     physicalKeyboardHighlightPressUsePointerEvents: true,
     syncInstanceInputs: true,
@@ -230,8 +229,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   };
 
   const onKeyReleased = (key, event) => {
-    // console.log("onKeyReleased");
-    
     // If actively setting keybind
     if (settingKeybindRef.current) {
       // todo: detect left/right button click
