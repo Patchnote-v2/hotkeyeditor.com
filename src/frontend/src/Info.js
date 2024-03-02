@@ -45,7 +45,7 @@ const Info = () => {
                         </ul>
                     </div>
                     <div>
-                        <h4>Staring with existing hotkeys:</h4>
+                        <h4>Starting with existing hotkeys:</h4>
                         <ul>
                             <li>Note the name of the hotkey profile you want to edit.</li>
                             <li>Go to the following directory ([your Steam ID] is a random 17-digit number):
