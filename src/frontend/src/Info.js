@@ -3,7 +3,7 @@ const Info = () => {
         <div id="info">
             <div>
                 <section>
-                    <h3>Supported Versions</h3>
+                    <h3>Requirements</h3>
                     <ul style={{fontSize: "12.5pt"}}>
                         <li><b>83607</b> (May 15, 2023) is the oldest supported version.</li>
                         <li><b>104954</b> is the latest supported version.</li>
