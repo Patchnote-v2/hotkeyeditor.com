@@ -2,12 +2,12 @@ import re
 
 from django.core.management.base import BaseCommand
 
-from hotkeys.hpk.new_hotkey_file import HotkeyFile
-from hotkeys.hpk.parse import FileType
+from hotkeys.hkp.new_hotkey_file import HotkeyFile
+from hotkeys.hkp.parse import FileType
 
 
 class Command(BaseCommand):
-    help = "Uses Base.hkp, Dev.hkp, and key-value-strings-utf8.txt in a given update ID's static folder to generate a complete list of all the needed English strings for use in strings.py"  # noqa
+    help = "Uses Base.hkp, Profile.hkp, and key-value-strings-utf8.txt in a given update ID's static folder to generate a complete list of all the needed English strings for use in strings.py"  # noqa
 
     def add_arguments(self, parser):
         parser.add_argument("update_id", nargs=1, type=int)
@@ -16,7 +16,7 @@ class Command(BaseCommand):
         update_id = options["update_id"][0]
 
         base_path = f"hotkeys/static/hotkeys/defaults/{str(update_id)}/Base.hkp"
-        dev_path = f"hotkeys/static/hotkeys/defaults/{str(update_id)}/Dev.hkp"
+        dev_path = f"hotkeys/static/hotkeys/defaults/{str(update_id)}/Profile.hkp"
         strings_path = f"hotkeys/static/hotkeys/defaults/{str(update_id)}/key-value-strings-utf8.txt"  # noqa
 
         # Get all English strings from file
@@ -47,7 +47,7 @@ class Command(BaseCommand):
             files["base"] = HotkeyFile(file.read(), False, "Base.hkp", FileType.HKP)
 
         with open(dev_path, "rb") as file:
-            files["profile"] = HotkeyFile(file.read(), False, "Dev.hkp", FileType.HKI)
+            files["profile"] = HotkeyFile(file.read(), False, "Profile.hkp", FileType.HKI)
 
         invalid_strings = {'base': {}, 'profile': {}}
         for key, file in files.items():
