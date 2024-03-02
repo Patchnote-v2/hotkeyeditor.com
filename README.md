@@ -45,7 +45,7 @@ In addition, I also found these pages from @KSneijders to be invaluble:
 
 4. Active the new virtual environment
   
-       source .venv/bin/activate`
+       source .venv/bin/activate
 
 5. Install the Python requirements
   
