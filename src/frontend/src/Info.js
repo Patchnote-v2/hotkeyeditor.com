@@ -7,7 +7,7 @@ const Info = () => {
                     <ul style={{fontSize: "12.5pt"}}>
                         <li><b>83607</b> (May 15, 2023) is the oldest supported version.</li>
                         <li><b>104954</b> is the latest supported version.</li>
-                        <li>A minimum resolution of <b>1080p</b>.</li>
+                        <li>A minimum window width of <b>1200 pixels</b>.</li>
                     </ul>
                 </section>
                 <section>

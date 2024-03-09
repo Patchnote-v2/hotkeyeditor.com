@@ -235,6 +235,33 @@
   }
 }
 
+
+@media all and (max-width: 1400px) {
+  .keyboardContainer {
+    .hg-button {
+      &.hg-button-space {
+        width: 200px;
+      }
+    }
+
+    // Narrowify the main containers
+    .simple-keyboard-main {
+      width: 500px;
+      min-width: 500px;
+    }
+    .controlArrows {
+      width: 175px;
+      min-width: 175px;
+    }
+    .rightSide {
+      .numPad {
+        width: 150px;
+        min-width: 150px;
+      }
+    }
+  }
+}
+
 $key-transition-time: 0.1s;
 #root {
   .hg-button {
