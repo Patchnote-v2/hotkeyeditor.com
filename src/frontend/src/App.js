@@ -3,6 +3,7 @@ import './scss/App.scss';
 
 import { useRef } from "react";
 
+import Compatability from './Compatability.js';
 import Upload from './Upload.js';
 import Notifications from './Notification.js';
 import Info from './Info.js';
@@ -15,6 +16,7 @@ import Info from './Info.js';
         <Info />
         <Notifications ref={notification} />
         <Upload notifications={notification} />
+        <Compatability notifications={notification}/>
         </>
     )
 };
