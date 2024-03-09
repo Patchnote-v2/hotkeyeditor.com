@@ -50,7 +50,7 @@ const Info = () => {
                             <li>Note the name of the hotkey profile you want to edit.</li>
                             <li>Go to the following directory ([your Steam ID] is a random 17-digit number):
                                 <ul>
-                                    <li><pre>{"C:\\Users\\[Windows username]\\Games\\Age of Empires 2 DE\\[your Steam ID]\\profile\\"}</pre></li>
+                                    <li class="pre-container"><pre>{"C:\\Users\\[Windows username]\\Games\\Age of Empires 2 DE\\[your Steam ID]\\profile\\"}</pre></li>
                                 </ul>
                             </li>
                             <li>There are two files you need.  They are both .hkp files.
@@ -69,13 +69,13 @@ const Info = () => {
                         <h4>Saving to your computer</h4>
                         Extract the downloaded <i>Hotkeys.zip</i> into the approriate directory.  [your Steam ID] is a random 17-digit number.
                         <ul>
-                            <li><pre>{"C:\\Users\\[Windows username]\\Games\\Age of Empires 2 DE\\[your Steam ID]\\profile\\"}</pre></li>
+                            <li class="pre-container"><pre>{"C:\\Users\\[Windows username]\\Games\\Age of Empires 2 DE\\[your Steam ID]\\profile\\"}</pre></li>
                         </ul>
                     </div>
                     <div>
                         If you want to override a hotkey profile, then you <i>also</i> need to override the cloud version:
                         <ul>
-                            <li><pre>{"C:\\Program Files (x86)\\Steam\\userdata\\[random number]\\813780\\remote\\"}</pre></li>
+                            <li class="pre-container"><pre>{"C:\\Program Files (x86)\\Steam\\userdata\\[random number]\\813780\\remote\\"}</pre></li>
                         </ul>
                     </div>
                 </section>
