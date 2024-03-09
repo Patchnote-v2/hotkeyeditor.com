@@ -25,7 +25,7 @@ const Notifications = forwardRef((props, ref) => {
              id="notifications-wrapper">
             {notifications.map((each, index) => {
                 return (
-                    <div className="notification">
+                    <div key={index} className="notification">
                         <span className="message" dangerouslySetInnerHTML={{ __html: each }} />
                         <span className="close-notification" onClick={e => removeNotification(index)}>✕</span>
                     </div>
