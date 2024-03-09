@@ -28,11 +28,12 @@ const Upload = (props) => {
     const [searchFilter, setSearchFilter] = useState(null);
     
     const notifications = useRef(null);
-    const clear = useRef(null);
-    const cancel = useRef(null);
-    const confirm = useRef(null);
+    const clear = useRef(null); // Button
+    const cancel = useRef(null); // Button
+    const confirm = useRef(null); // Button
     const keyboard = useRef(null);
-    const highlightedGroup = useRef(null);
+    const selectedGroupHeader = useRef(null); // Contains header element of currently highlighted groups (active, not currently hovered)
+    const hoverGroupHeader = useRef(null); // Contains header of group currently being hovered over
     
     let baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
                     ? "http://localhost:8000"
@@ -140,14 +141,20 @@ const Upload = (props) => {
                              true);
         
         // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
-        if (highlightedGroup.current) {
-            let rows = {}
-            data.groups[highlightedGroup.current.textContent].forEach((UUID) => {
+        if (selectedGroupHeader.current) {
+            let rows = {};
+            data.groups[selectedGroupHeader.current.textContent].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             clearHighlightedKeys(rows, true);
         }
-        
+        if (hoverGroupHeader.current) {
+            let rows = {};
+            data.groups[hoverGroupHeader.current.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-hover-button"];
+            });
+            clearHighlightedKeys(rows, true);
+        }
         // Update data and changed state variables
         let newHotkeys = {...data.hotkeys};
         let newChanged = {...changed};
@@ -181,10 +188,18 @@ const Upload = (props) => {
         disableButtons(true);
         
         // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
-        if (highlightedGroup.current) {
+        if (selectedGroupHeader.current) {
             let rows = {};
-            data.groups[highlightedGroup.current.textContent].forEach((UUID) => {
+            data.groups[selectedGroupHeader.current.textContent].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
+            });
+            
+            setHighlightedKeys(rows, false);
+        }
+        if (hoverGroupHeader.current) {
+            let rows = {};
+            data.groups[hoverGroupHeader.current.textContent].forEach((UUID) => {
+                rows[UUID] = ["menu-group-hover-button"];
             });
             
             setHighlightedKeys(rows, false);
@@ -273,6 +288,7 @@ const Upload = (props) => {
         });
     }
     
+    // Unused possible future code for if I could get right-clicking a keyboard key to change all
     // eslint-disable-next-line
     const bulkChange = (key) => {
         let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key));
@@ -356,10 +372,9 @@ const Upload = (props) => {
     // If inputData is null, all highlighted keys will be cleared.
     // If inputData is provided, only the provided classes from the specified keys
     // will be cleared.
-    // If useBuffer is true, then ONLY ONE KEY (UUID) must be provided.  This is
-    // an unintuitive way of doing this but I'm just trying to get it to work.
     const clearHighlightedKeys = (inputData=null, useBuffer=false) => {
         setHighlighted((oldHighlighted) => {
+            
             let current = JSON.parse(JSON.stringify(oldHighlighted))
             let transformed = {};
             let workingData = null;
@@ -401,7 +416,6 @@ const Upload = (props) => {
                         keysString += Utils.datasetToKeyString(data.hotkeys[UUID]) + " ";
                     });
                 }
-                
                 keysString = keysString.trim()
                 if (keysString !== "") {
                     keyboard.current.dispatch((instance) => {
@@ -417,7 +431,6 @@ const Upload = (props) => {
             // Finally update the currently highlighted
             return current;
         });
-        
     }
     
     /*
@@ -568,24 +581,24 @@ const Upload = (props) => {
     }
     
     const selectMenu = (event) => {
-        if (!highlightedGroup.current) {
+        if (!selectedGroupHeader.current) {
             let rows = {}
             data.groups[event.target.textContent].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             setHighlightedKeys(rows, false);
             
-            highlightedGroup.current = event.target;
+            selectedGroupHeader.current = event.target;
         }
         
-        else if (event.target.textContent === highlightedGroup?.current?.textContent) {
+        else if (event.target.textContent === selectedGroupHeader?.current?.textContent) {
             let rows = {}
             data.groups[event.target.textContent].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             clearHighlightedKeys(rows);
             
-            highlightedGroup.current = null;
+            selectedGroupHeader.current = null;
         }
     }
     
@@ -596,6 +609,8 @@ const Upload = (props) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             setHighlightedKeys(rows, false);
+            
+            hoverGroupHeader.current = event.target;
         }
         else if (event.type === "mouseout") {
             let rows = {}
@@ -603,6 +618,8 @@ const Upload = (props) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             clearHighlightedKeys(rows);
+            
+            hoverGroupHeader.current = null;
         }
     }
     
