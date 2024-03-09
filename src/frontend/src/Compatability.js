@@ -14,9 +14,8 @@ const Compatability = (props) => {
         queryList.addEventListener("change", monitorWidth);
         
         // First-time run for if window is already <1200px
-        if (queryList.matches) {
-            notifications.current.addNotification("Your viewport width is narrower that 1200 pixels.  Narrow widths won't break the site, but will make using it difficult.");
-        }
+        // This is possible due to MediaQueryList and the event both having match as a property"
+        monitorWidth(queryList);
         
         // Prevents event from firing twice in StrictMode
         // https://stackoverflow.com/a/71103130/2368714
