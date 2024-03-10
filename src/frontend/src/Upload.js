@@ -631,10 +631,24 @@ const Upload = (props) => {
                 return;
             }
             
-            let foundRows = Utils.objectFilter(data.hotkeys, ([, hotkey]) => {
+            let foundUUIDs = Utils.objectFilter(data.hotkeys, ([, hotkey]) => {
                 return hotkey["string_text"].toLowerCase().includes(searchText);
             });
-            setSearchFilter(Object.keys(foundRows));
+            let foundMenus = Utils.objectFilter(data.groups, ([group, UUIDs]) => {
+                return group.toLowerCase().includes(searchText)
+            })
+            
+            for (let [group, UUIDs] of Object.entries(foundMenus)) {
+                UUIDs.filter((UUID) => {
+                    return !foundUUIDs.hasOwnProperty(UUID);
+                })
+                UUIDs.forEach((UUID) => {
+                    console.log(UUID);
+                    foundUUIDs[UUID] = data.hotkeys[UUID]
+                })
+            }
+            
+            setSearchFilter(Object.keys(foundUUIDs));
         }
     }
     
