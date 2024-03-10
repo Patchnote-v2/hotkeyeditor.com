@@ -289,7 +289,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
           <div id="search">
             <input ref={search}
                    type="text"
-                   placeholder="Filter hotkeys by description"
+                   placeholder="Filter by description or group"
                    onInput={(e) => props.onSearchInput(e)} />
             <button className="clear-search"
                     value=""

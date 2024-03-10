@@ -90,7 +90,10 @@ const Upload = (props) => {
             setData(response.data.data)
             setProfileName(response.data.name)
             setFilteringRows(false);
-            setFoundRows([])
+            setFoundRows([]);
+            if (!data) {
+                document.querySelector("#search input").value = "";
+            }
         }).catch((error) => {
             notifications.current.addNotification(error.response.data.message);
         });
@@ -113,7 +116,11 @@ const Upload = (props) => {
             setData(response.data);
             setProfileName(null);
             setFilteringRows(false);
-            setFoundRows([])
+            setFoundRows([]);
+            if (!data) {
+                document.querySelector("#search input").value = "";
+            }
+
         }).catch((error) => {
             notifications.current.addNotification(error.response.data.message);
         });
