@@ -645,7 +645,7 @@ const Upload = (props) => {
                 return group.toLowerCase().includes(searchText)
             })
             
-            for (let [group, UUIDs] of Object.entries(foundMenus)) {
+            for (let [, UUIDs] of Object.entries(foundMenus)) {
                 UUIDs.filter((UUID) => {
                     return !foundUUIDs.hasOwnProperty(UUID);
                 })
