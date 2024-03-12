@@ -1,6 +1,3 @@
-// import logo from './logo.svg';
-import './scss/App.scss';
-
 import { useRef } from "react";
 
 import Compatability from './Compatability.js';
