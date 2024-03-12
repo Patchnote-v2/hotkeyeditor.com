@@ -26,7 +26,7 @@ const Compatability = (props) => {
     
     const monitorWidth = (event) => {
         if (event.matches) {
-            notifications.current.addNotification("Your viewport width is narrower that 1200 pixels.  Narrow widths won't break the site, but will make using it difficult.");
+            notifications.current.addNotification("Your viewport width is narrower than 1200 pixels.  Narrow widths won't break the site, but will make using it difficult.");
         }
     }
 }
