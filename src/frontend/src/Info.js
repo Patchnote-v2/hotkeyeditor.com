@@ -53,7 +53,7 @@ const Info = () => {
                                     <li className="pre-container"><pre>{"C:\\Users\\[Windows username]\\Games\\Age of Empires 2 DE\\[your Steam ID]\\profile\\"}</pre></li>
                                 </ul>
                             </li>
-                            <li>There are two files you need.  They are both .hkp files.
+                            <li>There are two files you need.  They are both <b>.hkp</b> files.
                                 <ul>
                                     <li>The first one is the name of your profile.</li>
                                     <li>The second is <pre>Base.hkp</pre> in a folder with the same name as your profile.</li>
