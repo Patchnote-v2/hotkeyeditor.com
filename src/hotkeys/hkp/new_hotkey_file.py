@@ -1,4 +1,5 @@
 import hashlib
+import struct
 
 from .izip import compress, decompress
 from .parse import HkParser, HkUnparser, FileType
@@ -43,7 +44,10 @@ class HotkeyFile:
 
         hk_bytes = decompress(hki)
         parser = HkParser(file_type)
-        data = parser.parse_to_dict(hk_bytes)
+        try:
+            data = parser.parse_to_dict(hk_bytes)
+        except struct.error as error:
+            raise error
 
         self._num_menus = len(data['menus'])
         self.deserialize_file(data)

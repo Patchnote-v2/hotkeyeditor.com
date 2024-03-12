@@ -1,5 +1,6 @@
 import json
 import io
+import struct
 import zipfile
 
 from pathlib import Path
@@ -26,7 +27,7 @@ class HKPView(View):
         # Base.hkp.
 
         if len(request.FILES.getlist("files", None)) != 2:
-            return JsonResponse(data={"message": "Please select only the two correct files (<b>&lt;profile_name>.hkp</b> and <b>&lt;profile_name>/Base.hkp</b>)."},
+            return JsonResponse(data={"message": "Please select only the two correct files (<b>&lt;profile_name>.hkp</b> and <b>&lt;profile_name>/Base.hkp</b>)."},  # noqa
                                 status=400)
 
         user_files = {'base': None, 'profile': None}
@@ -43,14 +44,24 @@ class HKPView(View):
         profile_name = Path(user_files['profile'].name).stem
 
         # Parse the user files
-        user_files['base'] = HotkeyFile(user_files['base'].read(),
-                                        False,
-                                        user_files['base'].name,
-                                        FileType.HKP)
-        user_files['profile'] = HotkeyFile(user_files['profile'].read(),
-                                           False,
-                                           user_files['profile'].name,
-                                           FileType.HKI)
+        # Try for exceptions individually so we can let the user know which one is invalid
+        try:
+            user_files['base'] = HotkeyFile(user_files['base'].read(),
+                                            False,
+                                            user_files['base'].name,
+                                            FileType.HKP)
+        except struct.error:
+            return JsonResponse(data={"message": "The provided file for Base.hkp is an invalid size.  Make sure that you're uploading two unique files from a supported build of the game."},  # noqa
+                                status=400)
+
+        try:
+            user_files['profile'] = HotkeyFile(user_files['profile'].read(),
+                                               False,
+                                               user_files['profile'].name,
+                                               FileType.HKI)
+        except struct.error:
+            return JsonResponse(data={"message": f"The provided file for {profile_name}.hkp is an invalid size.  Make sure that you're uploading two unique files from a supported build of the game."},  # noqa
+                                status=400)
 
         # Load default hotkey files so they can be updated with the user-uploaded files
         # This is more robust since if the user uploads either files a version ahead or
