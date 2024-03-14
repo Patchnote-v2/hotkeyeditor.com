@@ -439,7 +439,13 @@ hk_mapping = {
     0x4AD7: 'Select all Mule Carts',
     0x4B9A: 'Go to Mule Cart',
     0x4AD6: 'Mule Cart',
-    0x4D1F: 'Fortified Church: Go Back to Work'
+    0x4D1F: 'Fortified Church: Go Back to Work',
+
+    # update 107882
+    # Base.hkp
+    400017: "Seek Shelter",
+    400018: "All Back to Work",
+    400021: "Drop Off Resources",
 }
 
 hk_groups = {
@@ -672,7 +678,9 @@ hk_groups = {
         19214,
         19215,
         19224,
-        19240
+        19240,
+        400017,
+        400021,
     ],
     "Buildings/Transports": [
         19002,
@@ -757,6 +765,7 @@ hk_groups = {
         19335,
         19336,
         19158,
+        400018,
     ],
     "Dock": [
         19045,

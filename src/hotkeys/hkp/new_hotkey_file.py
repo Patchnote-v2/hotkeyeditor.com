@@ -17,8 +17,11 @@ hk_versions = [
     ('wk', 0x3f800000, {2240}, 'WololoKingdoms'),
     ('deo', 0x40400000, {}, 'DE (old)'),  # don't ever pick this version
     ('de', 0x40866666, {4632, 4644, 4664, 4676, 4712, 4724,
-                        4748, 4820, 2672, 2324, 4996}, 'Definitive Edition'),
+                        4748, 4820, 2672, 2324, 2796, 2336, 4996}, 'Definitive Edition'),
 ]
+
+# Filesizes by path (Base/Profile)
+# 107882: 2796/2336
 
 
 class HotkeyFile:
