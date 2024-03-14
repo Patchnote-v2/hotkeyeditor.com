@@ -50,9 +50,14 @@ class Command(BaseCommand):
             files["profile"] = HotkeyFile(file.read(), False, "Profile.hkp", FileType.HKI)
 
         invalid_strings = {'base': {}, 'profile': {}}
+        missing_strings = {'base': {}, 'profile': {}}
         for key, file in files.items():
             for id, hotkey in file.data.items():
                 if hotkey['string_text'] == "":
-                    invalid_strings[key][id] = strings[id]
+                    try:
+                        invalid_strings[key][id] = strings[id]
+                    except KeyError:
+                        missing_strings[key][id] = hotkey['string_id']
 
-        self.stdout.write(self.style.SUCCESS(invalid_strings))
+        self.stdout.write(self.style.ERROR(invalid_strings))
+        self.stdout.write(self.style.ERROR(missing_strings))
