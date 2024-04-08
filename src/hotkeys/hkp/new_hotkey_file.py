@@ -22,6 +22,7 @@ hk_versions = [
 
 # Filesizes by path (Base/Profile)
 # 107882: 2796/2336
+# 109739: 2796/2336
 
 
 class HotkeyFile:
