@@ -56,7 +56,8 @@ In addition, I also found these pages from @KSneijders to be invaluble:
        cd src
 
 7. Run the Django server
-  
+
+       python3 manage.py migrate
        python3 manage.py runserver
 
 ### In a separate terminal
@@ -67,7 +68,7 @@ In addition, I also found these pages from @KSneijders to be invaluble:
 
 2. Install NPM packages
   
-       npm run install
+       npm install
 
 3. Run server
   
