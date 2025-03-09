@@ -187,11 +187,13 @@
     width: 100%;
     
     .clear-search {
+      color: #AFAFAF;
       height: 30px;
       right: 10px;
-      padding: 5px;
+      padding: 0px;
       position: absolute;
       width: 25px;
+      background: rgba(202, 60, 60, 0.2);
     }
     
     input[type=text] {
