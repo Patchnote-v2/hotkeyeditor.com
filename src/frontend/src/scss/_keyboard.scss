@@ -210,7 +210,8 @@
       width: 53%;
       
       &::placeholder {
-        color: white;
+        color: #AFAFAF;
+        font-size: 80%;
       }
       &:focus {
         outline: 1px solid #EAFF00;
