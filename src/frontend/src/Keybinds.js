@@ -92,11 +92,22 @@ const Keybinds = (data) => {
                     });
                     return (
                         <div key={value} className="menu">
-                            <h3 onClick={(event) => data.selectMenu(event)}
-                                onMouseOver={(event) => data.hoverMenu(event)}
-                                onMouseOut={(event) => data.hoverMenu(event)}>
-                            {value}</h3>
-                            {menuRows}
+                            <span>
+                                <h3 onClick={(event) => data.selectMenu(event)}
+                                    onMouseOver={(event) => data.hoverMenu(event)}
+                                    onMouseOut={(event) => data.hoverMenu(event)}
+                                    value={value}>
+                                    {value}
+                                    <span class="hamburger hamburger--minus is-active" onClick={(event) => data.toggleMenu(event)} value={value}>
+                                        <span class="hamburger-box">
+                                            <span class="hamburger-inner"></span>
+                                        </span>
+                                    </span>
+                                </h3>
+                            </span>
+                            <ul class="menuList">
+                                {menuRows}
+                            </ul>
                         </div>
                     );
                 }

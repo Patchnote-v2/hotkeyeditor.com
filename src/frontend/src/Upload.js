@@ -21,6 +21,7 @@ const Upload = (props) => {
     const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
+    const [toggledMenus, setToggleMenues] = useState([]);
     
     const [filteringKey, setFilteringKey] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
@@ -150,7 +151,7 @@ const Upload = (props) => {
         // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
         if (selectedGroupHeader.current) {
             let rows = {};
-            data.groups[selectedGroupHeader.current.textContent].forEach((UUID) => {
+            data.groups[selectedGroupHeader.current.getAttribute("value")].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             clearHighlightedKeys(rows, true);
@@ -197,7 +198,7 @@ const Upload = (props) => {
         // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
         if (selectedGroupHeader.current) {
             let rows = {};
-            data.groups[selectedGroupHeader.current.textContent].forEach((UUID) => {
+            data.groups[selectedGroupHeader.current.getAttribute("value")].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             
@@ -588,9 +589,10 @@ const Upload = (props) => {
     }
     
     const selectMenu = (event) => {
+        let group = event.target.getAttribute("value");
+        let rows = {}
         if (!selectedGroupHeader.current) {
-            let rows = {}
-            data.groups[event.target.textContent].forEach((UUID) => {
+            data.groups[group].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             setHighlightedKeys(rows, false);
@@ -598,9 +600,8 @@ const Upload = (props) => {
             selectedGroupHeader.current = event.target;
         }
         
-        else if (event.target.textContent === selectedGroupHeader?.current?.textContent) {
-            let rows = {}
-            data.groups[event.target.textContent].forEach((UUID) => {
+        else if (group === selectedGroupHeader?.current?.getAttribute("value")) {
+            data.groups[group].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             clearHighlightedKeys(rows);
@@ -610,9 +611,10 @@ const Upload = (props) => {
     }
     
     const hoverMenu = (event) => {
+        let group = event.target.getAttribute("value");
+        let rows = {}
         if (event.type === "mouseover") {
-            let rows = {}
-            data.groups[event.target.textContent].forEach((UUID) => {
+            data.groups[group].forEach((UUID) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             setHighlightedKeys(rows, false);
@@ -620,14 +622,21 @@ const Upload = (props) => {
             hoverGroupHeader.current = event.target;
         }
         else if (event.type === "mouseout") {
-            let rows = {}
-            data.groups[event.target.textContent].forEach((UUID) => {
+            data.groups[group].forEach((UUID) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             clearHighlightedKeys(rows);
             
             hoverGroupHeader.current = null;
         }
+    }
+
+    const toggleMenu = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.target.classList.toggle("is-active");
+        let menu = event.target.closest(".menu");
+        menu.classList.toggle("collapsed"); 
     }
     
     const onSearchInput = (event) => {
@@ -728,6 +737,7 @@ const Upload = (props) => {
                   filteringRows={filteringRows}
                   selectMenu={selectMenu}
                   hoverMenu={hoverMenu}
+                  toggleMenu={toggleMenu}
                   highlighted={highlighted}
                   searchFilter={searchFilter} />
         </>
