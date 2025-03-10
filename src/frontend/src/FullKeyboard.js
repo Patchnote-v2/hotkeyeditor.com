@@ -294,7 +294,7 @@ const FullKeyboard = forwardRef((props, keyboard) => {
             <button className="clear-search"
                     value=""
                     onClick={(e) => clearSearch(e)}>
-              X
+              ✕
             </button>
           </div>
           <div className="numPad">
