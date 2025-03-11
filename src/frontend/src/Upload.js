@@ -22,12 +22,12 @@ const Upload = (props) => {
     const [buffer, setBuffer] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
     const [favorites, setFavorites] = useState([]);
-    
+
     const [filteringKey, setFilteringKey] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
     const [filteringRows, setFilteringRows] = useState(false);
     const [searchFilter, setSearchFilter] = useState(null);
-    
+
     const notifications = useRef(null);
     const clear = useRef(null); // Button
     const cancel = useRef(null); // Button
@@ -35,11 +35,11 @@ const Upload = (props) => {
     const keyboard = useRef(null);
     const selectedGroupHeader = useRef(null); // Contains header element of currently highlighted groups (active, not currently hovered)
     const hoverGroupHeader = useRef(null); // Contains header of group currently being hovered over
-    
+
     let baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
                     ? "http://localhost:8000"
                     : "https://hotkeyeditor.com"
-    
+
     useEffect(() => {
         // Initially set as disabled this way, otherwise if the buttons use an attribute
         // to be disabled then it just straight up doesn't work.
@@ -47,40 +47,40 @@ const Upload = (props) => {
             disableButtons(true);
         }
     }, []);
-    
+
     useEffect(() => {
         if (!notifications.current) {
             notifications.current = props.notifications.current;
         }
     }, [props])
-    
+
     useEffect(() => {
         if (data) {
             // Dear God please someone put me out of my misery
             dataLoadedRef.current = data;
         }
     }, [data]);
-    
+
     useEffect(() => {
         keyboard.current.dispatch((instance) => {
             instance.setOptions({physicalKeyboardHighlight: settingKeybind});
         });
     }, [settingKeybind]);
-    
+
     const _handleSubmit = (event) => {
         // Prevent the browser from reloading the page
         event.preventDefault();
-        
+
         const form = event.target;
         const formData = new FormData(form);
-        
+
         // Check for changes and ask if they want to be overriden
         if (Object.keys(changed).length) {
             if (!window.confirm("You have changes made to the current hotkeys.  Loading from new files will erase all changes.")) {
                 return;
             }
         }
-        
+
         axios({
             method: 'post',
             baseURL: baseUrl,
@@ -105,7 +105,7 @@ const Upload = (props) => {
             notifications.current.addNotification(error.response.data.message);
         });
     }
-    
+
     const _getDefaultFiles = (event) => {
         event.preventDefault();
         // Check for changes and ask if they want to be overriden
@@ -139,7 +139,7 @@ const Upload = (props) => {
             notifications.current.addNotification(error.response.data.message);
         });
     }
-    
+
     const uploadChanged = (event) => {
         event.preventDefault();
         axios({
@@ -155,12 +155,12 @@ const Upload = (props) => {
             notifications.current.addNotification(error.response.data.message);
         });
     }
-    
+
     const confirmKeybinds = (newKeybinds, key) => {
         newKeybinds = JSON.parse(JSON.stringify(newKeybinds));
         clearHighlightedKeys(Utils.bufferToHighlights(newKeybinds, ["keybind-row-setting-button", "keybind-row-hover-button"]),
                              true);
-        
+
         // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
         if (selectedGroupHeader.current) {
             let rows = {};
@@ -190,31 +190,31 @@ const Upload = (props) => {
                 newHotkeys[uuid].keycode = key;
                 newKeybinds[uuid].keycode = key;
             }
-            
+
             // Since datasets from rows don't include menu_id or string_id, we have to
             // make sure to copy them over "manually"
             newKeybinds[uuid]["menu_id"] = data.hotkeys[uuid]["menu_id"];
             newKeybinds[uuid]["string_id"] = data.hotkeys[uuid]["string_id"];
-            
+
             newHotkeys[uuid].ctrl = newKeybinds[uuid].ctrl;
             newHotkeys[uuid].shift = newKeybinds[uuid].shift;
             newHotkeys[uuid].alt = newKeybinds[uuid].alt;
-            
+
             newChanged[uuid] = newKeybinds[uuid];
         }
         setData({groups: data.groups, hotkeys: {...newHotkeys}});
         setChanged(newChanged);
-        
+
         setSettingKeybind(false);
         disableButtons(true);
-        
+
         // Ensure group highlighting gets refreshed.  Kinda ugly having this here.
         if (selectedGroupHeader.current) {
             let rows = {};
             data.groups[selectedGroupHeader.current.getAttribute("value")].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
-            
+
             setHighlightedKeys(rows, false);
         }
         if (hoverGroupHeader.current) {
@@ -222,19 +222,19 @@ const Upload = (props) => {
             data.groups[hoverGroupHeader.current.textContent].forEach((UUID) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
-            
+
             setHighlightedKeys(rows, false);
         }
-        
+
         return {};
     }
-    
+
     const handleSettingKeybind = (event) => {
         let dataset = Utils.getDatasetFromEvent(event);
-        
+
         setBuffer((currentBuffer) => {
             let oldBuffer = JSON.parse(JSON.stringify(currentBuffer));
-        
+
             // If already setting keybind, then add/remove from buffer based on the row's state
             if (settingKeybind) {
                 if (oldBuffer.hasOwnProperty(dataset.id)) {
@@ -262,7 +262,7 @@ const Upload = (props) => {
                 setSettingKeybind(true);
                 disableButtons(false);
             }
-            
+
             // If there's nothing in the buffer anymore, that means that there's no
             // active rows setting a keybind, so leave setting keybind state
             if (Object.keys(oldBuffer).length === 0) {
@@ -272,7 +272,7 @@ const Upload = (props) => {
             return oldBuffer;
         });
     }
-    
+
     // key _can be_ 0, so we cannot use if (key)
     const updateBuffer = (key) => {
         setBuffer((currentBuffer) => {
@@ -296,7 +296,7 @@ const Upload = (props) => {
                 for (let [uuid,] of Object.entries(oldBuffer)) {
                     oldBuffer[uuid][Utils.modifiers[key]] = !visible;
                 }
-                
+
                 setHighlightedKeys(Utils.bufferToHighlights(oldBuffer, ["keybind-row-setting-button"]),
                                    false,
                                    oldBuffer);
@@ -308,17 +308,17 @@ const Upload = (props) => {
             return oldBuffer;
         });
     }
-    
+
     // Unused possible future code for if I could get right-clicking a keyboard key to change all
     // eslint-disable-next-line
     const bulkChange = (key) => {
         let keycode = parseInt(Utils.findKeyByValue(simpleKeyboardKeyNames, key));
-        
+
         let UUIDs = findRowsByKeycode(keycode);
-        
+
         setBuffer((currentBuffer) => {
             let oldBuffer = JSON.parse(JSON.stringify(buffer));
-            
+
             if (settingKeybind) {
                 for (const UUID of UUIDs) {
                     if (oldBuffer.hasOwnProperty(UUID)) {
@@ -351,7 +351,7 @@ const Upload = (props) => {
                     disableButtons(false);
                 }
             }
-            
+
             // If there's nothing in the buffer anymore, that means that there's no
             // active rows setting a keybind, so leave setting keybind state
             if (Object.keys(oldBuffer).length === 0) {
@@ -361,14 +361,14 @@ const Upload = (props) => {
             return oldBuffer;
         });
     }
-    
+
     // Sets state of cancel/confirm buttons on keyboard
     const disableButtons = (state) => {
         clear.current.disabled = state;
         cancel.current.disabled = state;
         confirm.current.disabled = state;
     }
-    
+
     // Handles the actions of the cancel/confirm buttons
     const handleButtons = (event) => {
         if (settingKeybind) {
@@ -389,13 +389,13 @@ const Upload = (props) => {
             disableButtons(true);
         }
     }
-    
+
     // If inputData is null, all highlighted keys will be cleared.
     // If inputData is provided, only the provided classes from the specified keys
     // will be cleared.
     const clearHighlightedKeys = (inputData=null, useBuffer=false) => {
         setHighlighted((oldHighlighted) => {
-            
+
             let current = JSON.parse(JSON.stringify(oldHighlighted))
             let transformed = {};
             let workingData = null;
@@ -418,7 +418,7 @@ const Upload = (props) => {
                     }
                     transformed[string].push(uuid);
                 });
-                
+
                 // Remove classes from UUID if it exists in the highlighted state
                 if (Object.keys(current).includes(uuid)) {
                     current[uuid] = current[uuid].filter(x => !classesArray.includes(x));
@@ -444,7 +444,7 @@ const Upload = (props) => {
                     });
                 }
             }
-            
+
             // Filter any UUIDs that no longer have classes applied
             current = Utils.objectFilter(current, ([,cssClasses]) => {
                 return cssClasses.length;
@@ -453,7 +453,7 @@ const Upload = (props) => {
             return current;
         });
     }
-    
+
     /*
         Used to set the CSS class of the keys that need to be highlighted.
         Used to highlight when hovering over a keybind, and when setting a keybind.
@@ -463,7 +463,7 @@ const Upload = (props) => {
         if (clear) {
             clearHighlightedKeys();
         }
-        
+
         setHighlighted((oldHighlighted) => {
             let current = JSON.parse(JSON.stringify(oldHighlighted))
             let transformed = {};
@@ -477,7 +477,7 @@ const Upload = (props) => {
                     // Add the UUID to the array corresponding to the string
                     transformed[string].push(uuid);
                 });
-                
+
                 // Also update highlighted if we didn't clear so we only iterate once
                 if (!clear) {
                     if (Object.keys(current).includes(uuid)) {
@@ -489,7 +489,7 @@ const Upload = (props) => {
                     }
                 }
             }
-            
+
             // Normally the dataset used to determine which keys to to highlight comes
             // from the main hotkeys data.  However, when setting a new hotkey, that data
             // isn't updated until the hotkey is finalized.  As such, when setting a new hotkey
@@ -509,7 +509,7 @@ const Upload = (props) => {
                         keysString += Utils.datasetToKeyString(data.hotkeys[UUID]) + " ";
                     });
                 }
-                
+
                 keysString = keysString.trim()
                 if (keysString !== "") {
                     keyboard.current.dispatch((instance) => {
@@ -548,7 +548,7 @@ const Upload = (props) => {
             });
         }
     }
-    
+
     /*
         Given a keycode, returns an array of all UUIDs that have that keycode as their
         current key
@@ -564,7 +564,7 @@ const Upload = (props) => {
             return foundRows;
         }
     }
-    
+
     const hoverFilteringRows = (key) => {
         if (!key) {
             setFoundRows([]);
@@ -578,7 +578,7 @@ const Upload = (props) => {
         }
         setFoundRows(foundRows);
     }
-    
+
     const toggleFilteringRows = (key) => {
         if (key === filteringKey) {
             setFilteringRows(false);
@@ -601,7 +601,7 @@ const Upload = (props) => {
             });
         }
     }
-    
+
     const selectMenu = (event) => {
         let group = event.target.getAttribute("value");
         let rows = {}
@@ -610,21 +610,21 @@ const Upload = (props) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             setHighlightedKeys(rows, false);
-            
+
             selectedGroupHeader.current = event.target;
         }
-        
+
         else if (group === selectedGroupHeader?.current?.getAttribute("value")) {
             data.groups[group].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
             });
             clearHighlightedKeys(rows);
-            
+
             selectedGroupHeader.current = null;
         }
         event.target.classList.toggle("menu-group-select-button");
     }
-    
+
     const hoverMenu = (event) => {
         let group = event.target.getAttribute("value");
         let rows = {}
@@ -650,9 +650,9 @@ const Upload = (props) => {
         event.stopPropagation();
         event.target.classList.toggle("is-active");
         let menu = event.target.closest(".menu");
-        menu.classList.toggle("collapsed"); 
+        menu.classList.toggle("collapsed");
     }
-    
+
     const onSearchInput = (event) => {
         if (dataLoadedRef.current) {
             let searchText = event.target.value.toLowerCase();
@@ -660,14 +660,14 @@ const Upload = (props) => {
                 setSearchFilter(null);
                 return;
             }
-            
+
             let foundUUIDs = Utils.objectFilter(data.hotkeys, ([, hotkey]) => {
                 return hotkey["string_text"].toLowerCase().includes(searchText);
             });
             let foundMenus = Utils.objectFilter(data.groups, ([group, UUIDs]) => {
                 return group.toLowerCase().includes(searchText)
             })
-            
+
             for (let [, UUIDs] of Object.entries(foundMenus)) {
                 UUIDs.filter((UUID) => {
                     return !foundUUIDs.hasOwnProperty(UUID);
@@ -677,7 +677,7 @@ const Upload = (props) => {
                     foundUUIDs[UUID] = data.hotkeys[UUID]
                 })
             }
-            
+
             setSearchFilter(Object.keys(foundUUIDs));
         }
     }
@@ -715,7 +715,7 @@ const Upload = (props) => {
             data.groups["Favorites"].push(id);
         }
     }
-    
+
     return (
         <>
         <div id="controls">
@@ -730,18 +730,18 @@ const Upload = (props) => {
                     <button type="submit" className="confirm">Load Custom Hotkeys</button>
                 </form>
             </div>
-            
+
             <div id="get-changes">
                 <button onClick={uploadChanged} className="confirm">Download Changes</button>
             </div>
-            
+
             <div id="load-defaults">
                 <form method="POST" onSubmit={_getDefaultFiles}>
                     <button type="submit">Load Default Hotkeys</button>
                 </form>
             </div>
         </div>
-        
+
         <div id="keyboard-wrapper">
              {/*className={settingKeybind ? "" : "disable-keyboard"}>*/}
             <FullKeyboard ref={keyboard}
@@ -776,7 +776,7 @@ const Upload = (props) => {
                 </button>
             </div>
         </div>
-        
+
         <Keybinds data={data}
                   buffer={buffer}
                   updateCurrentHover={updateCurrentHover}
