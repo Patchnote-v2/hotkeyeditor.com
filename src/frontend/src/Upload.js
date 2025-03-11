@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
 import fileDownload from 'js-file-download';
+import * as ls from "local-storage";
 
 import { simpleKeyboardKeyNames } from './keyNames.js';
 import FullKeyboard from './FullKeyboard.js';
@@ -39,6 +40,19 @@ const Upload = (props) => {
     let baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
                     ? "http://localhost:8000"
                     : "https://hotkeyeditor.com"
+    useEffect(() => {
+        window.addEventListener("beforeunload", (event) => {
+            event.preventDefault();
+            if (Object.keys(changed).length) {
+                if (!window.confirm("You have changes made to the current hotkeys.  Loading from new files will erase all changes.")) {
+                    return;
+                }
+            }
+        });
+        return () => {
+            window.removeEventListener("beforeunload", ()=>{});
+        }
+    }, [changed]);
 
     useEffect(() => {
         // Initially set as disabled this way, otherwise if the buttons use an attribute
@@ -88,12 +102,6 @@ const Upload = (props) => {
             data: formData,
         }).then((response) => {
             setChanged({});
-            if (data) {
-                response.data.data.groups["Favorites"] = [...data.groups["Favorites"]];
-            }
-            else {
-                response.data.data.groups["Favorites"] = [];
-            }
             setData(response.data.data)
             setProfileName(response.data.name)
             setFilteringRows(false);
@@ -101,6 +109,20 @@ const Upload = (props) => {
             if (!data) {
                 document.querySelector("#search input").value = "";
             }
+
+            let localFavorites = ls.get("favorites");
+            let rows = {};
+            if (localFavorites) {
+                response.data.data.groups["Favorites"] = [...localFavorites];
+                setFavorites([...localFavorites]);
+                localFavorites.forEach((UUID) => {
+                    rows[UUID] = ["hotkey-favorite"];
+                });
+            }
+            else {
+                response.data.data.groups["Favorites"] = [];
+            }
+            setHighlightedKeys(rows, false, response.data);
         }).catch((error) => {
             notifications.current.addNotification(error.response.data.message);
         });
@@ -120,12 +142,6 @@ const Upload = (props) => {
             url: '/api/upload/',
         }).then((response) => {
             setChanged({});
-            if (data) {
-                response.data.groups["Favorites"] = [...data.groups["Favorites"]];
-            }
-            else {
-                response.data.groups["Favorites"] = [];
-            }
             setData(response.data);
             setProfileName(null);
             setFilteringRows(false);
@@ -134,6 +150,19 @@ const Upload = (props) => {
                 document.querySelector("#search input").value = "";
             }
 
+            let localFavorites = ls.get("favorites");
+            let rows = {};
+            if (localFavorites) {
+                response.data.groups["Favorites"] = [...localFavorites];
+                setFavorites([...localFavorites]);
+                localFavorites.forEach((UUID) => {
+                    rows[UUID] = ["hotkey-favorite"];
+                });
+            }
+            else {
+                response.data.groups["Favorites"] = [];
+            }
+            setHighlightedKeys(rows, false, response.data);
         }).catch((error) => {
             notifications.current.addNotification(error.response.data.message);
         });
@@ -703,6 +732,7 @@ const Upload = (props) => {
             }
 
             setHighlightedKeys(rows, false);
+            ls.set("favorites", oldFavorites);
             return oldFavorites;
         });
 
