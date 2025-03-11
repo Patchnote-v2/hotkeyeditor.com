@@ -21,7 +21,7 @@ const Upload = (props) => {
     const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
-    const [toggledMenus, setToggleMenues] = useState([]);
+    const [favorites, setFavorites] = useState([]);
     
     const [filteringKey, setFilteringKey] = useState(null);
     const [foundRows, setFoundRows] = useState([]);
@@ -114,6 +114,7 @@ const Upload = (props) => {
             url: '/api/upload/',
         }).then((response) => {
             setChanged({});
+            response.data.groups["Favorites"] = [];
             setData(response.data);
             setProfileName(null);
             setFilteringRows(false);
@@ -668,6 +669,40 @@ const Upload = (props) => {
             setSearchFilter(Object.keys(foundUUIDs));
         }
     }
+
+    const toggleFavorite = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        let id = event.target.getAttribute("id");
+        setFavorites((oldFavorites) => {
+            let rows = {};
+            oldFavorites.forEach((UUID) => {
+                rows[UUID] = ["hotkey-favorite"];
+            });
+            clearHighlightedKeys(rows);
+
+            let indexFavorites = oldFavorites.indexOf(id);
+            if (indexFavorites > -1) {
+                oldFavorites.splice(indexFavorites, 1);
+                delete rows[id]
+            }
+            else {
+                oldFavorites.push(id);
+                rows[id] = ["hotkey-favorite"];
+            }
+
+            setHighlightedKeys(rows, false);
+            return oldFavorites;
+        });
+
+        let index = data.groups["Favorites"].indexOf(id);
+        if (index > -1) {
+            data.groups["Favorites"].splice(index, 1);
+        }
+        else {
+            data.groups["Favorites"].push(id);
+        }
+    }
     
     return (
         <>
@@ -740,7 +775,8 @@ const Upload = (props) => {
                   hoverMenu={hoverMenu}
                   toggleMenu={toggleMenu}
                   highlighted={highlighted}
-                  searchFilter={searchFilter} />
+                  searchFilter={searchFilter}
+                  toggleFavorite={toggleFavorite}/>
         </>
     );
 };

@@ -190,7 +190,7 @@ header {
 
 $key-transition-time: 0.1s;
 #root {
-  .hotkey-row, .menu-header {
+  .hotkey-row {
     background:
                 var(--im1, linear-gradient(transparent, transparent)),
                 var(--im2, linear-gradient(transparent, transparent)),
@@ -202,6 +202,44 @@ $key-transition-time: 0.1s;
                 var(--im8, linear-gradient(transparent, transparent)),
                 var(--im9, linear-gradient(transparent, transparent)),
                 linear-gradient(#2f2f2f, #2f2f2f);
+    /* V "what is being hovered"-"state"-"what it applies to" */
+    &.keybind-row-hover-button {
+      --im2: linear-gradient(#DA767655, #DA767655);
+    }
+    &.keybind-row-setting-button {
+      --im3: linear-gradient(#DD434355, #DD434355);
+    }
+    &.button-hover-passive-button {
+      --im4: linear-gradient(#87E8FF55, #87E8FF55);
+    }
+    &.button-hover-setting-button {
+      --im5: linear-gradient(#DA767655, #DA767655);
+    }
+    &.menu-group-select-button {
+      --im6: linear-gradient(#00765555, #00765555);
+    }
+    &.menu-group-hover-button {
+      --im7: linear-gradient(#007655AA, #007655AA);
+    }
+    &.hotkey-row-find {
+      --im8: linear-gradient(#87E8FF55, #87E8FF55);
+    }
+    &.hotkey-favorite {
+      --im9: linear-gradient(#FFEE4555, #FFEE4555);
+    }
+  }
+  .menu-header {
+    background:
+                var(--im1, linear-gradient(transparent, transparent)),
+                var(--im2, linear-gradient(transparent, transparent)),
+                var(--im3, linear-gradient(transparent, transparent)),
+                var(--im4, linear-gradient(transparent, transparent)),
+                var(--im5, linear-gradient(transparent, transparent)),
+                var(--im6, linear-gradient(transparent, transparent)),
+                var(--im7, linear-gradient(transparent, transparent)),
+                var(--im8, linear-gradient(transparent, transparent)),
+                var(--im9, linear-gradient(transparent, transparent)),
+                linear-gradient(#242424, #242424);
     /* V "what is being hovered"-"state"-"what it applies to" */
     &.keybind-row-hover-button {
       --im2: linear-gradient(#DA767655, #DA767655);

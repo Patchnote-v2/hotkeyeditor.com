@@ -8,7 +8,12 @@ const Keybinds = (data) => {
     
     useEffect(() => {
         if (data.data) {
-            let mapping = Object.keys(data.data.groups).map((value, key) => {
+            let mapping = Object.keys(data.data.groups);
+            mapping.sort();
+            let index = mapping.indexOf("Favorites");
+            let item = mapping.splice(index, 1);
+            mapping.splice(0, 0, item);
+            mapping = mapping.map((value, key) => {
                 // Using data.groups, build an array of this menu's hotkeys with UUID keys
                 var menuRows = {}
                 data.data.groups[value].forEach((UUID) => {
@@ -42,8 +47,10 @@ const Keybinds = (data) => {
                         });
                     }
                 }
-                
-                if (menuRows && Object.keys(menuRows).length) {
+
+                // We're removing this check for now since Favorites can be empty at the start
+                //if (menuRows && Object.keys(menuRows).length) {
+                    console.log(Object.keys(menuRows));
                     menuRows = Object.keys(menuRows).map((UUID, index) => {
                         var hotkey = menuRows[UUID];
                         
@@ -65,6 +72,7 @@ const Keybinds = (data) => {
                                 onMouseOver={data.updateCurrentHover}
                                 onMouseOut={data.updateCurrentHover}
                                 onClick={(event) => data.handleSettingKeybind(event)}
+                                onContextMenu={(event) => data.toggleFavorite(event)}
                                 className={rowClassNames}>
                             {/*<span key={`${UUID}-hotkey-uuid`} className="hotkey-uuid">{UUID}</span>*/}
                             <span key={`${UUID}-hotkey-text`} className="hotkey-text">{hotkey.string_text}</span>
@@ -96,7 +104,7 @@ const Keybinds = (data) => {
                                 <h3 onClick={(event) => data.selectMenu(event)}
                                     onMouseOver={(event) => data.hoverMenu(event)}
                                     onMouseOut={(event) => data.hoverMenu(event)}
-                                    class="menu-header"
+                                    className="menu-header"
                                     value={value}>
                                     {value}
                                     <span class="hamburger hamburger--minus is-active" onClick={(event) => data.toggleMenu(event)} value={value}>
@@ -111,10 +119,10 @@ const Keybinds = (data) => {
                             </ul>
                         </div>
                     );
-                }
-                else {
-                    return null;
-                }
+                //}
+                //else {
+                //    return null;
+                //}
             });
             setKeybinds(mapping);
         }
