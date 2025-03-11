@@ -120,7 +120,6 @@ const Upload = (props) => {
             url: '/api/upload/',
         }).then((response) => {
             setChanged({});
-            console.log(data);
             if (data) {
                 response.data.groups["Favorites"] = [...data.groups["Favorites"]];
             }
