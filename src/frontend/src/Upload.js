@@ -701,7 +701,6 @@ const Upload = (props) => {
                     return !foundUUIDs.hasOwnProperty(UUID);
                 })
                 UUIDs.forEach((UUID) => {
-                    console.log(UUID);
                     foundUUIDs[UUID] = data.hotkeys[UUID]
                 })
             }
