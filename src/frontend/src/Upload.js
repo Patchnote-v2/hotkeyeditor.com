@@ -171,7 +171,7 @@ const Upload = (props) => {
         }
         if (hoverGroupHeader.current) {
             let rows = {};
-            data.groups[hoverGroupHeader.current.textContent].forEach((UUID) => {
+            data.groups[hoverGroupHeader.current.getAttribute("value")].forEach((UUID) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             clearHighlightedKeys(rows, true);
@@ -219,7 +219,7 @@ const Upload = (props) => {
         }
         if (hoverGroupHeader.current) {
             let rows = {};
-            data.groups[hoverGroupHeader.current.textContent].forEach((UUID) => {
+            data.groups[hoverGroupHeader.current.getAttribute("value")].forEach((UUID) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
 
@@ -612,8 +612,8 @@ const Upload = (props) => {
             setHighlightedKeys(rows, false);
 
             selectedGroupHeader.current = event.target;
+            event.target.classList.toggle("menu-group-select-button");
         }
-
         else if (group === selectedGroupHeader?.current?.getAttribute("value")) {
             data.groups[group].forEach((UUID) => {
                 rows[UUID] = ["menu-group-select-button"];
@@ -621,8 +621,8 @@ const Upload = (props) => {
             clearHighlightedKeys(rows);
 
             selectedGroupHeader.current = null;
+            event.target.classList.toggle("menu-group-select-button");
         }
-        event.target.classList.toggle("menu-group-select-button");
     }
 
     const hoverMenu = (event) => {
