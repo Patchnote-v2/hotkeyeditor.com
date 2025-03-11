@@ -106,14 +106,14 @@ const Keybinds = (data) => {
                                     className="menu-header"
                                     value={value}>
                                     {value}
-                                    <span class="hamburger hamburger--minus is-active" onClick={(event) => data.toggleMenu(event)} value={value}>
-                                        <span class="hamburger-box">
-                                            <span class="hamburger-inner"></span>
+                                    <span className="hamburger hamburger--minus is-active" onClick={(event) => data.toggleMenu(event)} value={value}>
+                                        <span className="hamburger-box">
+                                            <span className="hamburger-inner"></span>
                                         </span>
                                     </span>
                                 </h3>
                             </span>
-                            <ul class="menuList">
+                            <ul className="menuList">
                                 {menuRows}
                             </ul>
                         </div>
