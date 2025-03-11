@@ -468,6 +468,7 @@ const Upload = (props) => {
                 // Also update highlighted if we didn't clear so we only iterate once
                 if (!clear) {
                     if (Object.keys(current).includes(uuid)) {
+                        // todo: avoid the triple spread
                         current[uuid] = [...new Set([...classesArray, ...current[uuid]])]
                     }
                     else {
@@ -608,6 +609,7 @@ const Upload = (props) => {
             
             selectedGroupHeader.current = null;
         }
+        event.target.classList.toggle("menu-group-select-button");
     }
     
     const hoverMenu = (event) => {
@@ -618,7 +620,6 @@ const Upload = (props) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             setHighlightedKeys(rows, false);
-            
             hoverGroupHeader.current = event.target;
         }
         else if (event.type === "mouseout") {
@@ -626,9 +627,9 @@ const Upload = (props) => {
                 rows[UUID] = ["menu-group-hover-button"];
             });
             clearHighlightedKeys(rows);
-            
             hoverGroupHeader.current = null;
         }
+        event.target.classList.toggle("menu-group-hover-button");
     }
 
     const toggleMenu = (event) => {

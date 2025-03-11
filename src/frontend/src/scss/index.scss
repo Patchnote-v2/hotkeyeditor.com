@@ -190,7 +190,7 @@ header {
 
 $key-transition-time: 0.1s;
 #root {
-  .hotkey-row {
+  .hotkey-row, .menu-header {
     background:
                 var(--im1, linear-gradient(transparent, transparent)),
                 var(--im2, linear-gradient(transparent, transparent)),

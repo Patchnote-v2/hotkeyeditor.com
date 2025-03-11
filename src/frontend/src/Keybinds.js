@@ -96,6 +96,7 @@ const Keybinds = (data) => {
                                 <h3 onClick={(event) => data.selectMenu(event)}
                                     onMouseOver={(event) => data.hoverMenu(event)}
                                     onMouseOut={(event) => data.hoverMenu(event)}
+                                    class="menu-header"
                                     value={value}>
                                     {value}
                                     <span class="hamburger hamburger--minus is-active" onClick={(event) => data.toggleMenu(event)} value={value}>
