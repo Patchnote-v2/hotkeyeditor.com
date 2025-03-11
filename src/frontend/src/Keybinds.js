@@ -50,7 +50,6 @@ const Keybinds = (data) => {
 
                 // We're removing this check for now since Favorites can be empty at the start
                 //if (menuRows && Object.keys(menuRows).length) {
-                    console.log(Object.keys(menuRows));
                     menuRows = Object.keys(menuRows).map((UUID, index) => {
                         var hotkey = menuRows[UUID];
                         

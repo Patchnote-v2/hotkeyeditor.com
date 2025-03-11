@@ -88,6 +88,12 @@ const Upload = (props) => {
             data: formData,
         }).then((response) => {
             setChanged({});
+            if (data) {
+                response.data.data.groups["Favorites"] = [...data.groups["Favorites"]];
+            }
+            else {
+                response.data.data.groups["Favorites"] = [];
+            }
             setData(response.data.data)
             setProfileName(response.data.name)
             setFilteringRows(false);
@@ -114,7 +120,13 @@ const Upload = (props) => {
             url: '/api/upload/',
         }).then((response) => {
             setChanged({});
-            response.data.groups["Favorites"] = [];
+            console.log(data);
+            if (data) {
+                response.data.groups["Favorites"] = [...data.groups["Favorites"]];
+            }
+            else {
+                response.data.groups["Favorites"] = [];
+            }
             setData(response.data);
             setProfileName(null);
             setFilteringRows(false);
