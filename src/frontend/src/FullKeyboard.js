@@ -4,10 +4,12 @@ import { useEffect, forwardRef, useRef } from 'react';
 
 import Utils from './Utils.js';
 
+// todo: React 19 supposedly begins forwardRef deprecation, but removing it doesn't work
+// check in a future version if it can be removed
 const FullKeyboard = forwardRef((props, keyboard) => {
-  const search = useRef();
-  const settingKeybindRef = useRef();
-  const filteringRowsRef = useRef();
+  const search = useRef(null);
+  const settingKeybindRef = useRef(null);
+  const filteringRowsRef = useRef(null);
   
   // I don't understand this.  In the parent, even if I'm updating the state that gets passed
   // to this component's props in a useEffect in the parent, this component never recieves
@@ -268,7 +270,6 @@ const FullKeyboard = forwardRef((props, keyboard) => {
   return (
       <div className={"keyboardContainer"}>
         <Keyboard
-          ref={keyboard}
           baseClass={"simple-keyboard-main"}
           keyboardRef={r => {keyboard.current = r}}
           {...keyboardOptions}

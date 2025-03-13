@@ -18,7 +18,7 @@ const Upload = (props) => {
     const [changed, setChanged] = useState({});
     const [profileName, setProfileName] = useState(null);
     const [data, setData] = useState();
-    const dataLoadedRef = useRef();
+    const dataLoadedRef = useRef(null);
     const [highlighted, setHighlighted] = useState({});
     const [buffer, setBuffer] = useState({});
     const [settingKeybind, setSettingKeybind] = useState(false);
@@ -672,7 +672,7 @@ const Upload = (props) => {
         }
         event.target.classList.toggle("menu-group-hover-button");
     }
-
+// todo: removing favorite from the favorite group duplicate doesn't remove menu-row-hover-key
     const toggleMenu = (event) => {
         event.preventDefault();
         event.stopPropagation();

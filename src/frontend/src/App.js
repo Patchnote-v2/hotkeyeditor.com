@@ -6,7 +6,7 @@ import Notifications from './Notification.js';
 import Info from './Info.js';
 
  const App = () => {
-    const notification = useRef();
+    const notification = useRef(null);
     
     return (
         <>
