@@ -30,6 +30,14 @@ const Info = () => {
                     <h3>Contact</h3>
                     <p>The best way to contact me is through a <a href="https://github.com/Patchnote-v2/aoe2de-hotkeys/issues">GitHub ticket.</a></p>
                 </section>
+
+                <section>
+                    <h3>Tips</h3>
+                    <ul>
+                        <li>Left-click a keyboard key to only show hotkeys using that key.</li>
+                        <li>Right-clicking a hotkey will add or remove it from the favorites group.  This can shift some groups to different columns.</li>
+                    </ul>
+                </section>
             </div>
             
             
