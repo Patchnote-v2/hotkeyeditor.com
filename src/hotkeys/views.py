@@ -69,11 +69,11 @@ class HKPView(View):
         default_files = load_default_files()
 
         changed = serialize_all_files(user_files)
-        default_files['base'].update(changed)
-        default_files['profile'].update(changed)
+        userChanged = default_files['base'].update(changed) | default_files['profile'].update(changed)
 
         return JsonResponse(data={"data": {"hotkeys": serialize_all_files(default_files),
                                            "groups": format_groups(hk_groups)},
+                                  "changed": userChanged,
                                   "name": profile_name},
                             status=200)
 

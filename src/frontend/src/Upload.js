@@ -98,7 +98,7 @@ const Upload = (props) => {
             url: '/api/upload/',
             data: formData,
         }).then((response) => {
-            setChanged({});
+            setChanged(response.data.changed);
             setData(response.data.data)
             setProfileName(response.data.name)
             setFilteringRows(false);

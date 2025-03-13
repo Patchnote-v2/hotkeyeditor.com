@@ -77,10 +77,15 @@ class HotkeyFile:
             parser.validate_size()
             self.validate()
 
-    def update(self, changed):
-        for key, value in changed.items():
+    def update(self, newValues) -> dict:
+        changed = {}
+        for key, value in newValues.items():
             if key in self:
+                if self[key] != value:
+                    changed[key] = value
+
                 self[key] = value
+        return changed
 
     # todo: make this fail is there's missing strings in hk_mapping
     def deserialize_file(self, data):
