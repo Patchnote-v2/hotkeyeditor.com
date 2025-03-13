@@ -714,25 +714,26 @@ const Upload = (props) => {
         event.stopPropagation();
         let id = event.target.getAttribute("id");
         setFavorites((oldFavorites) => {
+            let newFavorites = [...oldFavorites];
             let rows = {};
-            oldFavorites.forEach((UUID) => {
+            newFavorites.forEach((UUID) => {
                 rows[UUID] = ["hotkey-favorite"];
             });
             clearHighlightedKeys(rows);
 
-            let indexFavorites = oldFavorites.indexOf(id);
+            let indexFavorites = newFavorites.indexOf(id);
             if (indexFavorites > -1) {
-                oldFavorites.splice(indexFavorites, 1);
+                newFavorites.splice(indexFavorites, 1);
                 delete rows[id]
             }
             else {
-                oldFavorites.push(id);
+                newFavorites.push(id);
                 rows[id] = ["hotkey-favorite"];
             }
 
             setHighlightedKeys(rows, false);
-            ls.set("favorites", oldFavorites);
-            return oldFavorites;
+            ls.set("favorites", newFavorites);
+            return [...newFavorites];
         });
 
         let index = data.groups["Favorites"].indexOf(id);
