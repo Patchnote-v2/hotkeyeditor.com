@@ -42,11 +42,8 @@ const Upload = (props) => {
                     : "https://hotkeyeditor.com"
     useEffect(() => {
         window.addEventListener("beforeunload", (event) => {
-            event.preventDefault();
-            if (Object.keys(changed).length) {
-                if (!window.confirm("You have changes made to the current hotkeys.  Loading from new files will erase all changes.")) {
-                    return;
-                }
+            if (Object.keys(changed).length !== 0) {
+                event.preventDefault();
             }
         });
         return () => {
