@@ -669,7 +669,7 @@ const Upload = (props) => {
         }
         event.target.classList.toggle("menu-group-hover-button");
     }
-// todo: removing favorite from the favorite group duplicate doesn't remove menu-row-hover-key
+
     const toggleMenu = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -722,6 +722,7 @@ const Upload = (props) => {
             if (indexFavorites > -1) {
                 newFavorites.splice(indexFavorites, 1);
                 delete rows[id]
+                clearHighlightedKeys({ [id]: ["keybind-row-hover-button"] });
             }
             else {
                 newFavorites.push(id);
