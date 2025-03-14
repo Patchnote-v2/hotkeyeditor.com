@@ -97,8 +97,17 @@ const Keybinds = (data) => {
                             </li>
                         );
                     });
+                    let menuClasses = "menu";
+                    let hamburgerClasses = "hamburger hamburger--minus"
+                    if (data.toggledMenus.includes(value)) {
+                        menuClasses += " collapsed";
+                    }
+                    else {
+                        hamburgerClasses += " is-active";
+                    }
+
                     return (
-                        <div key={value} className="menu">
+                        <div key={value} className={menuClasses}>
                             <span>
                                 <h3 onClick={(event) => data.selectMenu(event)}
                                     onMouseOver={(event) => data.hoverMenu(event)}
@@ -106,14 +115,14 @@ const Keybinds = (data) => {
                                     className="menu-header"
                                     value={value}>
                                     {value}
-                                    <span className="hamburger hamburger--minus is-active" onClick={(event) => data.toggleMenu(event)} value={value}>
+                                    <span className={hamburgerClasses} onClick={(event) => data.toggleMenu(event)} value={value}>
                                         <span className="hamburger-box">
                                             <span className="hamburger-inner"></span>
                                         </span>
                                     </span>
                                 </h3>
                             </span>
-                            <ul className="menuList">
+                            <ul className="menu-list">
                                 {menuRows}
                             </ul>
                         </div>

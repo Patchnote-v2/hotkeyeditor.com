@@ -29,6 +29,14 @@ const Upload = (props) => {
     const [filteringRows, setFilteringRows] = useState(false);
     const [searchFilter, setSearchFilter] = useState(null);
 
+    const [toggledMenus, setToggledMenus] = useState([
+        "Control Groups 1-10",
+        "Control Groups 11-20",
+        "Spectator/Replay Commands",
+        "BFG: Other",
+        "BFG: Techs"
+    ]);
+
     const notifications = useRef(null);
     const clear = useRef(null); // Button
     const cancel = useRef(null); // Button
@@ -676,6 +684,19 @@ const Upload = (props) => {
         event.target.classList.toggle("is-active");
         let menu = event.target.closest(".menu");
         menu.classList.toggle("collapsed");
+
+        //let name = menu.getAttribute("value");
+        //setToggledMenus((oldToggledMenus) => {
+        //    let newToggledMenus = [...oldToggledMenus];
+        //    let index = newToggledMenus.indexOf(name);
+        //    if (index > -1) {
+        //        newToggledMenus.splice(index, 1);
+        //    }
+        //    else {
+        //        newToggledMenus.push(name);
+        //    }
+        //    return newToggledMenus;
+        //})
     }
 
     const onSearchInput = (event) => {
@@ -815,7 +836,8 @@ const Upload = (props) => {
                   toggleMenu={toggleMenu}
                   highlighted={highlighted}
                   searchFilter={searchFilter}
-                  toggleFavorite={toggleFavorite}/>
+                  toggleFavorite={toggleFavorite}
+                  toggledMenus={toggledMenus} />
         </>
     );
 };
