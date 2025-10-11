@@ -18,6 +18,7 @@ hk_versions = [
     ('deo', 0x40400000, {}, 'DE (old)'),  # don't ever pick this version
     ('de', 0x40866666, {4632, 4644, 4664, 4676, 4712, 4724,
                         4748, 4820, 2672, 2324, 2796, 2336, 4996}, 'Definitive Edition'),
+    ('de-new', 0x4089999a, {6380, 11048}, 'Definitive Edition New'),
 ]
 
 # Filesizes by path (Base/Profile)
@@ -35,7 +36,8 @@ class HotkeyFile:
     # the reverse of _hk_names
     _hk_ids = {v: k for k, v in _hk_names.items()}
 
-    _valid_ids = set(_hk_ids.keys())
+    # _valid_ids = set(_hk_ids.values())
+    _valid_ids = set(hk_mapping.keys())
 
     # the strings that the above numerical ids/text ids map to
     _hk_desc = {k: v[1] for k, v in hk_mapping.items()}
@@ -158,18 +160,20 @@ class HotkeyFile:
                 f"Unrecognized file format, header: {self._header:x}, length: {self._file_size:d}")
         if self.orphan_ids:
             raise Exception(
-                f"Unrecognized hotkey ids: {','.join(f'{i:d}' for i in self.orphan_ids)}")
+                    f"Unrecognized hotkey ids: {','.join(f'{i:d}' for i in self.orphan_ids)}")
 
     @ classmethod
     def _build_id_map(cls, menus):
         hk_map = {}
+        hk_ids = set()
         for id, hotkey in menus.items():
             hk_map[id] = hotkey
+            hk_ids.add(hotkey['string_id'])
             # if id >= 0:
             # while id in hk_map:
             # id += 0x1000000
             # hk_map[id] = hotkey
-        return hk_map, set(hk_map.keys()) - cls._valid_ids
+        return hk_map, hk_ids - cls._valid_ids
 
     @ staticmethod
     def _find_version(file_size, header):
