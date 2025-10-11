@@ -47,9 +47,12 @@ class HkParser(object):
         hotkey_struct = self._unpack(HOTKEY_FORMAT)
         return Hotkey(*hotkey_struct)._asdict()
 
-    def parse_to_dict(self, hk_bytes):
+    def parse_header(self, hk_bytes):
         self._reset(hk_bytes)
         self._parse_header()
+
+    def parse_to_dict(self, hk_bytes):
+        self.parse_header(hk_bytes)
 
         # .hkp has a 3 constant menus that initialize the array in self._result['menus']
         # before the n-number of menus are processed, meaning that when a .hki file is

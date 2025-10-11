@@ -50,7 +50,17 @@ class HotkeyFile:
         self._file_type = file_type
 
         hk_bytes = decompress(hki)
+
         parser = HkParser(file_type)
+
+        # Patch for 155976
+        try:
+            parser.parse_header(hk_bytes)
+        except struct.error as error:
+            raise error
+        if parser._result['header'] == 0x4089999a:
+            hk_bytes = hk_bytes.replace(bytes.fromhex("600a100047726f75704865616465724775617264"), b"")
+
         try:
             data = parser.parse_to_dict(hk_bytes)
         except struct.error as error:
