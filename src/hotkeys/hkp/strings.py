@@ -456,6 +456,10 @@ hk_mapping = {
     # key-value-base
     19161: "Set Gather Point on Self",
 
+    19162: "Change Mode (2)",
+    19234: "Special Ability",
+    19263: "Unload (Siege)",
+
     # key-value-paphos
     419001: "Hoplite",
     419002: "Tech: Elite Hoplite",

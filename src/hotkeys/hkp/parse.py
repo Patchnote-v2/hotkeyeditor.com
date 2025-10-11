@@ -17,6 +17,7 @@ class HkParser(object):
     def __init__(self, file_type: FileType = FileType.HKI) -> None:
         self._file_type = file_type
         self._reset()
+        self.group_header_guard = None
 
     def _reset(self, hk_bytes=None):
         self._offset = 0
@@ -44,6 +45,11 @@ class HkParser(object):
         return [self._parse_hotkey() for _ in range(num_hotkeys)]
 
     def _parse_hotkey(self) -> dict:
+        if self.group_header_guard is not None:
+            group_header_guard, = struct.unpack_from(f'{len(self.group_header_guard)}s', self._hk_bytes, self._offset)
+            if (group_header_guard != self.group_header_guard):
+                raise Exception(f"bad group header guard:\nexpected: {self.group_header_guard}\ngot: {group_header_guard}")
+            self._offset += len(self.group_header_guard)
         hotkey_struct = self._unpack(HOTKEY_FORMAT)
         return Hotkey(*hotkey_struct)._asdict()
 
@@ -77,6 +83,7 @@ class HkUnparser(object):
     def __init__(self, file_type: FileType = FileType.HKI) -> None:
         self._file_type = file_type
         self._reset()
+        self.group_header_guard = None
 
     def _reset(self, hk_dict=None):
         self._offset = 0
@@ -108,6 +115,10 @@ class HkUnparser(object):
             self._unparse_hotkey(hotkey)
 
     def _unparse_hotkey(self, hotkey):
+        if self.group_header_guard is not None:
+            # struct.pack_into(f'{len(self.group_header_guard)}s', self._result, self._offset, bytes([0xAA] * len(self.group_header_guard)))
+            struct.pack_into(f'{len(self.group_header_guard)}s', self._result, self._offset, self.group_header_guard)
+            self._offset += len(self.group_header_guard)
         self._pack(*Hotkey(**hotkey), struct_format=HOTKEY_FORMAT)
 
     def unparse_to_bytes(self, hk_dict):

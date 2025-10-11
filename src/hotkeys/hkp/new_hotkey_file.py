@@ -53,13 +53,14 @@ class HotkeyFile:
 
         parser = HkParser(file_type)
 
+
         # Patch for 155976
         try:
             parser.parse_header(hk_bytes)
         except struct.error as error:
             raise error
         if parser._result['header'] == 0x4089999a:
-            hk_bytes = hk_bytes.replace(bytes.fromhex("600a100047726f75704865616465724775617264"), b"")
+            parser.group_header_guard = bytes.fromhex("600a100047726f75704865616465724775617264")
 
         try:
             data = parser.parse_to_dict(hk_bytes)
@@ -67,6 +68,7 @@ class HotkeyFile:
             raise error
 
         self._num_menus = len(data['menus'])
+
         self.deserialize_file(data)
 
         # Header, used to determine version
@@ -86,6 +88,7 @@ class HotkeyFile:
         if validate:
             parser.validate_size()
             self.validate()
+
 
     def update(self, newValues) -> dict:
         changed = {}
@@ -194,5 +197,9 @@ class HotkeyFile:
         unparser = HkUnparser(self._file_type)
         hk_dict = dict(size=self._file_size, header=self._header,
                        menus=self.serialize_to_file())
+
+        if hk_dict['header'] == 0x4089999a:
+            unparser.group_header_guard = bytes.fromhex("600a100047726f75704865616465724775617264") 
+
         raw = unparser.unparse_to_bytes(hk_dict)
         return compress(raw)
