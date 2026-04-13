@@ -1,0 +1,39 @@
+//INSTRUCTIONS:
+//In this File you can change the Keys that are Displayed to you inGame
+//Below you see the pattern for the Keys in the Building/Unit/Production menue:
+//
+//--------------------------
+//| 01 | 02 | 03 | 04 | 05 |
+//|------------------------|
+//| 06 | 07 | 08 | 09 | 10 |
+//|------------------------|
+//| 11 | 12 | 13 | 14 | 15 |
+//--------------------------
+//
+//The Numbers are a short form of the StringIDs below
+// 01 stands for IDS_MOD_TTS_VISIBLE_HOTKEYS_01 witch is the House in the Building menue
+// in the "" you can put the Key that you want to be displayed
+//
+//Example:
+//I edit the line IDS_MOD_TTS_VISIBLE_HOTKEYS_01 and change "Q" to "P"
+//It now looks like:
+//IDS_MOD_TTS_VISIBLE_HOTKEYS_01 "P"
+//
+//If you want to make individual Keys invisible, just set them to ""
+//
+
+IDS_MOD_TTS_VISIBLE_HOTKEYS_01 "Q"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_02 "W"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_03 "E"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_04 "R"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_05 "T"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_06 "A"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_07 "S"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_08 "D"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_09 "F"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_10 "G"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_11 "Z"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_12 "X"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_13 "C"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_14 "V"
+IDS_MOD_TTS_VISIBLE_HOTKEYS_15 "B"

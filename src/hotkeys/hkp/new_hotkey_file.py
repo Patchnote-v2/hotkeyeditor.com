@@ -18,6 +18,10 @@ hk_versions = [
     ('deo', 0x40400000, {}, 'DE (old)'),  # don't ever pick this version
     ('de', 0x40866666, {4632, 4644, 4664, 4676, 4712, 4724,
                         4748, 4820, 2672, 2324, 2796, 2336, 4996}, 'Definitive Edition'),
+    # 2026+ format wraps every record in named markers, so the file size is
+    # variable (depends on how many hotkeys/groups are present). Sentinel
+    # `None` means "any size accepted".
+    ('de_new', 0x408a3d71, None, 'Definitive Edition (2026+)'),
 ]
 
 # Filesizes by path (Base/Profile)
@@ -65,6 +69,11 @@ class HotkeyFile:
         # File size, used to determine version
         self._file_size = data['size']
 
+        # Format ('legacy' or 'new'); used so the unparser writes back in the
+        # same shape we read.
+        self._format = data.get('format', 'legacy')
+        self._handler_magic = data.get('handler_magic')
+
         # todo: graceful wrong hotkey file version handling
         self.version = self._find_version(self._file_size, self._header)
         # Raw menu data
@@ -90,9 +99,14 @@ class HotkeyFile:
     # todo: make this fail is there's missing strings in hk_mapping
     def deserialize_file(self, data):
         self.data = {}
-        index = 0
-        for menu in data['menus']:
-            for key in menu:
+        # Preserve the raw parsed menu structure so we can round-trip slots that
+        # don't appear in self.data (id <= 0 sentinels, or hotkeys we filter out
+        # because they have no displayable string). _slot_keys maps each
+        # (menu_idx, slot_idx) of self._raw_menus to the data key it lives under.
+        self._raw_menus = data['menus']
+        self._slot_keys = {}
+        for menu_idx, menu in enumerate(self._raw_menus):
+            for slot_idx, key in enumerate(menu):
                 if key['id'] <= 0:
                     continue
 
@@ -121,19 +135,34 @@ class HotkeyFile:
                                            "ctrl": key['ctrl'],
                                            "alt": key['alt'],
                                            "shift": key['shift'],
-                                           "menu_id": index, }
-            index = index + 1
+                                           "menu_id": menu_idx, }
+                self._slot_keys[(menu_idx, slot_idx)] = dataKey
 
     def serialize_to_file(self):
-        # Serializes the data from Hotfile.data to just include the data that the
-        # hotkey file has
-        output = [[] for _ in range(self._num_menus)]
-        for id, hotkey in self.data.items():
-            output[hotkey["menu_id"]].append({"code": hotkey["keycode"],
-                                              "id": hotkey["string_id"],
-                                              "ctrl": hotkey["ctrl"],
-                                              "alt": hotkey["alt"],
-                                              "shift": hotkey["shift"]})
+        # Walk the original parsed menu structure and replace each tracked slot
+        # with its (possibly user-edited) value from self.data. Untracked slots
+        # (id <= 0) pass through unchanged. This preserves both order and the
+        # filtered-out sentinel slots that the previous self.data-only rebuild
+        # would silently drop.
+        output = []
+        for menu_idx, menu in enumerate(self._raw_menus):
+            out_menu = []
+            for slot_idx, raw_slot in enumerate(menu):
+                data_key = self._slot_keys.get((menu_idx, slot_idx))
+                if data_key is not None and data_key in self.data:
+                    hotkey = self.data[data_key]
+                    out_menu.append({"code": hotkey["keycode"],
+                                     "id": hotkey["string_id"],
+                                     "ctrl": hotkey["ctrl"],
+                                     "alt": hotkey["alt"],
+                                     "shift": hotkey["shift"]})
+                else:
+                    out_menu.append({"code": raw_slot["code"],
+                                     "id": raw_slot["id"],
+                                     "ctrl": raw_slot["ctrl"],
+                                     "alt": raw_slot["alt"],
+                                     "shift": raw_slot["shift"]})
+            output.append(out_menu)
         return output
 
     def get_file_size(self) -> int:
@@ -162,7 +191,11 @@ class HotkeyFile:
     def _find_version(file_size, header):
         version = None
         for (k, head, sizes, desc) in hk_versions:
-            if file_size in sizes and header == head:
+            if header != head:
+                continue
+            # `sizes is None` means any size is valid (used for the variable-size
+            # 2026+ DE format).
+            if sizes is None or file_size in sizes:
                 version = k
         return version
 
@@ -183,6 +216,8 @@ class HotkeyFile:
     def serialize(self):
         unparser = HkUnparser(self._file_type)
         hk_dict = dict(size=self._file_size, header=self._header,
-                       menus=self.serialize_to_file())
+                       menus=self.serialize_to_file(),
+                       format=self._format,
+                       handler_magic=self._handler_magic)
         raw = unparser.unparse_to_bytes(hk_dict)
         return compress(raw)

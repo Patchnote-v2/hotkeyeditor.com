@@ -1,5 +1,6 @@
 import json
 import io
+import logging
 import struct
 import zipfile
 
@@ -19,29 +20,48 @@ from .hkp.new_hotkey_file import HotkeyFile
 from .hkp.parse import FileType
 from .hkp.strings import hk_groups
 
+logger = logging.getLogger(__name__)
+
+
+def _filter_groups(groups: dict, hotkeys: dict) -> dict:
+    return {name: [k for k in keys if k in hotkeys]
+            for name, keys in groups.items()}
+
 
 @method_decorator(csrf_exempt, name="dispatch")
 class HKPView(View):
     def post(self, request):
-        # Determine which user file is larger and use that to determine which file is
-        # Base.hkp.
+        uploaded = request.FILES.getlist("files", None)
+        logger.warning("UPLOAD: received %d file(s): %s",
+                       len(uploaded),
+                       [(f.name, f.size) for f in uploaded])
 
-        if len(request.FILES.getlist("files", None)) != 2:
+        if len(uploaded) != 2:
+            logger.warning("UPLOAD REJECTED: expected 2 files, got %d", len(uploaded))
             return JsonResponse(data={"message": "Please select only the two correct files (<b>&lt;profile_name>.hkp</b> and <b>&lt;profile_name>/Base.hkp</b>)."},  # noqa
                                 status=400)
 
+        # Identify the base file by name (it is always literally `Base.hkp`,
+        # because in the game profile folder it lives in a subfolder named
+        # after the hotkey set). The other file is the profile.
         user_files = {'base': None, 'profile': None}
-        for each in request.FILES.getlist("files", None):
-            if not user_files['base']:
-                user_files['base'] = each
-            elif user_files['base'].size < each.size:
-                user_files['profile'] = user_files['base']
+        for each in uploaded:
+            if Path(each.name).name == "Base.hkp":
                 user_files['base'] = each
             else:
                 user_files['profile'] = each
 
+        if user_files['base'] is None or user_files['profile'] is None:
+            logger.warning("UPLOAD REJECTED: could not identify Base.hkp + profile in %s",
+                           [f.name for f in uploaded])
+            return JsonResponse(data={"message": "Could not find a <b>Base.hkp</b> file in your selection. Please upload both <b>&lt;profile_name>.hkp</b> and <b>&lt;profile_name>/Base.hkp</b>."},  # noqa
+                                status=400)
+
         # Save the name of the profile file for later
         profile_name = Path(user_files['profile'].name).stem
+        logger.warning("UPLOAD: base=%s (%d bytes), profile=%s (%d bytes)",
+                       user_files['base'].name, user_files['base'].size,
+                       user_files['profile'].name, user_files['profile'].size)
 
         # Parse the user files
         # Try for exceptions individually so we can let the user know which one is invalid
@@ -50,8 +70,9 @@ class HKPView(View):
                                             False,
                                             user_files['base'].name,
                                             FileType.HKP)
-        except struct.error:
-            return JsonResponse(data={"message": "The provided file for Base.hkp is an invalid size.  Make sure that you're uploading two unique files from a supported build of the game."},  # noqa
+        except struct.error as exc:
+            logger.warning("UPLOAD REJECTED: Base.hkp parse failed: %s", exc, exc_info=True)
+            return JsonResponse(data={"message": "The provided file for Base.hkp could not be parsed.  Make sure that you're uploading two unique files from a supported build of the game."},  # noqa
                                 status=400)
 
         try:
@@ -59,8 +80,9 @@ class HKPView(View):
                                                False,
                                                user_files['profile'].name,
                                                FileType.HKI)
-        except struct.error:
-            return JsonResponse(data={"message": f"The provided file for {profile_name}.hkp is an invalid size.  Make sure that you're uploading two unique files from a supported build of the game."},  # noqa
+        except struct.error as exc:
+            logger.warning("UPLOAD REJECTED: %s.hkp parse failed: %s", profile_name, exc, exc_info=True)
+            return JsonResponse(data={"message": f"The provided file for {profile_name}.hkp could not be parsed.  Make sure that you're uploading two unique files from a supported build of the game."},  # noqa
                                 status=400)
 
         # Load default hotkey files so they can be updated with the user-uploaded files
@@ -71,8 +93,11 @@ class HKPView(View):
         changed = serialize_all_files(user_files)
         userChanged = default_files['base'].update(changed) | default_files['profile'].update(changed)
 
-        return JsonResponse(data={"data": {"hotkeys": serialize_all_files(default_files),
-                                           "groups": format_groups(hk_groups)},
+        hotkeys = serialize_all_files(default_files)
+        groups = _filter_groups(format_groups(hk_groups), hotkeys)
+
+        return JsonResponse(data={"data": {"hotkeys": hotkeys,
+                                           "groups": groups},
                                   "changed": userChanged,
                                   "name": profile_name},
                             status=200)
@@ -82,8 +107,11 @@ class HKPView(View):
         # otherwise it has to be updated manually
         default_files = load_default_files()
 
-        return JsonResponse(data={"hotkeys": serialize_all_files(default_files),
-                                  "groups": format_groups(hk_groups)},
+        hotkeys = serialize_all_files(default_files)
+        groups = _filter_groups(format_groups(hk_groups), hotkeys)
+
+        return JsonResponse(data={"hotkeys": hotkeys,
+                                  "groups": groups},
                             status=200)
 
 
